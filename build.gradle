@@ -1,6 +1,6 @@
 buildscript {
     // Kotlin
-    ext.kotlin_version = '1.2.40'
+    ext.kotlin_version = '1.2.41'
     // Retrofit
     ext.retrofit_version = '2.4.0'
     // JUnit 5
