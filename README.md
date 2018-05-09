@@ -136,7 +136,49 @@ johnSession.getNewsFeed().blockingStream(100)
 johnSession?.newsFeed?.blockingStream(100)
 ```
 
-TODO more examples
+Post public news with hashtag + url + user mention
+```kotlin
+val s = johnSession
+
+val post = TextWallMessage.Builder()
+        .setMessage("This is a post with #hashtag url https://mysocialapp.io and someone mentioned [[user:3856809369215939951]]")
+        .setVisibility(AccessControl.PUBLIC)
+        .build()
+
+s?.newsFeed?.blockingSendWallPost(post)
+``` 
+
+Post public photo with a hashtag
+```kotlin
+val s = johnSession
+
+val post = Photo.Builder()
+        .setMessage("This is a post with an image and a #hashtag :)")
+        .setImage(File("/tmp/myimage.jpg"))
+        .setVisibility(AccessControl.PUBLIC)
+        .build()
+
+s?.newsFeed?.blockingSendWallPost(post)
+```
+
+Post on a friend wall and mention him
+````kotlin
+ val s = johnSession
+
+// take my first friend
+val friend = s?.account?.blockingGet()?.blockingListFriends()?.firstOrNull() ?: return
+
+val post = TextWallMessage.Builder()
+        .setMessage("Hey [[user:${friend.id}]] what's up?")
+        .setVisibility(AccessControl.FRIEND)
+        .build()
+
+friend.blockingSendWallPost(post)
+````
+
+#### Want to see more examples?
+
+[Look at our test classes](https://github.com/MySocialApp/mysocialapp-java-client/tree/master/src/test/kotlin/io/mysocialapp/client)
 
 # Credits
 
