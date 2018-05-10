@@ -20,9 +20,9 @@ abstract class WallActivity(val action: ActivityType? = null,
         return when (map?.get("entity_type")?.let { EntityType.valueOf(it.toString()) }) {
             EntityType.TEXT_WALL_MESSAGE -> MyObjectMapper.objectMapper.convertValue(map, TextWallMessage::class.java)
             EntityType.PHOTO -> MyObjectMapper.objectMapper.convertValue(map, Photo::class.java)
-        //EntityType.EVENT -> MyObjectMapper.objectMapper.convertValue(map, Event::class.java)
-        //EntityType.RIDE -> MyObjectMapper.objectMapper.convertValue(map, Ride::class.java)
-        //EntityType.GROUP -> MyObjectMapper.objectMapper.convertValue(map, Group::class.java)
+            EntityType.EVENT -> MyObjectMapper.objectMapper.convertValue(map, Event::class.java)
+            EntityType.RIDE -> MyObjectMapper.objectMapper.convertValue(map, Ride::class.java)
+            EntityType.GROUP -> MyObjectMapper.objectMapper.convertValue(map, Group::class.java)
             EntityType.STATUS -> MyObjectMapper.objectMapper.convertValue(map, Status::class.java)
             else -> null
         }

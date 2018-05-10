@@ -28,7 +28,7 @@ class FeedTest {
 
         session?.newsFeed?.stream(33)?.doOnError { it.printStackTrace() }?.subscribe({ feed ->
             count++
-            println("$count ${feed.bodyMessage}")
+            println("$count - ${feed.baseObject?.type} - ${feed.bodyMessage}")
         }, {
             it.printStackTrace()
         }, {
