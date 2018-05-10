@@ -9,21 +9,21 @@ import io.mysocialapp.client.models.User
 class MySocialApp(private val configuration: Configuration,
                   private val clientConfiguration: ClientConfiguration = ClientConfiguration()) {
 
-    constructor(builder: Builder) : this(Configuration(builder.appId), builder.clientConfiguration)
+    constructor(builder: Builder) : this(Configuration(builder.mAppId), builder.mClientConfiguration)
 
     private val clientService = ClientService(configuration, clientConfiguration)
 
     class Builder {
-        var appId: String = ""
+        var mAppId: String = ""
 
-        var clientConfiguration: ClientConfiguration = ClientConfiguration()
+        var mClientConfiguration: ClientConfiguration = ClientConfiguration()
         fun setAppId(appId: String): Builder {
-            this.appId = appId
+            this.mAppId = appId
             return this
         }
 
         fun setClientConfiguration(clientConfiguration: ClientConfiguration): Builder {
-            this.clientConfiguration = clientConfiguration
+            this.mClientConfiguration = clientConfiguration
             return this
         }
 

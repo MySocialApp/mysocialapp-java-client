@@ -14,20 +14,20 @@ class TextWallMessage(var message: String? = null) : BaseWall(), Taggable {
         }
 
     class Builder {
-        var message: String? = null
-        var visibility: AccessControl = AccessControl.FRIEND
+        private var mMessage: String? = null
+        private var mVisibility: AccessControl = AccessControl.FRIEND
 
         fun setMessage(message: String?): Builder {
-            this.message = message
+            this.mMessage = message
             return this
         }
 
         fun setVisibility(visibility: AccessControl): Builder {
-            this.visibility = visibility
+            this.mVisibility = visibility
             return this
         }
 
-        fun build() = TextWallMessage(message).apply { accessControl = visibility }
+        fun build() = TextWallMessage(mMessage).apply { accessControl = mVisibility }
     }
 
 }

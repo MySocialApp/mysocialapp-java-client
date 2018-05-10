@@ -65,7 +65,7 @@ Most of the actions can be synchronous and asynchronous with RxJava. We are usin
 Create an account
 ```java
 String appId = "u123456789123a123456";
-MySocialApp msa = MySocialApp.Builder().setAppId(appId).build();
+MySocialApp msa = new MySocialApp.Builder().setAppId(appId).build();
 
 // create an account and return an active session to do fluent operations
 Session johnSession = msa.createAccount("John", "john@myapp.com", "myverysecretpassw0rd")

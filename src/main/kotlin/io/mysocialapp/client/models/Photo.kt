@@ -34,33 +34,33 @@ class Photo : BaseWall(), Taggable {
         get() = highURL
 
     class Builder {
-        var message: String? = null
-        var image: File? = null
-        var visibility: AccessControl = AccessControl.FRIEND
+        private var mMessage: String? = null
+        private var mImage: File? = null
+        private var mVisibility: AccessControl = AccessControl.FRIEND
 
         fun setMessage(message: String?): Builder {
-            this.message = message
+            this.mMessage = message
             return this
         }
 
         fun setImage(image: File?): Builder {
-            this.image = image
+            this.mImage = image
             return this
         }
 
         fun setVisibility(visibility: AccessControl): Builder {
-            this.visibility = visibility
+            this.mVisibility = visibility
             return this
         }
 
         fun build(): MultipartPhoto {
-            if (image == null) {
+            if (mImage == null) {
                 throw IllegalArgumentException("image file is mandatory")
             }
 
-            val photoRequestBody = RequestBody.create(image?.name?.imageMediaType(), image!!)
-            val messageRequestBody = if (message.isNullOrBlank()) null else RequestBody.create(MediaType.parse("multipart/form-data"), message!!)
-            val accessControlRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), visibility.name)
+            val photoRequestBody = RequestBody.create(mImage?.name?.imageMediaType(), mImage!!)
+            val messageRequestBody = if (mMessage.isNullOrBlank()) null else RequestBody.create(MediaType.parse("multipart/form-data"), mMessage!!)
+            val accessControlRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), mVisibility.name)
 
             return MultipartPhoto(photoRequestBody, messageRequestBody, accessControl = accessControlRequestBody)
         }
