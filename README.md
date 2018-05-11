@@ -24,7 +24,7 @@ MySocialApp is a very innovative way to have a turnkey native social network app
 | Group [optional module] | :heavy_check_mark: | Partially
 | Event [optional module] | :heavy_check_mark: | Partially
 | Roadbook [optional module] | :heavy_check_mark: | Partially
-| Live tracking with `RideShare` [optional module] | :heavy_check_mark: | Soon
+| Live tracking with `RideShare` ([exemple here](https://www.nousmotards.com/rideshare/follow/f6e0c27e01beb4f4-3856809369215939951-f10c31fd2dcc4576a1b488385aaa61c2)) [optional module] | :heavy_check_mark: | Soon
 | Point of interest [optional module] | :heavy_check_mark: | Soon
 
 Looking for official Swift/iOS client API ? This is coming soon 
@@ -34,7 +34,7 @@ Coming soon:
 
 ### What you can do:
 
-Add social features to your existing app, automate actions, scrape contents, machine learning, AI, content analysis, almost anything possible with the modules above.  
+Add social features to your existing app, automate actions, scrape contents, machine learning, AI, content analysis, almost anything possible with the modules above.
 
 ###
 
@@ -59,7 +59,7 @@ dependencies {
 
 # Prerequisites
 
-You must have "APP ID" to target the right gateway. 
+You must have "APP ID" to target the right App. Want to [create your app](https://support.mysocialapp.io/hc/en-us/articles/115003936872-Create-my-first-app)?
 ##### App owner/administrator:
 Sign in to [go.mysocialapp.io](https://go.mysocialapp.io) and go to API section. Your **APP ID** is part of the endpoint URL provided to your app. Which is something like `https://u123456789123a123456-api.mysocialapp.io`. Your **APP ID** is `u123456789123a123456`
 
