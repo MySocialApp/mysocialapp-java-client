@@ -1,3 +1,5 @@
+![mysocialapp header](https://msa-resources.s3.amazonaws.com/build%20your%20own%20social%20networking%20app%202.jpg)
+
 # mysocialapp-java-client
 
 Official Kotlin and Java client to interact with apps made with [MySocialApp](https://mysocialapp.io) (iOS and Android social app builder - SaaS).
