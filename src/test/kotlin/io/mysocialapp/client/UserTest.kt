@@ -48,4 +48,10 @@ class UserTest {
         users?.map { it.blockingCancelFriendRequest() } != null
     }
 
+    @Test
+    fun `search for users`() {
+        val s = getSession()
+        assert(s?.user?.blockingSearch(FluentUser.Search.Builder().setFirstName("romaric").build()) != null)
+    }
+
 }

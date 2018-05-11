@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 /**
  * Created by evoxmusic on 21/11/15.
  */
-class URLTag : TagEntityAbstract {
+class URLTag : TagEntityAbstract() {
 
     @JsonProperty("original_url")
     var originalURL: String? = null
@@ -38,16 +38,6 @@ class URLTag : TagEntityAbstract {
             this.startIndex = indices[0]
             this.endIndex = indices[1]
         }
-
-    constructor() {
-        // empty
-    }
-
-    constructor(originalURL: String, mIndices: IntArray) {
-        this.type = "URLTag"
-        this.originalURL = originalURL
-        indices = mIndices
-    }
 
     override val textShown: String?
         get() = originalURLToDisplay

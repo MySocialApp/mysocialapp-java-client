@@ -3,7 +3,7 @@ package io.mysocialapp.client.models
 /**
  * Created by evoxmusic on 11/01/15.
  */
-class Location : Base, BaseLocation {
+class Location : Base(), BaseLocation {
 
     var location: SimpleLocation? = null
     var country: String? = null
@@ -27,13 +27,5 @@ class Location : Base, BaseLocation {
         set(longitude) {
             this.location?.longitude = longitude
         }
-
-    constructor() {
-        // empty
-    }
-
-    constructor(latitude: Double, longitude: Double) {
-        this.location = SimpleLocation(latitude, longitude)
-    }
 
 }

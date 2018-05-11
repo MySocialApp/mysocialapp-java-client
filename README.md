@@ -32,7 +32,7 @@ Automate actions, scrape contents, machine learning, AI, content analysis, almos
 
 # Dependencies
 
-[![Release](https://jitpack.io/v/MySocialApp/mysocialapp-java-client.svg)](https://jitpack.io/MySocialApp/mysocialapp-java-client)
+[![Release](https://jitpack.io/v/MySocialApp/mysocialapp-java-client.svg)](https://jitpack.io/#MySocialApp/mysocialapp-java-client)
 
 Step 1. Add it in your root build.gradle at the end of repositories:
 ```
