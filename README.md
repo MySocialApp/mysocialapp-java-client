@@ -2,12 +2,12 @@
 
 # mysocialapp-java-client
 
-Official Kotlin and Java client to interact with apps made with [MySocialApp](https://mysocialapp.io) (iOS and Android social app builder - SaaS).
-This lib can be used inside any Java app, Android included.
+Official Kotlin and Java client to interact with apps made with [MySocialApp](https://mysocialapp.io) (iOS and Android network social app builder - SaaS).
+This lib can be used inside any Java and Android apps.
 
 # Why using it?
 
-MySocialApp is a very innovative way to have a turnkey native social app for iOS and Android. Our API are open and ready to use for all your need. What features are available through RESTFul API?
+MySocialApp is a very innovative way to have a turnkey native social network app for iOS and Android. Our API are open and ready to use for all your need. What features are available through RESTFul API?
 
 | Feature | Server side API | Java/Kotlin client API
 | ------- | ----------- | -------------------------- |
@@ -24,13 +24,13 @@ MySocialApp is a very innovative way to have a turnkey native social app for iOS
 | Group [optional module] | :heavy_check_mark: | Partially
 | Event [optional module] | :heavy_check_mark: | Partially
 | Roadbook [optional module] | :heavy_check_mark: | Partially
-| Live tracking (RideShare) [optional module] | :heavy_check_mark: | Soon
+| Live tracking with `RideShare` [optional module] | :heavy_check_mark: | Soon
 | Point of interest [optional module] | :heavy_check_mark: | Soon
 
 Looking for official Swift/iOS client API ? This is coming soon 
 
 Coming soon:
-* Real time downstream handlers with GCM (Android), APNS (iOS), websocket (others).
+* Real time downstream handlers with FCM (Android), APNS (iOS) and Web Socket.
 
 ### What you can do:
 
@@ -186,7 +186,7 @@ friend.blockingSendWallPost(post)
 
 #### Want to see more examples?
 
-[Look at our test classes](https://github.com/MySocialApp/mysocialapp-java-client/tree/master/src/test/kotlin/io/mysocialapp/client)
+[Look at our test classes for Java and Kotlin](https://github.com/MySocialApp/mysocialapp-java-client/tree/master/src/test)
 
 # Credits
 
