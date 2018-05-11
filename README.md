@@ -7,26 +7,32 @@ This lib can be used inside any Java app, Android included.
 
 MySocialApp is a very innovative way to have a turnkey native social app for iOS and Android. Our API are open and ready to use for all your need. What features are available through RESTFul API?
 
-* Account management
-* News feed
-* Comment / Like
-* Notification
-* Private messaging
-* Photo
-* Friend
-* Search
-* Group [optional module]
-* Event [optional module]
-* Roadbook [optional module]
-* Live tracking (RideShare) [optional module]
-* Point of interest [optional module]
+| Feature | Server side API | Java/Kotlin client API
+| ------- | ----------- | -------------------------- |
+| Account management | :heavy_check_mark: | Partially
+| Feed | :heavy_check_mark: | Partially
+| Comment | :heavy_check_mark: | Partially
+| Like | :heavy_check_mark: | Partially
+| Notification | :heavy_check_mark: | Soon
+| Private messaging | :heavy_check_mark: | Soon
+| Photo | :heavy_check_mark: | Soon
+| User | :heavy_check_mark: | :heavy_check_mark:
+| Friend | :heavy_check_mark: | :heavy_check_mark:
+| Search | :heavy_check_mark: | Soon
+| Group [optional module] | :heavy_check_mark: | Partially
+| Event [optional module] | :heavy_check_mark: | Partially
+| Roadbook [optional module] | :heavy_check_mark: | Partially
+| Live tracking (RideShare) [optional module] | :heavy_check_mark: | Soon
+| Point of interest [optional module] | :heavy_check_mark: | Soon
+
+Looking for official Swift/iOS client API ? This is coming soon 
 
 Coming soon:
 * Real time downstream handlers with GCM (Android), APNS (iOS), websocket (others).
 
-### Some examples of what you can do:
+### What you can do:
 
-Automate actions, scrape contents, machine learning, AI, content analysis, almost anything possible with the modules above.  
+Add social features to your existing app, automate actions, scrape contents, machine learning, AI, content analysis, almost anything possible with the modules above.  
 
 ###
 
