@@ -2,12 +2,19 @@
 
 # mysocialapp-java-client
 
-Official Kotlin and Java client to interact with apps made with [MySocialApp](https://mysocialapp.io) (iOS and Android network social app builder - SaaS).
-This lib can be used inside any Java and Android apps.
+Official Kotlin and Java client to interact with apps made with [MySocialApp](https://mysocialapp.io) (turnkey iOS and Android social network app builder - SaaS).
+
+Note: This lib was made in Kotlin and can be used inside any Java and Android apps.
 
 # Why using it?
 
-MySocialApp is a very innovative way to have a turnkey native social network app for iOS and Android. Our API are open and ready to use for all your need. What features are available through RESTFul API?
+MySocialApp is a very innovative way to have a turnkey native social network app for iOS and Android. Our API are open and ready to use for all your need inside one of our generated app or any thirds app. 
+
+### What can you do?
+
+Add social features to your existing app, automate actions, scrape contents, analyze the users content, add bot to your app, almost anything that a modern social network can bring.. There is no limit! Any suggestion to add here? Do a PR. 
+
+# What features are available?
 
 | Feature | Server side API | Java/Kotlin client API
 | ------- | ----------- | -------------------------- |
@@ -20,6 +27,10 @@ MySocialApp is a very innovative way to have a turnkey native social network app
 | Photo | :heavy_check_mark: | Soon
 | User | :heavy_check_mark: | :heavy_check_mark:
 | Friend | :heavy_check_mark: | :heavy_check_mark:
+| URL rewrite | :heavy_check_mark: | :heavy_check_mark:
+| URL preview | :heavy_check_mark: | :heavy_check_mark:
+| User mention | :heavy_check_mark: | :heavy_check_mark:
+| Hash tag| :heavy_check_mark: | :heavy_check_mark:
 | Search | :heavy_check_mark: | Soon
 | Group [optional module] | :heavy_check_mark: | Partially
 | Event [optional module] | :heavy_check_mark: | Partially
@@ -31,12 +42,6 @@ Looking for official Swift/iOS client API ? This is coming soon
 
 Coming soon:
 * Real time downstream handlers with FCM (Android), APNS (iOS) and Web Socket.
-
-### What you can do:
-
-Add social features to your existing app, automate actions, scrape contents, machine learning, AI, content analysis, almost anything possible with the modules above.
-
-###
 
 # Dependencies
 
