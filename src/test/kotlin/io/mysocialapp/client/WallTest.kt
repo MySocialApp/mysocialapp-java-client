@@ -12,7 +12,7 @@ import java.io.File
 class WallTest {
 
     companion object {
-        const val APP_ID = "u470584465854a269772"
+        const val APP_ID = "u470584465854a194805"
     }
 
     private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().connect("AliceX", "myverysecretpassw0rd")
@@ -58,7 +58,7 @@ class WallTest {
         val s = getSession()
 
         val post = TextWallMessage.Builder()
-                .setMessage("This is a post with someone mentioned [[user:3856809369215939951]]")
+                .setMessage("This is a post with someone mentioned [[user:2375667195016462956]]")
                 .setVisibility(AccessControl.FRIEND)
                 .build()
 
@@ -70,7 +70,7 @@ class WallTest {
         val s = getSession()
 
         val post = TextWallMessage.Builder()
-                .setMessage("This is a post with #hashtag url https://mysocialapp.io and someone mentioned [[user:3856809369215939951]]")
+                .setMessage("This is a post with #hashtag url https://mysocialapp.io and someone mentioned [[user:2375667195016462956]]")
                 .setVisibility(AccessControl.FRIEND)
                 .build()
 

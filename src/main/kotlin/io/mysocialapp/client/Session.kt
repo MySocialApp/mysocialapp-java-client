@@ -15,6 +15,7 @@ class Session(private val configuration: Configuration,
     val account: FluentAccount = FluentAccount(this)
     val newsFeed: FluentFeed = FluentFeed(this)
     val user: FluentUser = FluentUser(this)
+    val friend: FluentFriend = FluentFriend(this)
 
     fun disconnect(): Observable<Void> = clientService.logout.post()
 

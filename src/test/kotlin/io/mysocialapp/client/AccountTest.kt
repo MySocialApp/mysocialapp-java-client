@@ -8,7 +8,7 @@ import org.junit.Test
 class AccountTest {
 
     companion object {
-        const val APP_ID = "u470584465854a269772"
+        const val APP_ID = "u470584465854a194805"
     }
 
     private fun getBadSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().connect("AliceX", "mybadpassword")
@@ -79,6 +79,13 @@ class AccountTest {
         val mAcc = s?.account?.blockingGet()
         assert(mAcc?.livingLocation?.latitude == feed?.owner?.livingLocation?.latitude)
         assert(mAcc?.livingLocation?.longitude == feed?.owner?.livingLocation?.longitude)
+    }
+
+    @Test
+    fun `accept all friends requests`() {
+        val s = getSession()
+
+        s?.account?.blockingGet()?.blockingListFriends()
     }
 
 }

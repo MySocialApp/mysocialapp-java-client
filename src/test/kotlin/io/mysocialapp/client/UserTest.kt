@@ -8,7 +8,7 @@ import org.junit.Test
 class UserTest {
 
     companion object {
-        const val APP_ID = "u470584465854a269772"
+        const val APP_ID = "u470584465854a194805"
     }
 
     private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().connect("AliceX", "myverysecretpassw0rd")
