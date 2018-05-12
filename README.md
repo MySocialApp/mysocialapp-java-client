@@ -1,6 +1,6 @@
-[![mysocialapp header](https://msa-resources.s3.amazonaws.com/build%20your%20own%20social%20networking%20app%202.jpg)](https://mysocialapp.io)
-
 # mysocialapp-java-client [![Build Status](https://travis-ci.org/MySocialApp/mysocialapp-java-client.svg?branch=master)](https://travis-ci.org/MySocialApp/docker-cassandra) [![Release](https://jitpack.io/v/MySocialApp/mysocialapp-java-client.svg)](https://jitpack.io/#MySocialApp/mysocialapp-java-client)
+
+[![mysocialapp header](https://msa-resources.s3.amazonaws.com/build%20your%20own%20social%20networking%20app%202.jpg)](https://mysocialapp.io)
 
 Official Kotlin and Java client to interact with apps made with [MySocialApp](https://mysocialapp.io) (turnkey iOS and Android social network app builder - SaaS).
 
