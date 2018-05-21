@@ -12,10 +12,11 @@ class Session(private val configuration: Configuration,
 
     val clientService by lazy { ClientService(configuration, clientConfiguration, this) }
 
-    val account: FluentAccount = FluentAccount(this)
-    val newsFeed: FluentFeed = FluentFeed(this)
-    val user: FluentUser = FluentUser(this)
-    val friend: FluentFriend = FluentFriend(this)
+    val account by lazy { FluentAccount(this) }
+    val newsFeed by lazy { FluentFeed(this) }
+    val user by lazy { FluentUser(this) }
+    val friend by lazy { FluentFriend(this) }
+    val notification by lazy { FluentNotification(this) }
 
     fun disconnect(): Observable<Void> = clientService.logout.post()
 

@@ -18,11 +18,11 @@ Add social features to your existing app, automate actions, scrape contents, ana
 
 | Feature | Server side API | Java/Kotlin client API
 | ------- | ----------- | -------------------------- |
-| Account management | :heavy_check_mark: | Partially
-| Feed | :heavy_check_mark: | Partially
-| Comment | :heavy_check_mark: | Partially
-| Like | :heavy_check_mark: | Partially
-| Notification | :heavy_check_mark: | Soon
+| Profile management | :heavy_check_mark: | Partially
+| Feed | :heavy_check_mark: | :heavy_check_mark:
+| Comment | :heavy_check_mark: | :heavy_check_mark:
+| Like | :heavy_check_mark: | :heavy_check_mark:
+| Notification | :heavy_check_mark: | Partially
 | Private messaging | :heavy_check_mark: | Soon
 | Photo | :heavy_check_mark: | Soon
 | User | :heavy_check_mark: | :heavy_check_mark:
@@ -38,7 +38,7 @@ Add social features to your existing app, automate actions, scrape contents, ana
 | Live tracking with `RideShare` ([exemple here](https://www.nousmotards.com/rideshare/follow/f6e0c27e01beb4f4-3856809369215939951-f10c31fd2dcc4576a1b488385aaa61c2)) [optional module] | :heavy_check_mark: | Soon
 | Point of interest [optional module] | :heavy_check_mark: | Soon
 
-Looking for official Swift/iOS client API ? This is coming soon 
+Looking for official Swift/iOS client API ? [Click here](https://github.com/MySocialApp/mysocialapp-swift-client)
 
 Coming soon:
 * Real time downstream handlers with FCM (Android), APNS (iOS) and Web Socket.
