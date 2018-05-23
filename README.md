@@ -76,7 +76,7 @@ Ask for an administrator to give you the **APP ID**.
 
 Most of the actions can be synchronous and asynchronous with RxJava. We are using [RxJava](https://github.com/ReactiveX/RxJava) to provide an elegant way to handle asynchronous results.
 
-Create an account
+##### Create an account
 ```java
 String appId = "u123456789123a123456";
 MySocialApp msa = new MySocialApp.Builder().setAppId(appId).build();
@@ -93,7 +93,7 @@ val msa = MySocialApp.Builder().setAppId(appId).build()
 val johnSession = msa.createAccount("John", "john@myapp.com", "myverysecretpassw0rd")
 ```
 
-Do login with your account
+##### Do login with your account
 ```java
 Session johnSession = msa.connect("John", "myverysecretpassw0rd");
 ```
@@ -102,7 +102,7 @@ Session johnSession = msa.connect("John", "myverysecretpassw0rd");
 val johnSession = msa.connect("John", "myverysecretpassw0rd")
 ```
 
-Get your account info
+##### Get your account info
 ```java
 User account = johnSession.getAccount().blockingGet();
 account.getFirstName();
@@ -119,7 +119,7 @@ account.livingLocation?.completeCityAddress
 [..]
 ```
 
-Update your account
+##### Update your account
 ```java
 User account = johnSession.getAccount().blockingGet();
 account.setLastName("James");
@@ -132,7 +132,7 @@ account.lastName = "James"
 account.blockingSave() // or use save() to asynchronously save it with Rx
 ```
 
-List news feed from specific page and size
+##### List news feed from specific page and size
 ```java
 johnSession.getNewsFeed().blockingList(0, 10)
 ```
@@ -141,7 +141,7 @@ johnSession.getNewsFeed().blockingList(0, 10)
 johnSession?.newsFeed?.blockingList(0, 10)
 ```
 
-Stream all 100 first news feed message
+##### Stream all 100 first news feed message
 ```java
 johnSession.getNewsFeed().blockingStream(100)
 ```
@@ -150,7 +150,7 @@ johnSession.getNewsFeed().blockingStream(100)
 johnSession?.newsFeed?.blockingStream(100)
 ```
 
-Post public news with hashtag + url + user mention
+##### Post public news with hashtag + url + user mention
 ```kotlin
 val s = johnSession
 
@@ -162,7 +162,7 @@ val post = TextWallMessage.Builder()
 s?.newsFeed?.blockingSendWallPost(post)
 ``` 
 
-Post public photo with a hashtag
+##### Post public photo with a hashtag
 ```kotlin
 val s = johnSession
 
@@ -175,7 +175,7 @@ val post = Photo.Builder()
 s?.newsFeed?.blockingSendWallPost(post)
 ```
 
-Post on a friend wall and mention him
+##### Post on a friend wall and mention him
 ```kotlin
 val s = johnSession
 
@@ -190,7 +190,7 @@ val post = TextWallMessage.Builder()
 friend.blockingSendWallPost(post)
 ```
 
-Search for users by first name and gender
+##### Search for users by first name and gender
 ```kotlin
 val s = johnSession
 
@@ -203,7 +203,7 @@ val users = s?.user?.blockingSearch(searchQuery)
 // return the first 10 results
 ```
 
-Search for users by their living location
+##### Search for users by their living location
 ```kotlin
 val s = johnSession
 
