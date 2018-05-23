@@ -31,7 +31,10 @@ Add social features to your existing app, automate actions, scrape contents, ana
 | URL preview | :heavy_check_mark: | :heavy_check_mark:
 | User mention | :heavy_check_mark: | :heavy_check_mark:
 | Hash tag| :heavy_check_mark: | :heavy_check_mark:
-| Search | :heavy_check_mark: | Soon
+| Search users | :heavy_check_mark: | :heavy_check_mark:
+| Search news feed | :heavy_check_mark: | Soon
+| Search groups | :heavy_check_mark: | Soon
+| Search events | :heavy_check_mark: | Soon
 | Group [optional module] | :heavy_check_mark: | Partially
 | Event [optional module] | :heavy_check_mark: | Partially
 | Roadbook [optional module] | :heavy_check_mark: | Partially
