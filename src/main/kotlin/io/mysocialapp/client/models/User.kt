@@ -32,6 +32,7 @@ data class User(var updatedDate: Date? = null,
                 var userStat: UserStat? = null,
                 var isFriend: Boolean? = null,
                 var isRequestAsFriend: Boolean? = null,
+                var externalId: String? = null,
                 var customFields: List<CustomField>? = null) : Base() {
 
 

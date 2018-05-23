@@ -7,7 +7,7 @@ import java.io.Serializable
  */
 interface BaseLocation : Serializable {
 
-    val latitude: Double?
-    val longitude: Double?
+    var latitude: Double?
+    var longitude: Double?
 
 }

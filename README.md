@@ -173,8 +173,8 @@ s?.newsFeed?.blockingSendWallPost(post)
 ```
 
 Post on a friend wall and mention him
-````kotlin
- val s = johnSession
+```kotlin
+val s = johnSession
 
 // take my first friend
 val friend = s?.account?.blockingGet()?.blockingListFriends()?.firstOrNull() ?: return
@@ -185,7 +185,34 @@ val post = TextWallMessage.Builder()
         .build()
 
 friend.blockingSendWallPost(post)
-````
+```
+
+Search for users by first name and gender
+```kotlin
+val s = johnSession
+
+val searchQuery = FluentUser.Search.Builder()
+        .setFirstName("alice")
+        .setGender(Gender.FEMALE)
+        .build()
+
+val users = s?.user?.blockingSearch(searchQuery)
+// return the first 10 results
+```
+
+Search for users by their living location
+```kotlin
+val s = johnSession
+
+val parisLocation = SimpleLocation(48.85661400000001, 2.3522219000000177)
+
+val searchQuery = FluentUser.Search.Builder()
+        .setLivingLocation(parisLocation)
+        .build()
+
+val users = s?.user?.blockingSearch(searchQuery)
+// return the first 10 results
+```
 
 #### Want to see more examples?
 

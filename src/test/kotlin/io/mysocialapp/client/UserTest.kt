@@ -22,7 +22,7 @@ class UserTest {
     @Test
     fun `list my news feed`() {
         val s = getSession()
-        assert(s?.account?.blockingGet()?.blockingStreamNewsFeed(100) != null)
+        assert(s?.account?.blockingGet()?.blockingStreamNewsFeed(100)?.toList() != null)
     }
 
     @Test
@@ -51,7 +51,8 @@ class UserTest {
     @Test
     fun `search for users`() {
         val s = getSession()
-        assert(s?.user?.blockingSearch(FluentUser.Search.Builder().setFirstName("romaric").build()) != null)
+        val results = s?.user?.blockingSearch(FluentUser.Search.Builder().setFirstName("romaric").build())?.toList()
+        assert(results != null)
     }
 
 }
