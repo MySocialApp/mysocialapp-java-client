@@ -81,6 +81,10 @@ Most of the actions can be synchronous and asynchronous with RxJava. We are usin
 String appId = "u123456789123a123456";
 MySocialApp msa = new MySocialApp.Builder().setAppId(appId).build();
 
+// or
+String endpointURL = "https://u123456789123a123456-api.mysocialapp.io";
+MySocialApp msa = new MySocialApp.Builder().setAPIEndpointURL(endpointURL).build();
+
 // create an account and return an active session to do fluent operations
 Session johnSession = msa.createAccount("John", "john@myapp.com", "myverysecretpassw0rd")
 ```
@@ -89,11 +93,15 @@ Session johnSession = msa.createAccount("John", "john@myapp.com", "myverysecretp
 val appId = "u123456789123a123456"
 val msa = MySocialApp.Builder().setAppId(appId).build()
 
+// or
+val endpointURL = "https://u123456789123a123456-api.mysocialapp.io";
+val msa = MySocialApp.Builder().setAPIEndpointURL(endpointURL).build()
+
 // create an account and return an active session to do fluent operations
 val johnSession = msa.createAccount("John", "john@myapp.com", "myverysecretpassw0rd")
 ```
 
-##### Do login with your account
+##### Do login with your account and get session
 ```java
 Session johnSession = msa.connect("John", "myverysecretpassw0rd");
 ```
@@ -307,10 +315,10 @@ val s = johnSession
 val conversation = s?.conversation?.blockingList()?.firstOrNull()
 
 // kick member
-conversion.blockingKickMember(it)
+conversion.blockingKickMember(user)
 
 // invite user
-conversion.blockingAddMember(it)
+conversion.blockingAddMember(user)
 ```
 
 ##### Quit conversation

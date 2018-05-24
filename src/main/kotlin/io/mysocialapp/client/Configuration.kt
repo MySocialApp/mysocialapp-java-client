@@ -3,4 +3,9 @@ package io.mysocialapp.client
 /**
  * Created by evoxmusic on 27/04/2018.
  */
-data class Configuration(val appId: String)
+data class Configuration(private val appId: String,
+                         private val apiEndpointURL: String? = null) {
+
+    val completeAPIEndpointURL = apiEndpointURL?.let { "$it/api/v1/" } ?: "https://$appId-api.mysocialapp.io/api/v1/"
+
+}

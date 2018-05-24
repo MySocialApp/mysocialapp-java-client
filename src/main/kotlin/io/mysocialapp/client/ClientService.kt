@@ -87,7 +87,7 @@ class ClientService(private val configuration: Configuration,
                 .build()
 
         Retrofit.Builder()
-                .baseUrl("https://${configuration.appId}-api.mysocialapp.io/api/v1/")
+                .baseUrl(configuration.completeAPIEndpointURL)
                 .client(coreOkHttpClient)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create(MyObjectMapper.objectMapper))

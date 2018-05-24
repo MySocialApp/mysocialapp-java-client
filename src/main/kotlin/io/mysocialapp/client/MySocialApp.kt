@@ -9,16 +9,23 @@ import io.mysocialapp.client.models.User
 class MySocialApp(private val configuration: Configuration,
                   private val clientConfiguration: ClientConfiguration = ClientConfiguration()) {
 
-    constructor(builder: Builder) : this(Configuration(builder.mAppId), builder.mClientConfiguration)
+    constructor(builder: Builder) : this(Configuration(builder.mAppId, builder.mAPIEndpointURL), builder.mClientConfiguration)
 
     private val clientService = ClientService(configuration, clientConfiguration)
 
     class Builder {
         var mAppId: String = ""
+        var mAPIEndpointURL: String? = null
 
         var mClientConfiguration: ClientConfiguration = ClientConfiguration()
+
         fun setAppId(appId: String): Builder {
             this.mAppId = appId
+            return this
+        }
+
+        fun setAPIEndpointURL(appURL: String): Builder {
+            this.mAPIEndpointURL = appURL
             return this
         }
 
