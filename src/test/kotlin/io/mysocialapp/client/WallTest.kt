@@ -1,8 +1,7 @@
 package io.mysocialapp.client
 
 import io.mysocialapp.client.models.AccessControl
-import io.mysocialapp.client.models.Photo
-import io.mysocialapp.client.models.TextWallMessage
+import io.mysocialapp.client.models.FeedPost
 import org.junit.Test
 import java.io.File
 
@@ -21,7 +20,7 @@ class WallTest {
     fun `add simple text post on the news feed`() {
         val s = getSession()
 
-        val post = TextWallMessage.Builder()
+        val post = FeedPost.Builder()
                 .setMessage("hello this is a simple post visible only from my friends and me")
                 .setVisibility(AccessControl.FRIEND)
                 .build()
@@ -33,7 +32,7 @@ class WallTest {
     fun `add text post with hashtag on the news feed`() {
         val s = getSession()
 
-        val post = TextWallMessage.Builder()
+        val post = FeedPost.Builder()
                 .setMessage("This is a post with #hashtag")
                 .setVisibility(AccessControl.FRIEND)
                 .build()
@@ -45,7 +44,7 @@ class WallTest {
     fun `add text post with url on the news feed`() {
         val s = getSession()
 
-        val post = TextWallMessage.Builder()
+        val post = FeedPost.Builder()
                 .setMessage("This is a post with url https://mysocialapp.io")
                 .setVisibility(AccessControl.FRIEND)
                 .build()
@@ -57,7 +56,7 @@ class WallTest {
     fun `add text post with mention on the news feed`() {
         val s = getSession()
 
-        val post = TextWallMessage.Builder()
+        val post = FeedPost.Builder()
                 .setMessage("This is a post with someone mentioned [[user:2375667195016462956]]")
                 .setVisibility(AccessControl.FRIEND)
                 .build()
@@ -69,7 +68,7 @@ class WallTest {
     fun `add text post with hashtag + url + mention on the news feed`() {
         val s = getSession()
 
-        val post = TextWallMessage.Builder()
+        val post = FeedPost.Builder()
                 .setMessage("This is a post with #hashtag url https://mysocialapp.io and someone mentioned [[user:2375667195016462956]]")
                 .setVisibility(AccessControl.FRIEND)
                 .build()
@@ -82,7 +81,7 @@ class WallTest {
     fun `add image post on the news feed which is only visible from my friends`() {
         val s = getSession()
 
-        val post = Photo.Builder()
+        val post = FeedPost.Builder()
                 .setMessage("This is a post with an image and a #hashtag :)")
                 .setImage(File("/tmp/myimage.jpg"))
                 .setVisibility(AccessControl.FRIEND)
@@ -97,7 +96,7 @@ class WallTest {
 
         val friend = s?.account?.blockingGet()?.blockingListFriends()?.firstOrNull() ?: return
 
-        val post = TextWallMessage.Builder()
+        val post = FeedPost.Builder()
                 .setMessage("Hey [[user:${friend.id}]] what's up?")
                 .setVisibility(AccessControl.FRIEND)
                 .build()

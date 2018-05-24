@@ -37,7 +37,7 @@ open class Base : BaseImpl {
         return Observable.empty<Any>()
     }
 
-    override fun update(): Observable<*> {
+    override fun save(): Observable<*> {
         return Observable.empty<Any>()
     }
 

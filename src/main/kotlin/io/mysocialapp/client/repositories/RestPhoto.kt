@@ -22,27 +22,24 @@ interface RestPhoto {
 
     @Multipart
     @POST("photo")
-    fun post(@Part("file\"; filename=\"image\"") photo: RequestBody,
-             @Part("album") album: RequestBody,
-             @Part("tag_entities") tagEntities: RequestBody): Observable<Feed>
-
-    @Multipart
-    @POST("photo")
-    fun post(@Part("file\"; filename=\"image\"") photo: RequestBody,
-             @Part("album") album: RequestBody,
-             @Part("message") message: RequestBody,
-             @Part("tag_entities") tagEntities: RequestBody): Observable<Feed>
-
-    @Multipart
-    @POST("photo")
-    fun post(@Part("file\"; filename=\"image\"") photo: RequestBody,
-             @Part("album") album: RequestBody?,
-             @Part("message") message: RequestBody?,
-             @Part("access_control") accessControl: RequestBody?,
-             @Part("tag_entities") tagEntities: RequestBody?): Observable<Feed>
-
-    @Multipart
-    @POST("photo")
     fun post(@Part("file\"; filename=\"image\"") photo: RequestBody): Observable<Feed>
+
+    @Multipart
+    @POST("photo")
+    fun post(@Part("file\"; filename=\"image\"") photo: RequestBody,
+             @Part("access_control") accessControl: RequestBody): Observable<Feed>
+
+    @Multipart
+    @POST("photo")
+    fun post(@Part("file\"; filename=\"image\"") photo: RequestBody,
+             @Part("message") message: RequestBody,
+             @Part("access_control") accessControl: RequestBody): Observable<Feed>
+
+    @Multipart
+    @POST("photo")
+    fun post(@Part("file\"; filename=\"image\"") photo: RequestBody,
+             @Part("message") message: RequestBody,
+             @Part("access_control") accessControl: RequestBody,
+             @Part("tag_entities") tagEntities: RequestBody): Observable<Feed>
 
 }

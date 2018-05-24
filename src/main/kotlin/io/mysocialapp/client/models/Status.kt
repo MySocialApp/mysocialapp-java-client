@@ -41,7 +41,7 @@ class Status(var message: String? = null) : BaseWall() {
         return session?.clientService?.status?.delete(idStr?.toLong()) ?: Observable.empty()
     }
 
-    override fun update(): Observable<Status> {
+    override fun save(): Observable<Status> {
         return session?.clientService?.status?.update(idStr?.toLong(), this)?.map { it.session = session; it } ?: Observable.empty()
     }
 

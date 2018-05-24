@@ -24,16 +24,10 @@ class FluentFeed(private val session: Session) {
         }).map { it.session = session; it }
     }
 
-    fun blockingSendWallPost(textWallMessage: TextWallMessage): Feed? = sendWallPost(textWallMessage).toBlocking().first()
+    fun blockingSendWallPost(feedPost: FeedPost): Feed? = sendWallPost(feedPost).toBlocking().first()
 
-    fun sendWallPost(textWallMessage: TextWallMessage): Observable<Feed> {
-        return session.account.get().map { it.blockingSendWallPost(textWallMessage) }
-    }
-
-    fun blockingSendWallPost(multipartPhoto: MultipartPhoto): Feed? = sendWallPost(multipartPhoto).toBlocking().first()
-
-    fun sendWallPost(multipartPhoto: MultipartPhoto): Observable<Feed> {
-        return session.account.get().map { it.blockingSendWallPost(multipartPhoto) }
+    fun sendWallPost(feedPost: FeedPost): Observable<Feed> {
+        return session.account.get().map { it.blockingSendWallPost(feedPost) }
     }
 
     fun blockingSearch(search: FluentFeed.Search, page: Int = 0, size: Int = 10): FeedsSearchResult? =

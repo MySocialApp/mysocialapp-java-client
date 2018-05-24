@@ -42,6 +42,10 @@ class ClientService(private val configuration: Configuration,
     val notificationUnreadConsume: RestNotificationUnreadConsume by lazy { retrofit.create(RestNotificationUnreadConsume::class.java) }
     val notificationAck: RestNotificationAck by lazy { retrofit.create(RestNotificationAck::class.java) }
     val search: RestSearch by lazy { retrofit.create(RestSearch::class.java) }
+    val conversation: RestConversation by lazy { retrofit.create(RestConversation::class.java) }
+    val conversationMessage: RestConversationMessage by lazy { retrofit.create(RestConversationMessage::class.java) }
+    val conversationMessageConsume: RestConversationMessageConsume by lazy { retrofit.create(RestConversationMessageConsume::class.java) }
+    val conversationMessagePhoto: RestConversationMessagePhoto by lazy { retrofit.create(RestConversationMessagePhoto::class.java) }
 
     private val retrofit by lazy {
         val httpLoggingInterceptor = HttpLoggingInterceptor()

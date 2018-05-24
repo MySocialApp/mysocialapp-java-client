@@ -34,9 +34,13 @@ interface BaseImpl : Serializable {
 
     var accessControl: AccessControl?
 
+    fun blockingDelete() = delete().toBlocking()?.first()
+
     fun delete(): Observable<*>
 
-    fun update(): Observable<*>
+    fun blockingSave(): Any? = save().toBlocking()?.first()
+
+    fun save(): Observable<*>
 
     var session: Session?
 

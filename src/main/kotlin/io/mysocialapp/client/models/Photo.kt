@@ -1,11 +1,7 @@
 package io.mysocialapp.client.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.mysocialapp.client.extensions.imageMediaType
-import okhttp3.MediaType
-import okhttp3.RequestBody
 import rx.Observable
-import java.io.File
 
 /**
  * Created by evoxmusic on 09/01/15.
@@ -32,39 +28,6 @@ class Photo : BaseWall(), Taggable {
 
     override val bodyImageURL: String?
         get() = highURL
-
-    class Builder {
-        private var mMessage: String? = null
-        private var mImage: File? = null
-        private var mVisibility: AccessControl = AccessControl.FRIEND
-
-        fun setMessage(message: String?): Builder {
-            this.mMessage = message
-            return this
-        }
-
-        fun setImage(image: File?): Builder {
-            this.mImage = image
-            return this
-        }
-
-        fun setVisibility(visibility: AccessControl): Builder {
-            this.mVisibility = visibility
-            return this
-        }
-
-        fun build(): MultipartPhoto {
-            if (mImage == null) {
-                throw IllegalArgumentException("image file is mandatory")
-            }
-
-            val photoRequestBody = RequestBody.create(mImage?.name?.imageMediaType(), mImage!!)
-            val messageRequestBody = if (mMessage.isNullOrBlank()) null else RequestBody.create(MediaType.parse("multipart/form-data"), mMessage!!)
-            val accessControlRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), mVisibility.name)
-
-            return MultipartPhoto(photoRequestBody, messageRequestBody, accessControl = accessControlRequestBody)
-        }
-    }
 
     override fun getLikes(): Observable<Like> {
         return session?.clientService?.photoLike?.list(idStr?.toLong())

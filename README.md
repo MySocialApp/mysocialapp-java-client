@@ -23,8 +23,8 @@ Add social features to your existing app, automate actions, scrape contents, ana
 | Comment | :heavy_check_mark: | :heavy_check_mark:
 | Like | :heavy_check_mark: | :heavy_check_mark:
 | Notification | :heavy_check_mark: | Partially
-| Private messaging | :heavy_check_mark: | Soon
-| Photo | :heavy_check_mark: | Soon
+| Private messaging | :heavy_check_mark: | :heavy_check_mark:
+| Photo | :heavy_check_mark: | Partially
 | User | :heavy_check_mark: | :heavy_check_mark:
 | Friend | :heavy_check_mark: | :heavy_check_mark:
 | URL rewrite | :heavy_check_mark: | :heavy_check_mark:
@@ -154,7 +154,7 @@ johnSession?.newsFeed?.blockingStream(100)
 ```kotlin
 val s = johnSession
 
-val post = TextWallMessage.Builder()
+val post = FeedPost.Builder()
         .setMessage("This is a post with #hashtag url https://mysocialapp.io and someone mentioned [[user:3856809369215939951]]")
         .setVisibility(AccessControl.PUBLIC)
         .build()
@@ -166,7 +166,7 @@ s?.newsFeed?.blockingSendWallPost(post)
 ```kotlin
 val s = johnSession
 
-val post = Photo.Builder()
+val post = FeedPost.Builder()
         .setMessage("This is a post with an image and a #hashtag :)")
         .setImage(File("/tmp/myimage.jpg"))
         .setVisibility(AccessControl.PUBLIC)
@@ -182,7 +182,7 @@ val s = johnSession
 // take my first friend
 val friend = s?.account?.blockingGet()?.blockingListFriends()?.firstOrNull() ?: return
 
-val post = TextWallMessage.Builder()
+val post = FeedPost.Builder()
         .setMessage("Hey [[user:${friend.id}]] what's up?")
         .setVisibility(AccessControl.FRIEND)
         .build()
@@ -199,7 +199,7 @@ val searchQuery = FluentUser.Search.Builder()
         .setGender(Gender.FEMALE)
         .build()
 
-val users = s?.user?.blockingSearch(searchQuery)
+val users = s?.user?.blockingSearch(searchQuery)?.data
 // return the 10 first results
 ```
 
@@ -213,7 +213,19 @@ val searchQuery = FluentUser.Search.Builder()
         .setLivingLocation(parisLocation)
         .build()
 
-val users = s?.user?.blockingSearch(searchQuery)
+val users = s?.user?.blockingSearch(searchQuery)?.data
+// return the 10 first results
+```
+
+##### Search for news feeds that contains "hello world"
+```kotlin
+val s = johnSession
+
+val searchQuery = FluentFeed.Search.Builder()
+        .setTextToSearch("hello world")
+        .build()
+
+val feeds = s?.newsFeed?.blockingSearch(searchQuery)?.data
 // return the 10 first results
 ```
 

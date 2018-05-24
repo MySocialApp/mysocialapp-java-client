@@ -36,12 +36,10 @@ data class User(var updatedDate: Date? = null,
                 var customFields: List<CustomField>? = null) : Base() {
 
 
-    fun save(): Observable<User> {
-        return session?.clientService?.account?.put(this)?.map { it.session = session; it } ?: Observable.empty()
-    }
+    override fun blockingSave(): User? = save().toBlocking()?.first()
 
-    fun blockingSave() {
-        save().toBlocking().subscribe()
+    override fun save(): Observable<User> {
+        return session?.clientService?.account?.put(this)?.map { it.session = session; it } ?: Observable.empty()
     }
 
     fun blockingRequestAsFriend(): User? = requestAsFriend().toBlocking()?.first()
@@ -96,21 +94,25 @@ data class User(var updatedDate: Date? = null,
         }).map { it.session = session; it }
     }
 
-    fun blockingSendWallPost(textWallMessage: TextWallMessage): Feed = sendWallPost(textWallMessage).toBlocking().first()
+    fun blockingSendWallPost(feedPost: FeedPost): Feed? = sendWallPost(feedPost).toBlocking().first()
 
-    fun sendWallPost(textWallMessage: TextWallMessage): Observable<Feed> {
-        return session?.clientService?.userWallMessage?.post(idStr?.toLong(), textWallMessage)?.map {
-            it.session = session; it
-        } ?: Observable.empty()
-    }
+    fun sendWallPost(feedPost: FeedPost): Observable<Feed> {
+        if (feedPost.multipartPhoto == null) {
+            return feedPost.textWallMessage?.let { session?.clientService?.userWallMessage?.post(idStr?.toLong(), it) }?.map {
+                it.session = session; it
+            } ?: Observable.empty()
+        }
 
-    fun blockingSendWallPost(multipartPhoto: MultipartPhoto): Feed = sendWallPost(multipartPhoto).toBlocking().first()
+        val obs = when {
+            feedPost.multipartPhoto.message == null -> session?.clientService?.photo?.post(feedPost.multipartPhoto.photo,
+                    feedPost.multipartPhoto.accessControl!!)
+            feedPost.multipartPhoto.tagEntities == null -> session?.clientService?.photo?.post(feedPost.multipartPhoto.photo,
+                    feedPost.multipartPhoto.message, feedPost.multipartPhoto.accessControl!!)
+            else -> session?.clientService?.photo?.post(feedPost.multipartPhoto.photo,
+                    feedPost.multipartPhoto.message, feedPost.multipartPhoto.accessControl!!, feedPost.multipartPhoto.tagEntities)
+        }
 
-    fun sendWallPost(multipartPhoto: MultipartPhoto): Observable<Feed> {
-        return session?.clientService?.photo?.post(multipartPhoto.photo, null, multipartPhoto.message,
-                multipartPhoto.accessControl, multipartPhoto.tagEntities)?.map {
-            it.session = session; it
-        } ?: Observable.empty()
+        return obs?.map { it.session = session; it } ?: Observable.empty()
     }
 
 }
