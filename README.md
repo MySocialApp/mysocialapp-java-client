@@ -86,7 +86,7 @@ String endpointURL = "https://u123456789123a123456-api.mysocialapp.io";
 MySocialApp msa = new MySocialApp.Builder().setAPIEndpointURL(endpointURL).build();
 
 // create an account and return an active session to do fluent operations
-Session johnSession = msa.createAccount("John", "john@myapp.com", "myverysecretpassw0rd")
+Session johnSession = msa.blockingCreateAccount("John", "john@myapp.com", "myverysecretpassw0rd")
 ```
 
 ```kotlin
@@ -98,16 +98,26 @@ val endpointURL = "https://u123456789123a123456-api.mysocialapp.io";
 val msa = MySocialApp.Builder().setAPIEndpointURL(endpointURL).build()
 
 // create an account and return an active session to do fluent operations
-val johnSession = msa.createAccount("John", "john@myapp.com", "myverysecretpassw0rd")
+val johnSession = msa.blockingCreateAccount("John", "john@myapp.com", "myverysecretpassw0rd")
 ```
 
-##### Do login with your account and get session
+##### Do login with an access token and get session
 ```java
-Session johnSession = msa.connect("John", "myverysecretpassw0rd");
+Session johnSession = msa.blockingConnect("my access token");
 ```
 
 ```kotlin
-val johnSession = msa.connect("John", "myverysecretpassw0rd")
+val johnSession = msa.blockingConnect("my access token")
+```
+
+
+##### Do login with your account and get session
+```java
+Session johnSession = msa.blockingConnect("John", "myverysecretpassw0rd");
+```
+
+```kotlin
+val johnSession = msa.blockingConnect("John", "myverysecretpassw0rd")
 ```
 
 ##### Get your account info
@@ -196,6 +206,27 @@ val post = FeedPost.Builder()
         .build()
 
 friend.blockingSendWallPost(post)
+```
+
+##### Ignore a news feed post
+```kotlin
+val s = getSession()
+val newsFeed = s?.newsFeed?.blockingStream(1)?.firstOrNull()
+newsFeed?.blockingIgnore()
+```
+
+##### Report a news feed post
+```kotlin
+val s = getSession()
+val newsFeed = s?.newsFeed?.blockingStream(1)?.firstOrNull()
+newsFeed?.blockingReport()
+```
+
+##### Delete a news feed post
+```kotlin
+val s = getSession()
+val newsFeed = s?.newsFeed?.blockingStream(1)?.firstOrNull()
+newsFeed?.blockingDelete()
 ```
 
 ##### Search for users by first name and gender

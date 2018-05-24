@@ -14,7 +14,7 @@ class ConversationTest {
         const val APP_ID = "u470584465854a194805"
     }
 
-    private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().connect("AliceX", "myverysecretpassw0rd")
+    private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("AliceX", "myverysecretpassw0rd")
 
     @Test
     fun `create conversation with 3 people`() {

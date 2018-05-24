@@ -16,7 +16,7 @@ class UserTest {
             .setAppId(APP_ID)
             .setClientConfiguration(ClientConfiguration(30_000L))
             .build()
-            .connect("AliceX", "myverysecretpassw0rd")
+            .blockingConnect("AliceX", "myverysecretpassw0rd")
 
     @Test
     fun `get 100 users`() {

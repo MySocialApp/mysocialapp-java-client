@@ -11,12 +11,12 @@ class FeedTest {
         const val APP_ID = "u470584465854a194805"
     }
 
-    private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().connect("AliceX", "myverysecretpassw0rd")
+    private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("AliceX", "myverysecretpassw0rd")
 
     @Test
     fun `get some news from feed`() {
         val s = getSession()
-        s?.newsFeed?.list()?.toBlocking()?.subscribe { feed -> println(feed.bodyMessage) }
+        s?.newsFeed?.blockingList()?.forEach { feed -> println(feed.bodyMessage) }
     }
 
     @Test
@@ -67,6 +67,24 @@ class FeedTest {
         val s = getSession()
         val results = s?.newsFeed?.blockingSearch(FluentFeed.Search.Builder().setTextToSearch("hello").build())
         assert(results != null)
+    }
+
+    @Test
+    fun `ignore last feed`() {
+        val s = getSession()
+        s?.newsFeed?.blockingStream(1)?.firstOrNull()?.blockingIgnore()
+    }
+
+    @Test
+    fun `report last feed`() {
+        val s = getSession()
+        s?.newsFeed?.blockingStream(1)?.firstOrNull()?.blockingAbuse()
+    }
+
+    @Test
+    fun `delete last feed`() {
+        val s = getSession()
+        s?.newsFeed?.blockingStream(1)?.firstOrNull()?.blockingDelete()
     }
 
 }

@@ -79,4 +79,16 @@ open class BaseWall : Base(), Likable, Commentable {
         }?.map { it.session = session; it } ?: Observable.empty()
     }
 
+    fun ignore(): Observable<Void> {
+        return session?.clientService?.feedIgnore?.post(id) ?: Observable.empty()
+    }
+
+    fun abuse(): Observable<Void> {
+        return session?.clientService?.feedAbuse?.post(id) ?: Observable.empty()
+    }
+
+    override fun delete(): Observable<Void> {
+        return session?.clientService?.feed?.delete(id) ?: Observable.empty()
+    }
+
 }

@@ -38,9 +38,7 @@ interface Wallable : Serializable {
 
     fun addLike(): Observable<Like>
 
-    fun deleteBlockingLike() {
-        deleteLike().toBlocking()?.first()
-    }
+    fun deleteBlockingLike() = deleteLike().toBlocking()?.first()
 
     fun deleteLike(): Observable<Void>
 
@@ -55,6 +53,18 @@ interface Wallable : Serializable {
     fun addBlockingComment(multipart: MultipartPhoto): Comment? = addComment(multipart).toBlocking()?.first()
 
     fun addComment(multipart: MultipartPhoto): Observable<Comment>
+
+    fun blockingIgnore() = ignore().toBlocking()?.first()
+
+    fun ignore(): Observable<Void>
+
+    fun blockingAbuse() = abuse().toBlocking()?.first()
+
+    fun abuse(): Observable<Void>
+
+    fun blockingDelete() = delete().toBlocking()?.first()
+
+    fun delete(): Observable<Void>
 
     var session: Session?
 

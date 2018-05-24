@@ -84,4 +84,16 @@ abstract class WallActivity(val action: ActivityType? = null,
         return baseObject?.addComment(multipart) ?: Observable.empty()
     }
 
+    override fun ignore(): Observable<Void> {
+        return session?.clientService?.feedIgnore?.post(baseObject?.id) ?: Observable.empty()
+    }
+
+    override fun abuse(): Observable<Void> {
+        return session?.clientService?.feedAbuse?.post(baseObject?.id) ?: Observable.empty()
+    }
+
+    override fun delete(): Observable<Void> {
+        return session?.clientService?.feed?.delete(baseObject?.id) ?: Observable.empty()
+    }
+
 }

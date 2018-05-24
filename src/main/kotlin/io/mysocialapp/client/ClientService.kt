@@ -22,6 +22,8 @@ class ClientService(private val configuration: Configuration,
     val register: RestRegister by lazy { retrofit.create(RestRegister::class.java) }
     val account: RestAccount by lazy { retrofit.create(RestAccount::class.java) }
     val feed: RestFeed by lazy { retrofit.create(RestFeed::class.java) }
+    val feedIgnore: RestFeedIgnore by lazy { retrofit.create(RestFeedIgnore::class.java) }
+    val feedAbuse: RestFeedAbuse by lazy { retrofit.create(RestFeedAbuse::class.java) }
     val feedComment: RestFeedComment by lazy { retrofit.create(RestFeedComment::class.java) }
     val feedLike: RestFeedLike by lazy { retrofit.create(RestFeedLike::class.java) }
     val photo: RestPhoto by lazy { retrofit.create(RestPhoto::class.java) }
