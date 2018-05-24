@@ -3,6 +3,7 @@ package io.mysocialapp.client
 import io.mysocialapp.client.models.Conversation
 import io.mysocialapp.client.models.ConversationMessagePost
 import org.junit.Test
+import java.io.File
 
 /**
  * Created by evoxmusic on 24/05/2018.
@@ -19,6 +20,7 @@ class ConversationTest {
     fun `create conversation with 3 people`() {
         val s = getSession()
 
+        // take 3 people
         val people = s?.user?.blockingStream(3)?.toList()?.get(0)?.users?.toSet() ?: emptySet()
 
         val conversation = Conversation.Builder()
@@ -93,7 +95,8 @@ class ConversationTest {
         val lastConversation = s?.conversation?.blockingList()?.firstOrNull()
 
         val message = ConversationMessagePost.Builder()
-                .setMessage("Hello, this is a message from our SDK")
+                .setMessage("Hello, this is a message from our SDK #MySocialApp with an amazing picture. Enjoy")
+                .setImage(File("/tmp/myimage.jpg"))
                 .build()
 
         val messageSent = lastConversation?.blockingSendMessage(message)

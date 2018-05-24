@@ -246,6 +246,81 @@ account?.blockingSave()
 val user = s?.user?.blockingGetByExternalId(yourAppUserId)
 ```
 
+##### List private conversations
+```kotlin
+val s = johnSession
+val conversations = s?.conversation?.blockingList()
+```
+
+##### Create conversation
+```kotlin
+val s = johnSession
+
+// take 3 first users
+val people = s?.user?.blockingStream(3)?.toList()?.get(0)?.users?.toSet() ?: emptySet()
+
+val conversation = Conversation.Builder()
+        .setName("let's talk about the next event in private")
+        .addMembers(people)
+        .build()
+
+val createdConversation = s?.conversation?.blockingCreate(conversation)
+```
+
+##### Post new message into conversation
+```kotlin
+val s = johnSession
+val lastConversation = s?.conversation?.blockingList()?.firstOrNull()
+
+val message = ConversationMessagePost.Builder()
+        .setMessage("Hello, this is a message from our SDK #MySocialApp with an amazing picture. Enjoy")
+        .setImage(File("/tmp/myimage.jpg"))
+        .build()
+
+val messageSent = lastConversation?.blockingSendMessage(message)
+```
+
+##### Get messages from conversation
+```kotlin
+val s = johnSession
+val conversation = s?.conversation?.blockingList()?.firstOrNull()
+
+// get 35 last messages without consuming them
+val conversationMessages = conversation?.messages?.blockingStream(35)?.toList()
+
+// get 35 last messages and consume them
+val conversationMessages = conversation?.messages?.blockingStreamAndConsume(35)?.toList()
+```
+
+##### Change conversation name
+```kotlin
+val s = johnSession
+val conversion = s?.conversation?.blockingList()?.firstOrNull()
+
+conversion?.name = "new conversation title :)"
+conversion?.blockingSave()
+```
+
+##### Kick/invite member from conversation
+```kotlin
+val s = johnSession
+val conversation = s?.conversation?.blockingList()?.firstOrNull()
+
+// kick member
+conversion.blockingKickMember(it)
+
+// invite user
+conversion.blockingAddMember(it)
+```
+
+##### Quit conversation
+```kotlin
+val s = johnSession
+val conversation = s?.conversation?.blockingList()?.firstOrNull()
+
+conversation?.blockingQuit()
+```
+
 #### More examples?
 
 [Look at our test classes for Java and Kotlin](https://github.com/MySocialApp/mysocialapp-java-client/tree/master/src/test)
