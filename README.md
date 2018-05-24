@@ -32,7 +32,7 @@ Add social features to your existing app, automate actions, scrape contents, ana
 | User mention | :heavy_check_mark: | :heavy_check_mark:
 | Hash tag| :heavy_check_mark: | :heavy_check_mark:
 | Search users | :heavy_check_mark: | :heavy_check_mark:
-| Search news feed | :heavy_check_mark: | Soon
+| Search news feed | :heavy_check_mark: | :heavy_check_mark:
 | Search groups | :heavy_check_mark: | Soon
 | Search events | :heavy_check_mark: | Soon
 | Group [optional module] | :heavy_check_mark: | Partially
@@ -200,7 +200,7 @@ val searchQuery = FluentUser.Search.Builder()
         .build()
 
 val users = s?.user?.blockingSearch(searchQuery)
-// return the first 10 results
+// return the 10 first results
 ```
 
 ##### Search for users by their living location
@@ -214,10 +214,27 @@ val searchQuery = FluentUser.Search.Builder()
         .build()
 
 val users = s?.user?.blockingSearch(searchQuery)
-// return the first 10 results
+// return the 10 first results
 ```
 
-#### Want to see more examples?
+##### How to integrate a MySocialApp user with an existing user in my application? 
+MySocialApp allows you to use your own user IDs to find a user using the "external_id" property. 
+
+```kotlin
+val yourAppUserId = "12348-abcdy-82739-qzdqdq"
+
+val s = johnSession
+
+// set app external user id
+val account = s?.account?.blockingGet()
+account?.externalId = yourAppUserId
+account?.blockingSave()
+
+// find user by external id
+val user = s?.user?.blockingGetByExternalId(yourAppUserId)
+```
+
+#### More examples?
 
 [Look at our test classes for Java and Kotlin](https://github.com/MySocialApp/mysocialapp-java-client/tree/master/src/test)
 

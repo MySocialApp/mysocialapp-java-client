@@ -59,6 +59,7 @@ class AccountTest {
 
         s?.account?.blockingGet()?.apply {
             lastName = "JoshX"
+            externalId = "123externalID123"
             blockingSave()
         }
 

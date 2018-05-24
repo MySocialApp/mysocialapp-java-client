@@ -1,5 +1,6 @@
 package io.mysocialapp.client
 
+import io.mysocialapp.client.models.SimpleLocation
 import org.junit.Test
 
 /**
@@ -11,7 +12,11 @@ class UserTest {
         const val APP_ID = "u470584465854a194805"
     }
 
-    private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().connect("AliceX", "myverysecretpassw0rd")
+    private fun getSession(): Session? = MySocialApp.Builder()
+            .setAppId(APP_ID)
+            .setClientConfiguration(ClientConfiguration(30_000L))
+            .build()
+            .connect("AliceX", "myverysecretpassw0rd")
 
     @Test
     fun `get 100 users`() {
@@ -51,8 +56,37 @@ class UserTest {
     @Test
     fun `search for users`() {
         val s = getSession()
-        val results = s?.user?.blockingSearch(FluentUser.Search.Builder().setFirstName("romaric").build())?.toList()
+        val results = s?.user?.blockingSearch(FluentUser.Search.Builder().setFirstName("romaric").build())
         assert(results != null)
+    }
+
+    @Test
+    fun `search for users by location`() {
+        val s = getSession()
+
+        val parisLocation = SimpleLocation(48.85661400000001, 2.3522219000000177)
+        val query = FluentUser.Search.Builder()
+                .setLivingLocation(parisLocation)
+                .setLivingLocationMaximumDistanceInKilometers(100.0)
+                .build()
+
+        val results = s?.user?.blockingSearch(query)
+
+        assert(results != null)
+    }
+
+    @Test
+    fun `search for users by their presentation`() {
+        val s = getSession()
+        val results = s?.user?.blockingSearch(FluentUser.Search.Builder().setPresentation("mysocialapp").build())
+        assert(results != null)
+    }
+
+    @Test
+    fun `find user by external id`() {
+        val s = getSession()
+        val user = s?.user?.blockingGetByExternalId("123externalID123")
+        assert(user?.externalId == "123externalID123")
     }
 
 }

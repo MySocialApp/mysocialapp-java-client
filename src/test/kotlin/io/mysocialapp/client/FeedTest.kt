@@ -62,4 +62,11 @@ class FeedTest {
         print("most popular feed on 100 last feeds is : '${mostPopularFeed?.bodyMessage}'")
     }
 
+    @Test
+    fun `search for feeds containing "hello"`() {
+        val s = getSession()
+        val results = s?.newsFeed?.blockingSearch(FluentFeed.Search.Builder().setTextToSearch("hello").build())
+        assert(results != null)
+    }
+
 }

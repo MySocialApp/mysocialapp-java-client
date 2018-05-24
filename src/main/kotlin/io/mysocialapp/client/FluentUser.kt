@@ -32,27 +32,30 @@ class FluentUser(private val session: Session) {
 
     fun getByExternalId(id: String): Observable<User> = session.clientService.userExternal.get(id).map { it.session = session; it }
 
-    fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): Iterable<Users> = search(search).toBlocking().toIterable()
+    fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): UsersSearchResult? =
+            search(search, page, size).toBlocking().first()
 
-    fun search(search: Search, page: Int = 0, size: Int = 10): Observable<Users> {
+    fun search(search: Search, page: Int = 0, size: Int = 10): Observable<UsersSearchResult> {
         val queryParams = search.toQueryParams()
 
-        return stream(page, size, object : PaginationResource<Users> {
-            override fun onNext(page: Int, size: Int): List<Users> {
+        return stream(page, size, object : PaginationResource<UsersSearchResult?> {
+            override fun onNext(page: Int, size: Int): List<UsersSearchResult?> {
                 return listOf(session.clientService.search.get(page, size, queryParams).map {
-                    Users(it.resultsByType?.users?.matchedCount, it.resultsByType?.users?.data)
+                    it.resultsByType?.users
                 }.toBlocking().first())
             }
-        }).map { it.users?.forEach { u -> u.session = session }; it }
+        }).map { it?.data?.forEach { u -> u.session = session }; it }
     }
 
-    class Search(private val user: User) : ISearch {
+    class Search(override val searchQuery: SearchQuery) : ISearch {
 
         class Builder {
             private var mFirstName: String? = null
             private var mLastName: String? = null
             private var mGender: Gender? = null
             private var mLivingLocation: SimpleLocation? = null
+            private var mLivingLocationMaximumDistance: Double? = null
+            private var mPresentation: String? = null
 
             fun setFirstName(firstName: String): Builder {
                 this.mFirstName = firstName
@@ -74,28 +77,35 @@ class FluentUser(private val session: Session) {
                 return this
             }
 
+            fun setLivingLocationMaximumDistanceInMeters(maximumDistance: Double): Builder {
+                this.mLivingLocationMaximumDistance = maximumDistance
+                return this
+            }
+
+            fun setLivingLocationMaximumDistanceInKilometers(maximumDistance: Double): Builder {
+                this.mLivingLocationMaximumDistance = maximumDistance * 1000
+                return this
+            }
+
+            fun setPresentation(presentation: String): Builder {
+                this.mPresentation = presentation
+                return this
+            }
+
             fun build(): Search {
-                return Search(User(
+                return Search(SearchQuery(user = User(
                         firstName = mFirstName,
                         lastName = mLastName,
                         gender = mGender,
+                        presentation = mPresentation,
                         livingLocation = mLivingLocation?.let { Location(location = it) }
-                ))
+                ), maximumDistanceInMeters = mLivingLocationMaximumDistance))
             }
         }
 
-        override fun toQueryParams(): Map<String, String> {
-            val m = mutableMapOf<String, String>()
+        override fun toQueryParams(): MutableMap<String, String> {
+            val m = super.toQueryParams()
             m["type"] = "USER" // limit responses to User type
-
-            user.firstName?.let { m["first_name"] = it }
-            user.lastName?.let { m["last_name"] = it }
-            user.gender?.let { m["gender"] = it.name }
-            user.livingLocation?.let {
-                it.latitude?.toString()?.let { m["latitude"] = it }
-                it.longitude?.toString()?.let { m["longitude"] = it }
-            }
-
             return m
         }
 
