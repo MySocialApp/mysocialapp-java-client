@@ -1,6 +1,7 @@
 package io.mysocialapp.client.models
 
 import io.mysocialapp.client.extensions.PaginationResource
+import io.mysocialapp.client.extensions.prepareAsync
 import io.mysocialapp.client.extensions.stream
 import rx.Observable
 import java.util.*
@@ -113,6 +114,16 @@ data class User(var updatedDate: Date? = null,
         }
 
         return obs?.map { it.session = session; it } ?: Observable.empty()
+    }
+
+    fun blockingSendPrivateMessage(conversationMessagePost: ConversationMessagePost): ConversationMessage? {
+        return sendPrivateMessage(conversationMessagePost).toBlocking()?.first()
+    }
+
+    fun sendPrivateMessage(conversationMessagePost: ConversationMessagePost): Observable<ConversationMessage> {
+        return session?.conversation?.create(Conversation.Builder().addMember(this).build())?.flatMap { conversation ->
+            conversation.sendMessage(conversationMessagePost).prepareAsync().map { it.session = session; it }
+        } ?: Observable.empty()
     }
 
 }

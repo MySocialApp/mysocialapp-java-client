@@ -40,6 +40,7 @@ Add social features to your existing app, automate actions, scrape contents, ana
 | Roadbook [optional module] | :heavy_check_mark: | Partially
 | Live tracking with `RideShare` ([exemple here](https://www.nousmotards.com/rideshare/follow/f6e0c27e01beb4f4-3856809369215939951-f10c31fd2dcc4576a1b488385aaa61c2)) [optional module] | :heavy_check_mark: | Soon
 | Point of interest [optional module] | :heavy_check_mark: | Soon
+| Admin operations | :heavy_check_mark: | Soon
 
 Looking for official Swift/iOS client API ? [Click here](https://github.com/MySocialApp/mysocialapp-swift-client)
 
@@ -76,7 +77,9 @@ Ask for an administrator to give you the **APP ID**.
 
 Most of the actions can be synchronous and asynchronous with RxJava. We are using [RxJava](https://github.com/ReactiveX/RxJava) to provide an elegant way to handle asynchronous results.
 
+### Profile
 ##### Create an account
+Java
 ```java
 String appId = "u123456789123a123456";
 MySocialApp msa = new MySocialApp.Builder().setAppId(appId).build();
@@ -89,6 +92,7 @@ MySocialApp msa = new MySocialApp.Builder().setAPIEndpointURL(endpointURL).build
 Session johnSession = msa.blockingCreateAccount("John", "john@myapp.com", "myverysecretpassw0rd")
 ```
 
+Kotlin
 ```kotlin
 val appId = "u123456789123a123456"
 val msa = MySocialApp.Builder().setAppId(appId).build()
@@ -102,25 +106,30 @@ val johnSession = msa.blockingCreateAccount("John", "john@myapp.com", "myverysec
 ```
 
 ##### Do login with an access token and get session
+Java
 ```java
 Session johnSession = msa.blockingConnect("my access token");
 ```
 
+Kotlin
 ```kotlin
 val johnSession = msa.blockingConnect("my access token")
 ```
 
 
 ##### Do login with your account and get session
+Java
 ```java
 Session johnSession = msa.blockingConnect("John", "myverysecretpassw0rd");
 ```
 
+Kotlin
 ```kotlin
 val johnSession = msa.blockingConnect("John", "myverysecretpassw0rd")
 ```
 
 ##### Get your account info
+Java
 ```java
 User account = johnSession.getAccount().blockingGet();
 account.getFirstName();
@@ -129,6 +138,7 @@ account.getLivingLocation();
 [..]
 ```
 
+Kotlin
 ```kotlin
 val account = jognSession.account.blockingGet()
 account.firstName
@@ -138,32 +148,67 @@ account.livingLocation?.completeCityAddress
 ```
 
 ##### Update your account
+Java
 ```java
 User account = johnSession.getAccount().blockingGet();
 account.setLastName("James");
 account.blockingSave(); // or use save() to asynchronously save it with Rx
 ```
 
+Kotlin
 ```kotlin
 val account = johnSession.account
 account.lastName = "James"
 account.blockingSave() // or use save() to asynchronously save it with Rx
 ```
 
+##### How to integrate a MySocialApp user with an existing user in my application? 
+MySocialApp allows you to use your own user IDs to find a user using the "external_id" property. 
+
+```kotlin
+val yourAppUserId = "12348-abcdy-82739-qzdqdq"
+
+val s = johnSession
+
+// set app external user id
+val account = s?.account?.blockingGet()
+account?.externalId = yourAppUserId
+account?.blockingSave()
+
+// find user by external id
+val user = s?.user?.blockingGetByExternalId(yourAppUserId)
+```
+
+##### Delete your account (not recoverable)
+⚠ Caution: this operation is not recoverable
+```kotlin
+val s = johnSession
+val password = "your account password to confirm the ownership"
+
+s?.account?.blockingRequestForDeleteAccount(password)
+// Your account has been deleted..
+// You are no more able to perform operations
+```
+
+### News feed
 ##### List news feed from specific page and size
+Java
 ```java
 johnSession.getNewsFeed().blockingList(0, 10)
 ```
 
+Kotlin
 ```kotlin
 johnSession?.newsFeed?.blockingList(0, 10)
 ```
 
 ##### Stream all 100 first news feed message
+Java
 ```java
 johnSession.getNewsFeed().blockingStream(100)
 ```
 
+Kotlin
 ```kotlin
 johnSession?.newsFeed?.blockingStream(100)
 ```
@@ -229,6 +274,7 @@ val newsFeed = s?.newsFeed?.blockingStream(1)?.firstOrNull()
 newsFeed?.blockingDelete()
 ```
 
+### Search
 ##### Search for users by first name and gender
 ```kotlin
 val s = johnSession
@@ -268,23 +314,7 @@ val feeds = s?.newsFeed?.blockingSearch(searchQuery)?.data
 // return the 10 first results
 ```
 
-##### How to integrate a MySocialApp user with an existing user in my application? 
-MySocialApp allows you to use your own user IDs to find a user using the "external_id" property. 
-
-```kotlin
-val yourAppUserId = "12348-abcdy-82739-qzdqdq"
-
-val s = johnSession
-
-// set app external user id
-val account = s?.account?.blockingGet()
-account?.externalId = yourAppUserId
-account?.blockingSave()
-
-// find user by external id
-val user = s?.user?.blockingGetByExternalId(yourAppUserId)
-```
-
+### Private conversation
 ##### List private conversations
 ```kotlin
 val s = johnSession
@@ -350,6 +380,19 @@ conversion.blockingKickMember(user)
 
 // invite user
 conversion.blockingAddMember(user)
+```
+
+##### Send quick private message to someone
+```kotlin
+val s = johnSession
+val user = s?.user?.blockingList()?.firstOrNull()?.users?.firstOrNull()
+
+val message = ConversationMessagePost.Builder()
+        .setMessage("Hey [[user:${user?.id}]] ! This is a quick message from our SDK #MySocialApp with an amazing picture. Enjoy")
+        .setImage(File("/tmp/myimage.jpg"))
+        .build()
+
+user?.blockingSendPrivateMessage(message)
 ```
 
 ##### Quit conversation

@@ -111,5 +111,18 @@ class ConversationTest {
         assert(s?.conversation?.blockingList()?.firstOrNull()?.id != conversation?.id)
     }
 
+    @Test
+    fun `send quick private message to someone`() {
+        val s = getSession()
+        val user = s?.user?.blockingList()?.firstOrNull()?.users?.firstOrNull()
+
+        val message = ConversationMessagePost.Builder()
+                .setMessage("Hey [[user:${user?.id}]] ! This is a quick message from our SDK #MySocialApp with an amazing picture. Enjoy")
+                .setImage(File("/tmp/myimage.jpg"))
+                .build()
+
+        user?.blockingSendPrivateMessage(message)
+    }
+
 
 }
