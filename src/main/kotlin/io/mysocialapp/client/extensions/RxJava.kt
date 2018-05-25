@@ -2,7 +2,6 @@ package io.mysocialapp.client.extensions
 
 import rx.Observable
 import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -11,7 +10,6 @@ import java.util.concurrent.TimeUnit
  */
 
 fun <T> Observable<T>.prepareAsync(): Observable<T> = this.subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
         .onErrorResumeNext(Observable.empty<T>())
         .doOnError { it.printStackTrace() }
 
