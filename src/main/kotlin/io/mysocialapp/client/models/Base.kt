@@ -21,8 +21,7 @@ open class Base : BaseImpl {
     override var owner: User? = null
 
     @JsonIgnore
-    override var
-            session: Session? = null
+    override var session: Session? = null
 
     override var bodyMessage: String?
         get() = null

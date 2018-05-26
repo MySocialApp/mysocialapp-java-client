@@ -122,7 +122,7 @@ data class User(var updatedDate: Date? = null,
 
     fun sendPrivateMessage(conversationMessagePost: ConversationMessagePost): Observable<ConversationMessage> {
         return session?.conversation?.create(Conversation.Builder().addMember(this).build())?.flatMap { conversation ->
-            conversation.sendMessage(conversationMessagePost).prepareAsync().map { it.session = session; it }
+            conversation.sendMessage(conversationMessagePost).prepareAsync()
         } ?: Observable.empty()
     }
 

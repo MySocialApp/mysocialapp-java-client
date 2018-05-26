@@ -24,7 +24,7 @@ Add social features to your existing app, automate actions, scrape contents, ana
 | Like | :heavy_check_mark: | :heavy_check_mark:
 | Notification | :heavy_check_mark: | Partially
 | Private messaging | :heavy_check_mark: | :heavy_check_mark:
-| Photo | :heavy_check_mark: | Partially
+| Photo | :heavy_check_mark: | :heavy_check_mark:
 | User | :heavy_check_mark: | :heavy_check_mark:
 | Friend | :heavy_check_mark: | :heavy_check_mark:
 | URL rewrite | :heavy_check_mark: | :heavy_check_mark:
@@ -67,10 +67,10 @@ dependencies {
 # Prerequisites
 
 You must have "APP ID" to target the right App. Want to [create your app](https://support.mysocialapp.io/hc/en-us/articles/115003936872-Create-my-first-app)?
-##### App owner/administrator:
+#### App owner/administrator:
 Sign in to [go.mysocialapp.io](https://go.mysocialapp.io) and go to API section. Your **APP ID** is part of the endpoint URL provided to your app. Which is something like `https://u123456789123a123456-api.mysocialapp.io`. Your **APP ID** is `u123456789123a123456`
 
-##### App user:
+#### App user:
 Ask for an administrator to give you the **APP ID**.
 
 # Usage
@@ -78,7 +78,7 @@ Ask for an administrator to give you the **APP ID**.
 Most of the actions can be synchronous and asynchronous with RxJava. We are using [RxJava](https://github.com/ReactiveX/RxJava) to provide an elegant way to handle asynchronous results.
 
 ### Profile
-##### Create an account
+#### Create an account
 Java
 ```java
 String appId = "u123456789123a123456";
@@ -105,7 +105,7 @@ val msa = MySocialApp.Builder().setAPIEndpointURL(endpointURL).build()
 val johnSession = msa.blockingCreateAccount("John", "john@myapp.com", "myverysecretpassw0rd")
 ```
 
-##### Do login with an access token and get session
+#### Do login with an access token and get session
 Java
 ```java
 Session johnSession = msa.blockingConnect("my access token");
@@ -117,7 +117,7 @@ val johnSession = msa.blockingConnect("my access token")
 ```
 
 
-##### Do login with your account and get session
+#### Do login with your account and get session
 Java
 ```java
 Session johnSession = msa.blockingConnect("John", "myverysecretpassw0rd");
@@ -128,7 +128,7 @@ Kotlin
 val johnSession = msa.blockingConnect("John", "myverysecretpassw0rd")
 ```
 
-##### Get your account info
+#### Get your account info
 Java
 ```java
 User account = johnSession.getAccount().blockingGet();
@@ -147,7 +147,7 @@ account.livingLocation?.completeCityAddress
 [..]
 ```
 
-##### Update your account
+#### Update your account
 Java
 ```java
 User account = johnSession.getAccount().blockingGet();
@@ -162,7 +162,7 @@ account.lastName = "James"
 account.blockingSave() // or use save() to asynchronously save it with Rx
 ```
 
-##### How to integrate a MySocialApp user with an existing user in my application? 
+#### How to integrate a MySocialApp user with an existing user in my application? 
 MySocialApp allows you to use your own user IDs to find a user using the "external_id" property. 
 
 ```kotlin
@@ -179,7 +179,7 @@ account?.blockingSave()
 val user = s?.user?.blockingGetByExternalId(yourAppUserId)
 ```
 
-##### Delete your account (not recoverable)
+#### Delete your account (not recoverable)
 ⚠ Caution: this operation is not recoverable
 ```kotlin
 val s = johnSession
@@ -191,7 +191,7 @@ s?.account?.blockingRequestForDeleteAccount(password)
 ```
 
 ### News feed
-##### List news feed from specific page and size
+#### List news feed from specific page and size
 Java
 ```java
 johnSession.getNewsFeed().blockingList(0, 10)
@@ -202,7 +202,7 @@ Kotlin
 johnSession?.newsFeed?.blockingList(0, 10)
 ```
 
-##### Stream all 100 first news feed message
+#### Stream all 100 first news feed message
 Java
 ```java
 johnSession.getNewsFeed().blockingStream(100)
@@ -213,7 +213,7 @@ Kotlin
 johnSession?.newsFeed?.blockingStream(100)
 ```
 
-##### Post public news with hashtag + url + user mention
+#### Post public news with hashtag + url + user mention
 ```kotlin
 val s = johnSession
 
@@ -225,7 +225,7 @@ val post = FeedPost.Builder()
 s?.newsFeed?.blockingSendWallPost(post)
 ``` 
 
-##### Post public photo with a hashtag
+#### Post public photo with a hashtag
 ```kotlin
 val s = johnSession
 
@@ -238,7 +238,7 @@ val post = FeedPost.Builder()
 s?.newsFeed?.blockingSendWallPost(post)
 ```
 
-##### Post on a friend wall and mention him
+#### Post on a friend wall and mention him
 ```kotlin
 val s = johnSession
 
@@ -253,21 +253,21 @@ val post = FeedPost.Builder()
 friend.blockingSendWallPost(post)
 ```
 
-##### Ignore a news feed post
+#### Ignore a news feed post
 ```kotlin
 val s = getSession()
 val newsFeed = s?.newsFeed?.blockingStream(1)?.firstOrNull()
 newsFeed?.blockingIgnore()
 ```
 
-##### Report a news feed post
+#### Report a news feed post
 ```kotlin
 val s = getSession()
 val newsFeed = s?.newsFeed?.blockingStream(1)?.firstOrNull()
 newsFeed?.blockingReport()
 ```
 
-##### Delete a news feed post
+#### Delete a news feed post
 ```kotlin
 val s = getSession()
 val newsFeed = s?.newsFeed?.blockingStream(1)?.firstOrNull()
@@ -275,7 +275,7 @@ newsFeed?.blockingDelete()
 ```
 
 ### Search
-##### Search for users by first name and gender
+#### Search for users by first name and gender
 ```kotlin
 val s = johnSession
 
@@ -288,7 +288,7 @@ val users = s?.user?.blockingSearch(searchQuery)?.data
 // return the 10 first results
 ```
 
-##### Search for users by their living location
+#### Search for users by their living location
 ```kotlin
 val s = johnSession
 
@@ -302,7 +302,7 @@ val users = s?.user?.blockingSearch(searchQuery)?.data
 // return the 10 first results
 ```
 
-##### Search for news feeds that contains "hello world"
+#### Search for news feeds that contains "hello world"
 ```kotlin
 val s = johnSession
 
@@ -315,13 +315,13 @@ val feeds = s?.newsFeed?.blockingSearch(searchQuery)?.data
 ```
 
 ### Private conversation
-##### List private conversations
+#### List private conversations
 ```kotlin
 val s = johnSession
 val conversations = s?.conversation?.blockingList()
 ```
 
-##### Create conversation
+#### Create conversation
 ```kotlin
 val s = johnSession
 
@@ -336,7 +336,7 @@ val conversation = Conversation.Builder()
 val createdConversation = s?.conversation?.blockingCreate(conversation)
 ```
 
-##### Post new message into conversation
+#### Post new message into conversation
 ```kotlin
 val s = johnSession
 val lastConversation = s?.conversation?.blockingList()?.firstOrNull()
@@ -349,7 +349,7 @@ val message = ConversationMessagePost.Builder()
 val messageSent = lastConversation?.blockingSendMessage(message)
 ```
 
-##### Get messages from conversation
+#### Get messages from conversation
 ```kotlin
 val s = johnSession
 val conversation = s?.conversation?.blockingList()?.firstOrNull()
@@ -361,7 +361,7 @@ val conversationMessages = conversation?.messages?.blockingStream(35)?.toList()
 val conversationMessages = conversation?.messages?.blockingStreamAndConsume(35)?.toList()
 ```
 
-##### Change conversation name
+#### Change conversation name
 ```kotlin
 val s = johnSession
 val conversion = s?.conversation?.blockingList()?.firstOrNull()
@@ -370,7 +370,7 @@ conversion?.name = "new conversation title :)"
 conversion?.blockingSave()
 ```
 
-##### Kick/invite member from conversation
+#### Kick/invite member from conversation
 ```kotlin
 val s = johnSession
 val conversation = s?.conversation?.blockingList()?.firstOrNull()
@@ -382,7 +382,7 @@ conversion.blockingKickMember(user)
 conversion.blockingAddMember(user)
 ```
 
-##### Send quick private message to someone
+#### Send quick private message to someone
 ```kotlin
 val s = johnSession
 val user = s?.user?.blockingList()?.firstOrNull()?.users?.firstOrNull()
@@ -395,7 +395,7 @@ val message = ConversationMessagePost.Builder()
 user?.blockingSendPrivateMessage(message)
 ```
 
-##### Quit conversation
+#### Quit conversation
 ```kotlin
 val s = johnSession
 val conversation = s?.conversation?.blockingList()?.firstOrNull()
@@ -403,7 +403,7 @@ val conversation = s?.conversation?.blockingList()?.firstOrNull()
 conversation?.blockingQuit()
 ```
 
-#### More examples?
+### More examples?
 
 [Look at our test classes for Java and Kotlin](https://github.com/MySocialApp/mysocialapp-java-client/tree/master/src/test)
 
