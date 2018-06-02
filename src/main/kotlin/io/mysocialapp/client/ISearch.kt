@@ -1,5 +1,6 @@
 package io.mysocialapp.client
 
+import io.mysocialapp.client.extensions.toISO8601
 import io.mysocialapp.client.models.SearchQuery
 
 /**
@@ -27,6 +28,12 @@ interface ISearch {
         }
 
         searchQuery.maximumDistanceInMeters?.toString()?.let { m["maximum_distance"] = it }
+
+        m["date_field"] = searchQuery.dateField ?: "created_date"
+        searchQuery.startDate?.let { m["start_date"] = it.toISO8601() }
+        searchQuery.endDate?.let { m["end_date"] = it.toISO8601() }
+
+        searchQuery.sortOrder?.let { m["sort_order"] = it.name }
 
         return m
     }

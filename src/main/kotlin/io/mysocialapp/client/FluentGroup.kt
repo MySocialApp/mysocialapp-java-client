@@ -28,8 +28,8 @@ class FluentGroup(private val session: Session) {
 
     fun get(id: Long): Observable<Group> = session.clientService.group.get(id).map { it.session = session; it }
 
-    fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): GroupsSearchResult? =
-            search(search, page, size).toBlocking().first()
+    fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): Iterable<GroupsSearchResult> =
+            search(search, page, size).toBlocking().toIterable()
 
     fun search(search: Search, page: Int = 0, size: Int = 10): Observable<GroupsSearchResult> {
         val queryParams = search.toQueryParams()
@@ -53,6 +53,7 @@ class FluentGroup(private val session: Session) {
             private var mGender: Gender? = null
             private var mLocation: SimpleLocation? = null
             private var mLocationMaximumDistance: Double? = null
+            private var mSortOrder: SortOrder? = null
 
             fun setName(name: String): Builder {
                 this.mName = name
@@ -89,13 +90,18 @@ class FluentGroup(private val session: Session) {
                 return this
             }
 
+            fun setOrder(sortOrder: SortOrder): Builder {
+                this.mSortOrder = sortOrder
+                return this
+            }
+
             fun build(): Search {
                 return Search(SearchQuery(user = User(
                         firstName = mFirstName,
                         lastName = mLastName,
                         gender = mGender,
                         livingLocation = mLocation?.let { Location(location = it) }
-                ), name = mName, content = mDescription, maximumDistanceInMeters = mLocationMaximumDistance))
+                ), name = mName, content = mDescription, maximumDistanceInMeters = mLocationMaximumDistance, sortOrder = mSortOrder))
             }
         }
 

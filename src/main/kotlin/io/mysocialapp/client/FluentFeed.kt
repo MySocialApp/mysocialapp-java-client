@@ -30,8 +30,8 @@ class FluentFeed(private val session: Session) {
         return session.account.get().map { it.blockingSendWallPost(feedPost) }
     }
 
-    fun blockingSearch(search: FluentFeed.Search, page: Int = 0, size: Int = 10): FeedsSearchResult? =
-            search(search, page, size).toBlocking().first()
+    fun blockingSearch(search: FluentFeed.Search, page: Int = 0, size: Int = 10): Iterable<FeedsSearchResult> =
+            search(search, page, size).toBlocking().toIterable()
 
     fun search(search: FluentFeed.Search, page: Int = 0, size: Int = 10): Observable<FeedsSearchResult> {
         val queryParams = search.toQueryParams()
@@ -54,6 +54,7 @@ class FluentFeed(private val session: Session) {
             private var mLivingLocation: SimpleLocation? = null
             private var mLivingLocationMaximumDistance: Double? = null
             private var mTextToSearch: String? = null
+            private var mSortOrder: SortOrder? = null
 
             fun setOwnerFirstName(firstName: String): Builder {
                 this.mFirstName = firstName
@@ -90,13 +91,18 @@ class FluentFeed(private val session: Session) {
                 return this
             }
 
+            fun setOrder(sortOrder: SortOrder): Builder {
+                this.mSortOrder = sortOrder
+                return this
+            }
+
             fun build(): Search {
                 return Search(SearchQuery(user = User(
                         firstName = mFirstName,
                         lastName = mLastName,
                         gender = mGender,
                         livingLocation = mLivingLocation?.let { Location(location = it) }
-                ), q = mTextToSearch, maximumDistanceInMeters = mLivingLocationMaximumDistance))
+                ), q = mTextToSearch, maximumDistanceInMeters = mLivingLocationMaximumDistance, sortOrder = mSortOrder))
             }
         }
 

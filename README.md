@@ -404,6 +404,8 @@ conversation?.blockingQuit()
 ```
 
 ### Event
+This module is optional. Please contact [us](mailto:support@mysocialapp.io) to request it
+
 #### List next events
 
 TODO
@@ -437,6 +439,8 @@ TODO
 TODO
 
 ### Group
+This module is optional. Please contact [us](mailto:support@mysocialapp.io) to request it 
+
 #### List groups
 
 TODO

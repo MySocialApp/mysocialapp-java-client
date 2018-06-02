@@ -32,8 +32,8 @@ class FluentUser(private val session: Session) {
 
     fun getByExternalId(id: String): Observable<User> = session.clientService.userExternal.get(id).map { it.session = session; it }
 
-    fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): UsersSearchResult? =
-            search(search, page, size).toBlocking().first()
+    fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): Iterable<UsersSearchResult> =
+            search(search, page, size).toBlocking().toIterable()
 
     fun search(search: Search, page: Int = 0, size: Int = 10): Observable<UsersSearchResult> {
         val queryParams = search.toQueryParams()
@@ -56,6 +56,7 @@ class FluentUser(private val session: Session) {
             private var mLivingLocation: SimpleLocation? = null
             private var mLivingLocationMaximumDistance: Double? = null
             private var mPresentation: String? = null
+            private var mSortOrder: SortOrder? = null
 
             fun setFirstName(firstName: String): Builder {
                 this.mFirstName = firstName
@@ -92,6 +93,11 @@ class FluentUser(private val session: Session) {
                 return this
             }
 
+            fun setOrder(sortOrder: SortOrder): Builder {
+                this.mSortOrder = sortOrder
+                return this
+            }
+
             fun build(): Search {
                 return Search(SearchQuery(user = User(
                         firstName = mFirstName,
@@ -99,7 +105,7 @@ class FluentUser(private val session: Session) {
                         gender = mGender,
                         presentation = mPresentation,
                         livingLocation = mLivingLocation?.let { Location(location = it) }
-                ), maximumDistanceInMeters = mLivingLocationMaximumDistance))
+                ), maximumDistanceInMeters = mLivingLocationMaximumDistance, sortOrder = mSortOrder))
             }
         }
 

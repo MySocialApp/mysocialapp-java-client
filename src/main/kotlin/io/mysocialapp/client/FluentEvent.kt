@@ -4,6 +4,7 @@ import io.mysocialapp.client.extensions.PaginationResource
 import io.mysocialapp.client.extensions.stream
 import io.mysocialapp.client.models.*
 import rx.Observable
+import java.util.*
 
 /**
  * Created by evoxmusic on 02/06/2018.
@@ -28,8 +29,8 @@ class FluentEvent(private val session: Session) {
 
     fun get(id: Long): Observable<Event> = session.clientService.event.get(id).map { it.session = session; it }
 
-    fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): EventsSearchResult? =
-            search(search, page, size).toBlocking().first()
+    fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): Iterable<EventsSearchResult> =
+            search(search, page, size).toBlocking().toIterable()
 
     fun search(search: Search, page: Int = 0, size: Int = 10): Observable<EventsSearchResult> {
         val queryParams = search.toQueryParams()
@@ -53,6 +54,10 @@ class FluentEvent(private val session: Session) {
             private var mGender: Gender? = null
             private var mLocation: SimpleLocation? = null
             private var mLocationMaximumDistance: Double? = null
+            private var mSortOrder: SortOrder? = null
+            private var mFromDate: Date? = null
+            private var mToDate: Date? = null
+            private var mDateField: DateField? = null
 
             fun setName(name: String): Builder {
                 this.mName = name
@@ -89,13 +94,40 @@ class FluentEvent(private val session: Session) {
                 return this
             }
 
+            fun setOrder(sortOrder: SortOrder): Builder {
+                this.mSortOrder = sortOrder
+                return this
+            }
+
+            fun setFromDate(date: Date): Builder {
+                this.mFromDate = date
+                return this
+            }
+
+            fun setToDate(date: Date): Builder {
+                this.mToDate = date
+                return this
+            }
+
+            fun setDateField(dateField: DateField): Builder {
+                this.mDateField = dateField
+                return this
+            }
+
             fun build(): Search {
                 return Search(SearchQuery(user = User(
                         firstName = mFirstName,
                         lastName = mLastName,
                         gender = mGender,
                         livingLocation = mLocation?.let { Location(location = it) }
-                ), name = mName, content = mDescription, maximumDistanceInMeters = mLocationMaximumDistance))
+                ), name = mName, content = mDescription, maximumDistanceInMeters = mLocationMaximumDistance,
+                        sortOrder = mSortOrder, startDate = mFromDate, endDate = mToDate,
+                        dateField = mDateField?.name ?: DateField.START_DATE.name))
+            }
+
+            enum class DateField {
+                START_DATE,
+                END_DATE
             }
         }
 
@@ -104,6 +136,5 @@ class FluentEvent(private val session: Session) {
             m["type"] = "EVENT" // limit responses to Event type
             return m
         }
-
     }
 }

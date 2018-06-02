@@ -2,6 +2,7 @@ package io.mysocialapp.client
 
 import io.mysocialapp.client.models.SimpleLocation
 import org.junit.Test
+import java.util.*
 
 /**
  * Created by evoxmusic on 02/06/2018.
@@ -22,6 +23,18 @@ class EventTest {
     fun `get 100 next events`() {
         val s = getSession()
         assert(s?.event?.blockingStream(100)?.toList() != null)
+    }
+
+    @Test
+    fun `get past events`() {
+        val s = getSession()
+
+        val query = FluentEvent.Search.Builder()
+                .setFromDate(Date(0))
+                .setToDate(Date())
+                .build()
+
+        assert(s?.event?.blockingSearch(query)?.toList() != null)
     }
 
     @Test
