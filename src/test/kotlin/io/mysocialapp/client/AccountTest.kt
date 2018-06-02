@@ -89,4 +89,17 @@ class AccountTest {
         s?.account?.blockingGet()?.blockingListFriends()
     }
 
+    @Test
+    fun `change my notification settings`() {
+        val s = getSession()
+
+        val acc = s?.account?.blockingGet()
+        val originalValue = acc?.userSettings?.notification?.newsletterEnabled ?: false
+
+        acc?.userSettings?.notification?.newsletterEnabled = !originalValue
+        val receivedAccount = acc?.blockingSave()
+
+        assert(receivedAccount?.userSettings?.notification?.newsletterEnabled == !originalValue)
+    }
+
 }

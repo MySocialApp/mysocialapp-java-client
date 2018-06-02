@@ -41,7 +41,7 @@ class FluentUser(private val session: Session) {
         return stream(page, size, object : PaginationResource<UsersSearchResult?> {
             override fun onNext(page: Int, size: Int): List<UsersSearchResult?> {
                 return listOf(session.clientService.search.get(page, size, queryParams).map {
-                    it.resultsByType?.users
+                    it.resultsByType?.users ?: UsersSearchResult(matchedCount = 0L)
                 }.toBlocking().first())
             }
         }).map { it?.data?.forEach { u -> u.session = session }; it }
@@ -72,7 +72,7 @@ class FluentUser(private val session: Session) {
                 return this
             }
 
-            fun setLivingLocation(location: SimpleLocation): Builder {
+            fun setLocation(location: SimpleLocation): Builder {
                 this.mLivingLocation = location
                 return this
             }

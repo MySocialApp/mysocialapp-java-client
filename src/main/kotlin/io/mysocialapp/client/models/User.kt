@@ -85,12 +85,13 @@ data class User(var updatedDate: Date? = null,
 
     fun streamNewsFeed(limit: Int = Int.MAX_VALUE): Observable<Feed> = listNewsFeed(0, limit)
 
-    fun blockingListNewsFeed(page: Int = 0, size: Int = 10): Iterable<Feed> = listNewsFeed().toBlocking()?.toIterable() ?: emptyList()
+    fun blockingListNewsFeed(page: Int = 0, size: Int = 10): Iterable<Feed> =
+            listNewsFeed(page, size).toBlocking()?.toIterable() ?: emptyList()
 
     fun listNewsFeed(page: Int = 0, size: Int = 10): Observable<Feed> {
         return stream(page, size, object : PaginationResource<Feed> {
             override fun onNext(page: Int, size: Int): List<Feed> {
-                return session?.clientService?.feed?.list(page, size)?.toBlocking()?.first() ?: emptyList()
+                return session?.clientService?.userWall?.list(id, page, size)?.toBlocking()?.first() ?: emptyList()
             }
         }).map { it.session = session; it }
     }
@@ -124,6 +125,36 @@ data class User(var updatedDate: Date? = null,
         return session?.conversation?.create(Conversation.Builder().addMember(this).build())?.flatMap { conversation ->
             conversation.sendMessage(conversationMessagePost).prepareAsync()
         } ?: Observable.empty()
+    }
+
+    fun blockingStreamGroup(limit: Int = Int.MAX_VALUE): Iterable<Group> = streamGroup(limit).toBlocking().toIterable()
+
+    fun streamGroup(limit: Int = Int.MAX_VALUE): Observable<Group> = listGroup(0, limit)
+
+    fun blockingListGroup(page: Int = 0, size: Int = 10): Iterable<Group> =
+            listGroup(page, size).toBlocking()?.toIterable() ?: emptyList()
+
+    fun listGroup(page: Int = 0, size: Int = 10): Observable<Group> {
+        return stream(page, size, object : PaginationResource<Group> {
+            override fun onNext(page: Int, size: Int): List<Group> {
+                return session?.clientService?.userGroup?.list(id, page, size)?.toBlocking()?.first() ?: emptyList()
+            }
+        }).map { it.session = session; it }
+    }
+
+    fun blockingStreamEvent(limit: Int = Int.MAX_VALUE): Iterable<Event> = streamEvent(limit).toBlocking().toIterable()
+
+    fun streamEvent(limit: Int = Int.MAX_VALUE): Observable<Event> = listEvent(0, limit)
+
+    fun blockingListEvent(page: Int = 0, size: Int = 10): Iterable<Event> =
+            listEvent(page, size).toBlocking()?.toIterable() ?: emptyList()
+
+    fun listEvent(page: Int = 0, size: Int = 10): Observable<Event> {
+        return stream(page, size, object : PaginationResource<Event> {
+            override fun onNext(page: Int, size: Int): List<Event> {
+                return session?.clientService?.userEvent?.list(id, page, size)?.toBlocking()?.first() ?: emptyList()
+            }
+        }).map { it.session = session; it }
     }
 
 }

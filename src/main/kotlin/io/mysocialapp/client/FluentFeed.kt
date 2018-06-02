@@ -39,7 +39,7 @@ class FluentFeed(private val session: Session) {
         return stream(page, size, object : PaginationResource<FeedsSearchResult?> {
             override fun onNext(page: Int, size: Int): List<FeedsSearchResult?> {
                 return listOf(session.clientService.search.get(page, size, queryParams).map {
-                    it.resultsByType?.feeds
+                    it.resultsByType?.feeds ?: FeedsSearchResult(matchedCount = 0L)
                 }.toBlocking().first())
             }
         }).map { it?.data?.forEach { u -> u.session = session }; it }

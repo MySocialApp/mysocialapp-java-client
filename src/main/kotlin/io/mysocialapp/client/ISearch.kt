@@ -14,6 +14,9 @@ interface ISearch {
 
         searchQuery.q?.let { m["q"] = it }
 
+        searchQuery.name?.let { m["name"] = it }
+        searchQuery.content?.let { m["content"] = it }
+
         searchQuery.user?.firstName?.let { m["first_name"] = it }
         searchQuery.user?.lastName?.let { m["last_name"] = it }
         searchQuery.user?.presentation?.let { m["content"] = it }

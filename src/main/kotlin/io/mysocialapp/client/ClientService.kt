@@ -35,6 +35,8 @@ class ClientService(private val configuration: Configuration,
     val user: RestUser by lazy { retrofit.create(RestUser::class.java) }
     val userExternal: RestUserExternal by lazy { retrofit.create(RestUserExternal::class.java) }
     val userActive: RestUserActive by lazy { retrofit.create(RestUserActive::class.java) }
+    val userGroup: RestUserGroup by lazy { retrofit.create(RestUserGroup::class.java) }
+    val userEvent: RestUserEvent by lazy { retrofit.create(RestUserEvent::class.java) }
     val userFriend: RestUserFriend by lazy { retrofit.create(RestUserFriend::class.java) }
     val userWall: RestUserWall by lazy { retrofit.create(RestUserWall::class.java) }
     val userWallMessage: RestUserWallMessage by lazy { retrofit.create(RestUserWallMessage::class.java) }
@@ -48,6 +50,8 @@ class ClientService(private val configuration: Configuration,
     val conversationMessage: RestConversationMessage by lazy { retrofit.create(RestConversationMessage::class.java) }
     val conversationMessageConsume: RestConversationMessageConsume by lazy { retrofit.create(RestConversationMessageConsume::class.java) }
     val conversationMessagePhoto: RestConversationMessagePhoto by lazy { retrofit.create(RestConversationMessagePhoto::class.java) }
+    val group: RestGroup by lazy { retrofit.create(RestGroup::class.java) }
+    val event: RestEvent by lazy { retrofit.create(RestEvent::class.java) }
 
     private val retrofit by lazy {
         val httpLoggingInterceptor = HttpLoggingInterceptor()

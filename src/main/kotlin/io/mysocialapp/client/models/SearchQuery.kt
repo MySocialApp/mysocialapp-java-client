@@ -5,4 +5,6 @@ package io.mysocialapp.client.models
  */
 data class SearchQuery(val user: User? = null,
                        val q: String? = null,
+                       val name: String? = null,
+                       val content: String? = null,
                        val maximumDistanceInMeters: Double? = null)

@@ -66,7 +66,7 @@ class UserTest {
 
         val parisLocation = SimpleLocation(48.85661400000001, 2.3522219000000177)
         val query = FluentUser.Search.Builder()
-                .setLivingLocation(parisLocation)
+                .setLocation(parisLocation)
                 .setLivingLocationMaximumDistanceInKilometers(100.0)
                 .build()
 

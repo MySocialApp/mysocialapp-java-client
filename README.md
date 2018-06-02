@@ -18,7 +18,7 @@ Add social features to your existing app, automate actions, scrape contents, ana
 
 | Feature | Server side API | Java/Kotlin client API
 | ------- | ----------- | -------------------------- |
-| Profile management | :heavy_check_mark: | Partially
+| Profile management | :heavy_check_mark: | :heavy_check_mark:
 | Feed | :heavy_check_mark: | :heavy_check_mark:
 | Comment | :heavy_check_mark: | :heavy_check_mark:
 | Like | :heavy_check_mark: | :heavy_check_mark:
@@ -33,8 +33,8 @@ Add social features to your existing app, automate actions, scrape contents, ana
 | Hash tag| :heavy_check_mark: | :heavy_check_mark:
 | Search users | :heavy_check_mark: | :heavy_check_mark:
 | Search news feed | :heavy_check_mark: | :heavy_check_mark:
-| Search groups | :heavy_check_mark: | Soon
-| Search events | :heavy_check_mark: | Soon
+| Search groups | :heavy_check_mark: | :heavy_check_mark:
+| Search events | :heavy_check_mark: | :heavy_check_mark:
 | Group [optional module] | :heavy_check_mark: | Partially
 | Event [optional module] | :heavy_check_mark: | Partially
 | Roadbook [optional module] | :heavy_check_mark: | Partially
@@ -402,6 +402,68 @@ val conversation = s?.conversation?.blockingList()?.firstOrNull()
 
 conversation?.blockingQuit()
 ```
+
+### Event
+#### List next events
+
+TODO
+
+#### Create an event
+
+TODO
+
+#### Update an event
+
+TODO
+
+#### Join / participate to an event
+
+TODO
+
+#### List my next events
+
+TODO
+
+#### List events between two dates
+
+TODO
+
+#### Search for events by name or description
+
+TODO
+
+#### Search for events by owner
+
+TODO
+
+### Group
+#### List groups
+
+TODO
+
+#### Create a group
+
+TODO
+
+#### Update a group
+
+TODO
+
+#### Join a group
+
+TODO
+
+#### List my groups
+
+TODO
+
+#### Search for groups by name or description
+
+TODO
+
+#### Search for groups by owner
+
+TODO
 
 ### More examples?
 

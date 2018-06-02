@@ -18,6 +18,8 @@ class Session(private val configuration: Configuration,
     val friend by lazy { FluentFriend(this) }
     val notification by lazy { FluentNotification(this) }
     val conversation by lazy { FluentConversation(this) }
+    val group by lazy { FluentGroup(this) }
+    val event by lazy { FluentEvent(this) }
 
     fun disconnect(): Observable<Void> = clientService.logout.post()
 
