@@ -409,67 +409,179 @@ This module is optional. Please contact [us](mailto:support@mysocialapp.io) to r
 #### List 50 next events
 ```kotlin
 val s = johnSession
-s?.event?.blockingStream(100)
+s?.event?.blockingStream(50)
 ```
 
 #### Create an event
+```kotlin
+val s = johnSession
 
-TODO
+val newarkLocation = SimpleLocation(40.736504474883915, -74.18175405)
+
+val tomorrow = Calendar.getInstance().apply {
+    time = Date()
+    add(Calendar.DATE, 1)
+}
+
+val afterTomorrow = Calendar.getInstance().apply {
+    time = Date()
+    add(Calendar.DATE, 2)
+}
+
+val event = Event.Builder()
+        .setName("New test event")
+        .setDescription("This is a new event create with our SDK")
+        .setStartDate(tomorrow.time)
+        .setEndDate(afterTomorrow.time)
+        .setLocation(newarkLocation)
+        .setMaxSeats(100)
+        .setMemberAccessControl(EventMemberAccessControl.PUBLIC)
+        .setCoverImage(File("/tmp/image.jpg"))
+        .build()
+
+s?.event?.blockingCreate(event)
+```
 
 #### Update an event
-
-TODO
+```kotlin
+event.name = "New event name"
+event.save()
+```
 
 #### Join / participate to an event
+```kotlin
+event.blockingParticipate()
+```
 
-TODO
-
-#### List my next events
-
-TODO
+#### List my 10 next events
+```kotlin
+val s = johnSession
+s?.account?.blockingGet()?.blockingStreamEvent(10)
+```
 
 #### List events between two dates
+```kotlin
+val s = johnSession
 
-TODO
+val tomorrow = Calendar.getInstance().apply {
+    time = Date()
+    add(Calendar.DATE, 1)
+}
+
+val afterTomorrow = Calendar.getInstance().apply {
+    time = Date()
+    add(Calendar.DATE, 2)
+}
+
+val query = FluentEvent.Search.Builder()
+        .setLocationMaximumDistanceInKilometers(100.0)
+        .setFromDate(tomorrow)
+        .setToDate(afterTomorrow)
+        .build()
+
+s?.event?.blockingSearch(query)
+```
 
 #### Search for events by name or description
+```kotlin
+val s = johnSession
 
-TODO
+val query = FluentEvent.Search.Builder()
+        .setName("my event name")
+        .setDescription("my event description")
+        .build()
+
+s?.event?.blockingSearch(query)
+```
 
 #### Search for events by owner
+```kotlin
+[..]
+user.blockingStreamEvent(10)
+```
 
-TODO
+#### Create post on event
+```kotlin
+[..]
+val post = FeedPost.Builder()
+        .setMessage("This is a post with #hashtag url https://mysocialapp.io and someone mentioned [[user:3856809369215939951]]")
+        .setVisibility(AccessControl.PUBLIC)
+        .build()
+
+event.blockingSendWallPost(post)
+```
 
 ### Group
 This module is optional. Please contact [us](mailto:support@mysocialapp.io) to request it 
 
 #### List groups
-
-TODO
+```kotlin
+val s = johnSession
+s?.group?.blockingStream(100)
+```
 
 #### Create a group
+```kotlin
+val s = johnSession
 
-TODO
+val newarkLocation = SimpleLocation(40.736504474883915, -74.18175405)
+
+val group = Group.Builder()
+        .setName("New group")
+        .setDescription("This is a new group create with our SDK")
+        .setLocation(newarkLocation)
+        .setMemberAccessControl(EventMemberAccessControl.PUBLIC)
+        .setImage(File("/tmp/image.jpg"))
+        .build()
+
+s?.group?.blockingCreate(group)
+```
 
 #### Update a group
-
-TODO
+```kotlin
+group.name = "New group name"
+group.save()
+```
 
 #### Join a group
-
-TODO
+```kotlin
+group.blockingJoin()
+```
 
 #### List my groups
-
-TODO
+```kotlin
+val s = johnSession
+s?.account?.blockingGet()?.blockingStreamGroup(10)
+```
 
 #### Search for groups by name or description
+```kotlin
+val s = johnSession
 
-TODO
+val query = FluentGroup.Search.Builder()
+        .setName("my group name")
+        .setDescription("my group description")
+        .build()
+
+s?.group?.blockingSearch(query)
+```
 
 #### Search for groups by owner
+```kotlin
+[..]
+user.blockingStreamGroup(10)
+```
 
-TODO
+#### Create post on group
+```kotlin
+[..]
+val post = FeedPost.Builder()
+        .setMessage("This is a post with #hashtag url https://mysocialapp.io and someone mentioned [[user:3856809369215939951]]")
+        .setVisibility(AccessControl.PUBLIC)
+        .build()
+
+group.blockingSendWallPost(post)
+```
 
 ### More examples?
 
