@@ -35,8 +35,8 @@ Add social features to your existing app, automate actions, scrape contents, ana
 | Search news feed | :heavy_check_mark: | :heavy_check_mark:
 | Search groups | :heavy_check_mark: | :heavy_check_mark:
 | Search events | :heavy_check_mark: | :heavy_check_mark:
-| Group [optional module] | :heavy_check_mark: | Partially
-| Event [optional module] | :heavy_check_mark: | Partially
+| Group [optional module] | :heavy_check_mark: | :heavy_check_mark:
+| Event [optional module] | :heavy_check_mark: | :heavy_check_mark:
 | Roadbook [optional module] | :heavy_check_mark: | Partially
 | Live tracking with `RideShare` ([exemple here](https://www.nousmotards.com/rideshare/follow/f6e0c27e01beb4f4-3856809369215939951-f10c31fd2dcc4576a1b488385aaa61c2)) [optional module] | :heavy_check_mark: | Soon
 | Point of interest [optional module] | :heavy_check_mark: | Soon
