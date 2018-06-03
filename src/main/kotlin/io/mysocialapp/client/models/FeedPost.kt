@@ -16,17 +16,17 @@ data class FeedPost(val textWallMessage: TextWallMessage? = null,
         private var mImage: File? = null
         private var mVisibility: AccessControl = AccessControl.FRIEND
 
-        fun setMessage(message: String?): FeedPost.Builder {
+        fun setMessage(message: String): Builder {
             this.mMessage = message
             return this
         }
 
-        fun setImage(image: File?): FeedPost.Builder {
+        fun setImage(image: File): Builder {
             this.mImage = image
             return this
         }
 
-        fun setVisibility(visibility: AccessControl): FeedPost.Builder {
+        fun setVisibility(visibility: AccessControl): Builder {
             this.mVisibility = visibility
             return this
         }

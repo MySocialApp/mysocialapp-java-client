@@ -1,10 +1,7 @@
 package io.mysocialapp.client.repositories
 
 import io.mysocialapp.client.models.Group
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
-import retrofit2.http.QueryMap
+import retrofit2.http.*
 import rx.Observable
 
 /**
@@ -19,6 +16,11 @@ interface RestGroup {
     @GET("group")
     fun list(@Query("page") page: Int,
              @Query("size") size: Int): Observable<List<Group>>
+
+    @GET("group")
+    fun list(@Query("page") page: Int,
+             @Query("size") size: Int,
+             @Query("limited") limited: Boolean): Observable<List<Group>>
 
     @GET("group")
     fun list(@Query("latitude") latitude: Double,
@@ -48,5 +50,11 @@ interface RestGroup {
 
     @GET("group/{id}")
     fun get(@Path("id") id: Long?): Observable<Group>
+
+    @POST("group")
+    fun post(@Body group: Group): Observable<Group>
+
+    @PUT("group/{id}")
+    fun put(@Path("id") id: Long?, @Body group: Group): Observable<Group>
 
 }

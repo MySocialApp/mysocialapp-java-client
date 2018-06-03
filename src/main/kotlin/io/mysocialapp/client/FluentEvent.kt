@@ -1,7 +1,9 @@
 package io.mysocialapp.client
 
 import io.mysocialapp.client.extensions.PaginationResource
+import io.mysocialapp.client.extensions.prepareAsync
 import io.mysocialapp.client.extensions.stream
+import io.mysocialapp.client.extensions.toRequestBody
 import io.mysocialapp.client.models.*
 import rx.Observable
 import java.util.*
@@ -11,23 +13,41 @@ import java.util.*
  */
 class FluentEvent(private val session: Session) {
 
-    fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<List<Event>> = stream(limit).toBlocking().toIterable()
+    fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<Event> = stream(limit).toBlocking().toIterable()
 
-    fun stream(limit: Int = Int.MAX_VALUE): Observable<List<Event>> = list(0, limit)
+    fun stream(limit: Int = Int.MAX_VALUE): Observable<Event> = list(0, limit)
 
-    fun blockingList(page: Int = 0, size: Int = 10): Iterable<List<Event>> = list(page, size).toBlocking().toIterable()
+    fun blockingList(page: Int = 0, size: Int = 10): Iterable<Event> = list(page, size).toBlocking().toIterable()
 
-    fun list(page: Int = 0, size: Int = 10): Observable<List<Event>> {
-        return stream(page, size, object : PaginationResource<List<Event>> {
-            override fun onNext(page: Int, size: Int): List<List<Event>> {
-                return listOf(session.clientService.event.list(page, size).toBlocking().first())
+    fun list(page: Int = 0, size: Int = 10): Observable<Event> {
+        return stream(page, size, object : PaginationResource<Event> {
+            override fun onNext(page: Int, size: Int): List<Event> {
+                return session.clientService.event.list(page, size, false).toBlocking().first()
             }
-        }).map { it.forEach { it.session = session }; it }
+        }).map { it.session = session; it }
     }
 
     fun blockingGet(id: Long): Event? = get(id).toBlocking()?.first()
 
     fun get(id: Long): Observable<Event> = session.clientService.event.get(id).map { it.session = session; it }
+
+    fun blockingCreate(event: Event): Event? = create(event).toBlocking()?.first()
+
+    fun create(event: Event): Observable<Event> {
+        return session.clientService.event.post(event).map { it.session = session; it }.flatMap { e ->
+            if (event.profileImageFile != null) {
+                session.clientService.eventProfilePhoto.post(e.id, event.profileImageFile?.toRequestBody()!!).map { it.session = session;e }.prepareAsync()
+            } else {
+                Observable.just(e)
+            }
+        }.flatMap { e ->
+            if (event.profileCoverImageFile != null) {
+                session.clientService.eventProfileCoverPhoto.post(e.id, event.profileCoverImageFile?.toRequestBody()!!).map { it.session = session;e }.prepareAsync()
+            } else {
+                Observable.just(e)
+            }
+        }
+    }
 
     fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): Iterable<EventsSearchResult> =
             search(search, page, size).toBlocking().toIterable()

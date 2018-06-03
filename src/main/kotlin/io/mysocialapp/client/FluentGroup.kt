@@ -1,7 +1,9 @@
 package io.mysocialapp.client
 
 import io.mysocialapp.client.extensions.PaginationResource
+import io.mysocialapp.client.extensions.prepareAsync
 import io.mysocialapp.client.extensions.stream
+import io.mysocialapp.client.extensions.toRequestBody
 import io.mysocialapp.client.models.*
 import rx.Observable
 
@@ -10,23 +12,41 @@ import rx.Observable
  */
 class FluentGroup(private val session: Session) {
 
-    fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<List<Group>> = stream(limit).toBlocking().toIterable()
+    fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<Group> = stream(limit).toBlocking().toIterable()
 
-    fun stream(limit: Int = Int.MAX_VALUE): Observable<List<Group>> = list(0, limit)
+    fun stream(limit: Int = Int.MAX_VALUE): Observable<Group> = list(0, limit)
 
-    fun blockingList(page: Int = 0, size: Int = 10): Iterable<List<Group>> = list(page, size).toBlocking().toIterable()
+    fun blockingList(page: Int = 0, size: Int = 10): Iterable<Group> = list(page, size).toBlocking().toIterable()
 
-    fun list(page: Int = 0, size: Int = 10): Observable<List<Group>> {
-        return stream(page, size, object : PaginationResource<List<Group>> {
-            override fun onNext(page: Int, size: Int): List<List<Group>> {
-                return listOf(session.clientService.group.list(page, size).toBlocking().first())
+    fun list(page: Int = 0, size: Int = 10): Observable<Group> {
+        return stream(page, size, object : PaginationResource<Group> {
+            override fun onNext(page: Int, size: Int): List<Group> {
+                return session.clientService.group.list(page, size, false).toBlocking().first()
             }
-        }).map { it.forEach { it.session = session }; it }
+        }).map { it.session = session; it }
     }
 
     fun blockingGet(id: Long): Group? = get(id).toBlocking()?.first()
 
     fun get(id: Long): Observable<Group> = session.clientService.group.get(id).map { it.session = session; it }
+
+    fun blockingCreate(group: Group): Group? = create(group).toBlocking()?.first()
+
+    fun create(group: Group): Observable<Group> {
+        return session.clientService.group.post(group).map { it.session = session; it }.flatMap { g ->
+            if (group.profileImageFile != null) {
+                session.clientService.groupProfilePhoto.post(g.id, group.profileImageFile?.toRequestBody()!!).map { it.session = session;g }.prepareAsync()
+            } else {
+                Observable.just(g)
+            }
+        }.flatMap { g ->
+            if (group.profileCoverImageFile != null) {
+                session.clientService.groupProfileCoverPhoto.post(g.id, group.profileCoverImageFile?.toRequestBody()!!).map { it.session = session;g }.prepareAsync()
+            } else {
+                Observable.just(g)
+            }
+        }
+    }
 
     fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): Iterable<GroupsSearchResult> =
             search(search, page, size).toBlocking().toIterable()

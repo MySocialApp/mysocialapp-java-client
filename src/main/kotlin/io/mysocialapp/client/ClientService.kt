@@ -50,8 +50,24 @@ class ClientService(private val configuration: Configuration,
     val conversationMessage: RestConversationMessage by lazy { retrofit.create(RestConversationMessage::class.java) }
     val conversationMessageConsume: RestConversationMessageConsume by lazy { retrofit.create(RestConversationMessageConsume::class.java) }
     val conversationMessagePhoto: RestConversationMessagePhoto by lazy { retrofit.create(RestConversationMessagePhoto::class.java) }
-    val group: RestGroup by lazy { retrofit.create(RestGroup::class.java) }
     val event: RestEvent by lazy { retrofit.create(RestEvent::class.java) }
+    val eventCancel: RestEventCancel by lazy { retrofit.create(RestEventCancel::class.java) }
+    val eventCustomField: RestEventCustomField by lazy { retrofit.create(RestEventCustomField::class.java) }
+    val eventMember: RestEventMember by lazy { retrofit.create(RestEventMember::class.java) }
+    val eventPhoto: RestEventPhoto by lazy { retrofit.create(RestEventPhoto::class.java) }
+    val eventProfilePhoto: RestEventProfilePhoto by lazy { retrofit.create(RestEventProfilePhoto::class.java) }
+    val eventProfileCoverPhoto: RestEventProfileCoverPhoto by lazy { retrofit.create(RestEventProfileCoverPhoto::class.java) }
+    val eventRide: RestEventRide by lazy { retrofit.create(RestEventRide::class.java) }
+    val eventWall: RestEventWall by lazy { retrofit.create(RestEventWall::class.java) }
+    val eventWallMessage: RestEventWallMessage by lazy { retrofit.create(RestEventWallMessage::class.java) }
+    val group: RestGroup by lazy { retrofit.create(RestGroup::class.java) }
+    val groupCustomField: RestGroupCustomField by lazy { retrofit.create(RestGroupCustomField::class.java) }
+    val groupMember: RestGroupMember by lazy { retrofit.create(RestGroupMember::class.java) }
+    val groupPhoto: RestGroupPhoto by lazy { retrofit.create(RestGroupPhoto::class.java) }
+    val groupProfilePhoto: RestGroupProfilePhoto by lazy { retrofit.create(RestGroupProfilePhoto::class.java) }
+    val groupProfileCoverPhoto: RestGroupProfileCoverPhoto by lazy { retrofit.create(RestGroupProfileCoverPhoto::class.java) }
+    val groupWall: RestGroupWall by lazy { retrofit.create(RestGroupWall::class.java) }
+    val groupWallMessage: RestGroupWallMessage by lazy { retrofit.create(RestGroupWallMessage::class.java) }
 
     private val retrofit by lazy {
         val httpLoggingInterceptor = HttpLoggingInterceptor()

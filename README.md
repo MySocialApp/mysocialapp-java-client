@@ -406,9 +406,11 @@ conversation?.blockingQuit()
 ### Event
 This module is optional. Please contact [us](mailto:support@mysocialapp.io) to request it
 
-#### List next events
-
-TODO
+#### List 50 next events
+```kotlin
+val s = johnSession
+s?.event?.blockingStream(100)
+```
 
 #### Create an event
 

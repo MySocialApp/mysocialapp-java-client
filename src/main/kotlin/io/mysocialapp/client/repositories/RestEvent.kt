@@ -1,10 +1,7 @@
 package io.mysocialapp.client.repositories
 
 import io.mysocialapp.client.models.Event
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
-import retrofit2.http.QueryMap
+import retrofit2.http.*
 import rx.Observable
 
 /**
@@ -19,6 +16,11 @@ interface RestEvent {
     @GET("event")
     fun list(@Query("page") page: Int,
              @Query("size") size: Int): Observable<List<Event>>
+
+    @GET("event")
+    fun list(@Query("page") page: Int,
+             @Query("size") size: Int,
+             @Query("limited") limited: Boolean): Observable<List<Event>>
 
     @GET("event")
     fun list(@Query("latitude") latitude: Double,
@@ -48,5 +50,11 @@ interface RestEvent {
 
     @GET("event/{id}")
     fun get(@Path("id") id: Long?): Observable<Event>
+
+    @POST("event")
+    fun post(@Body event: Event): Observable<Event>
+
+    @PUT("event/{id}")
+    fun put(@Path("id") id: Long?, @Body event: Event): Observable<Event>
 
 }
