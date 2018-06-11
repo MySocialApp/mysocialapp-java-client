@@ -16,20 +16,27 @@ class NotificationTest {
     @Test
     fun `list unread notifications`() {
         val s = getSession()
-        assert(s?.notification?.unread?.blockingStream(100) != null)
+        assert(s?.notification?.unread?.blockingStream(100)?.toList() != null)
     }
 
     @Test
     fun `list read notifications`() {
         val s = getSession()
-        assert(s?.notification?.read?.blockingStream(100) != null)
+        assert(s?.notification?.read?.blockingStream(100)?.toList() != null)
     }
 
     @Test
     fun `consume last unread notification`() {
         val s = getSession()
         val lastNotification = s?.notification?.unread?.blockingStream(1)?.firstOrNull() ?: return
-        println(lastNotification.blockingConsume() != null)
+        assert(lastNotification.blockingConsume() != null)
+    }
+
+    @Test
+    fun `get new event notifications`() {
+        val s = getSession()
+        val newEventNotifications = s?.notification?.unread?.blockingStream(100)?.toList()
+        assert(newEventNotifications != null)
     }
 
 }

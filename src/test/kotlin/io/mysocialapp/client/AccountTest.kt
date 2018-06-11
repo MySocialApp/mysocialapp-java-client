@@ -20,9 +20,9 @@ class AccountTest {
         val msa = MySocialApp.Builder().setAppId(APP_ID).build()
 
         val s = try {
-            msa.blockingCreateAccount("AliceX", "alicex@mysocialapp.io", "myverysecretpassw0rd")
+            msa.blockingCreateAccount("alicex@mysocialapp.io", "myverysecretpassw0rd", "AliceX")
         } catch (e: Exception) {
-            msa.blockingConnect("AliceX", "myverysecretpassw0rd")
+            msa.blockingConnect("alicex@mysocialapp.io", "myverysecretpassw0rd")
         }
 
         assert(s?.authenticationToken?.accessToken?.isNotEmpty() == true)

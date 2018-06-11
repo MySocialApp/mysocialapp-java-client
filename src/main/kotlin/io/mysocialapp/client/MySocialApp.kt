@@ -40,15 +40,15 @@ class MySocialApp(private val configuration: Configuration,
         fun build() = MySocialApp(this)
     }
 
-    fun blockingCreateAccount(username: String, email: String, password: String, firstName: String = username): Session? {
-        return createAccount(username, email, password, firstName).toBlocking()?.first()
+    fun blockingCreateAccount(email: String, password: String, firstName: String): Session? {
+        return createAccount(email, password, firstName).toBlocking()?.first()
     }
 
-    fun createAccount(username: String, email: String, password: String, firstName: String = username): Observable<Session> {
-        val user = User(username = username, firstName = firstName, email = email, password = password)
+    fun createAccount(email: String, password: String, firstName: String): Observable<Session> {
+        val user = User(firstName = firstName, email = email, password = password)
 
         return clientService.register.post(user).flatMap {
-            clientService.login.post(LoginCredentials(username, password))
+            clientService.login.post(LoginCredentials(email, password))
         }.map {
             Session(configuration, clientConfiguration, it)
         }
