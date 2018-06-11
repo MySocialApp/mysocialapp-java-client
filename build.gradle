@@ -34,9 +34,6 @@ dependencies {
 
     compile group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '3.10.0'
 
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
-    compile("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
-
     testRuntime("org.junit.vintage:junit-vintage-engine:$junitVintageVersion")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
     testRuntime("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
@@ -45,6 +42,7 @@ dependencies {
     testCompile("org.junit.vintage:junit-vintage-engine:$junitVintageVersion")
     testCompile("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
     testCompile("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 compileKotlin {

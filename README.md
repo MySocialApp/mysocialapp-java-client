@@ -64,6 +64,15 @@ dependencies {
 }
 ```
 
+For android, exclude module "kotlin-stdlib-jdk8" 
+```
+dependencies {
+    compile('com.github.mysocialapp:mysocialapp-java-client:v0.2.1') {
+        exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk8"
+    }
+}
+```
+
 # Prerequisites
 
 You must have "APP ID" to target the right App. Want to [create your app](https://support.mysocialapp.io/hc/en-us/articles/115003936872-Create-my-first-app)?
