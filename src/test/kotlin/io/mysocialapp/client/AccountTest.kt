@@ -11,9 +11,9 @@ class AccountTest {
         const val APP_ID = "u470584465854a194805"
     }
 
-    private fun getBadSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("AliceX", "mybadpassword")
+    private fun getBadSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("alicex@mysocialapp.io", "mybadpassword")
 
-    private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("AliceX", "myverysecretpassw0rd")
+    private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("alicex@mysocialapp.io", "myverysecretpassw0rd")
 
     @Test
     fun `create account`() {

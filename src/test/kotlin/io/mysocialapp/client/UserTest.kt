@@ -16,7 +16,7 @@ class UserTest {
             .setAppId(APP_ID)
             .setClientConfiguration(ClientConfiguration(30_000L))
             .build()
-            .blockingConnect("AliceX", "myverysecretpassw0rd")
+            .blockingConnect("alicex@mysocialapp.io", "myverysecretpassw0rd")
 
     @Test
     fun `get 100 users`() {
@@ -57,6 +57,13 @@ class UserTest {
     fun `search for users`() {
         val s = getSession()
         val results = s?.user?.blockingSearch(FluentUser.Search.Builder().setFirstName("romaric").build())
+        assert(results != null)
+    }
+
+    @Test
+    fun `search for users by with partial full name`() {
+        val s = getSession()
+        val results = s?.user?.blockingSearch(FluentUser.Search.Builder().setFullName("romaric philog").build())?.firstOrNull()
         assert(results != null)
     }
 

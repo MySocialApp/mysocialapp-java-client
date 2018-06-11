@@ -54,16 +54,12 @@ class MySocialApp(private val configuration: Configuration,
         }
     }
 
-    fun blockingConnectByEmail(email: String, password: String): Session? = blockingConnect(email, password)
-
-    fun connectByEmail(email: String, password: String): Observable<Session> = connect(email, password)
-
-    fun blockingConnect(username: String, password: String): Session? {
-        return connect(username, password).toBlocking()?.first()
+    fun blockingConnect(email: String, password: String): Session? {
+        return connect(email, password).toBlocking()?.first()
     }
 
-    fun connect(username: String, password: String): Observable<Session> {
-        return clientService.login.post(LoginCredentials(username, password)).map { Session(configuration, clientConfiguration, it) }
+    fun connect(email: String, password: String): Observable<Session> {
+        return clientService.login.post(LoginCredentials(email, password)).map { Session(configuration, clientConfiguration, it) }
     }
 
     fun blockingConnect(accessToken: String): Session? {

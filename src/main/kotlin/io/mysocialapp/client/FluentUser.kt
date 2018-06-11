@@ -50,6 +50,7 @@ class FluentUser(private val session: Session) {
     class Search(override val searchQuery: SearchQuery) : ISearch {
 
         class Builder {
+            private var mFullName: String? = null
             private var mFirstName: String? = null
             private var mLastName: String? = null
             private var mGender: Gender? = null
@@ -57,6 +58,11 @@ class FluentUser(private val session: Session) {
             private var mLivingLocationMaximumDistance: Double? = null
             private var mPresentation: String? = null
             private var mSortOrder: SortOrder? = null
+
+            fun setFullName(fullName: String): Builder {
+                this.mFullName = fullName
+                return this
+            }
 
             fun setFirstName(firstName: String): Builder {
                 this.mFirstName = firstName
@@ -105,7 +111,7 @@ class FluentUser(private val session: Session) {
                         gender = mGender,
                         presentation = mPresentation,
                         livingLocation = mLivingLocation?.let { Location(location = it) }
-                ), maximumDistanceInMeters = mLivingLocationMaximumDistance, sortOrder = mSortOrder))
+                ), maximumDistanceInMeters = mLivingLocationMaximumDistance, sortOrder = mSortOrder, q = mFullName))
             }
         }
 
