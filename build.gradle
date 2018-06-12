@@ -46,8 +46,8 @@ dependencies {
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "1.7"
+    kotlinOptions.jvmTarget = "1.6"
 }
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.7"
+    kotlinOptions.jvmTarget = "1.6"
 }
