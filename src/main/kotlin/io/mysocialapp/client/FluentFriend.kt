@@ -31,8 +31,8 @@ class FluentFriend(private val session: Session) {
         }
     }
 
-    fun blockingList(): Iterable<User> = list().toBlocking()?.toIterable() ?: emptyList()
+    fun blockingList(page: Int = 0, size: Int = 10): Iterable<User> = list(page, size).toBlocking()?.toIterable() ?: emptyList()
 
-    fun list(): Observable<User> = session.account.get().flatMap { it.listFriends() }
+    fun list(page: Int = 0, size: Int = 10): Observable<User> = session.account.get().flatMap { it.listFriends(page, size) }
 
 }

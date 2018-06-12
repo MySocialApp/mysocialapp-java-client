@@ -71,10 +71,11 @@ data class User(var updatedDate: Date? = null,
         return session?.clientService?.userFriend?.delete(idStr?.toLong()) ?: Observable.empty()
     }
 
-    fun blockingListFriends(): Iterable<User> = listFriends().toBlocking()?.toIterable() ?: emptyList()
+    fun blockingListFriends(page: Int = 0, size: Int = 10): Iterable<User> =
+            listFriends(page, size).toBlocking()?.toIterable() ?: emptyList()
 
-    fun listFriends(): Observable<User> {
-        return stream(0, Int.MAX_VALUE, object : PaginationResource<User> {
+    fun listFriends(page: Int = 0, size: Int = 10): Observable<User> {
+        return stream(page, size, object : PaginationResource<User> {
             override fun onNext(page: Int, size: Int): List<User> {
                 return session?.clientService?.userFriend?.list(idStr?.toLong(), page, size)?.toBlocking()?.first() ?: emptyList()
             }
