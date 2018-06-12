@@ -42,7 +42,7 @@ dependencies {
     testCompile("org.junit.vintage:junit-vintage-engine:$junitVintageVersion")
     testCompile("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
     testCompile("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 compileKotlin {
