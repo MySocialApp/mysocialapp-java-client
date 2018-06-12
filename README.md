@@ -64,11 +64,20 @@ dependencies {
 }
 ```
 
-For android, exclude module "kotlin-stdlib-jdk8" 
+For android, exclude duplicate META-INF files if needed. `Build.gradle`
 ```
-dependencies {
-    compile('com.github.mysocialapp:mysocialapp-java-client:v0.2.1') {
-        exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk8"
+android {
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
     }
 }
 ```
