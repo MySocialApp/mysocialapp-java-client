@@ -1,5 +1,6 @@
 package io.mysocialapp.client
 
+import io.mysocialapp.client.extensions.prepareAsync
 import io.mysocialapp.client.models.AuthenticationToken
 import io.mysocialapp.client.models.LoginCredentials
 import io.mysocialapp.client.models.ResetIdentifier
@@ -48,7 +49,7 @@ class MySocialApp(private val configuration: Configuration,
         val user = User(firstName = firstName, email = email, password = password)
 
         return clientService.register.post(user).flatMap {
-            clientService.login.post(LoginCredentials(email, password))
+            clientService.login.post(LoginCredentials(email, password)).prepareAsync()
         }.map {
             Session(configuration, clientConfiguration, it)
         }
