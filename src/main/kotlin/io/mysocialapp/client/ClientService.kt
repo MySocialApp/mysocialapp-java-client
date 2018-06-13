@@ -5,7 +5,6 @@ import io.mysocialapp.client.utils.MyObjectMapper
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -97,10 +96,14 @@ class ClientService(private val configuration: Configuration,
 
                     val res = chain.proceed(chain.request().newBuilder().build())
 
-                    if (res.code() == 401) {
-                        // TODO add handler
-                    } else if (res?.code() == 400 || res?.code() == 403) {
-                        // TODO add handler
+                    if (res.code() >= 400 || res.code() < 200) {
+                        //val responseBody = res.peekBody(Long.MAX_VALUE)?.string()
+                        if (res.code() == 401) {
+                            //throw MyObjectMapper.objectMapper.readValue(responseBody, InvalidCredentialsMySocialAppException::class.java)
+                        }
+
+                        //throw MyObjectMapper.objectMapper.readValue(responseBody, MySocialAppException::class.java)
+                        res.newBuilder()
                     }
 
                     res
@@ -111,7 +114,7 @@ class ClientService(private val configuration: Configuration,
         Retrofit.Builder()
                 .baseUrl(configuration.completeAPIEndpointURL)
                 .client(coreOkHttpClient)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create(MyObjectMapper.objectMapper))
                 .build()
     }

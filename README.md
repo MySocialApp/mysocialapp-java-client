@@ -601,6 +601,12 @@ val post = FeedPost.Builder()
 group.blockingSendWallPost(post)
 ```
 
+### Handle exceptions
+
+MySocialAppException and children can be handle by using the non blocking way with `.doOnError(..)` or `.onErrorResumeNext(..)`. Please refer to [RxJava](https://github.com/ReactiveX/RxJava) to know the difference between them.
+
+Note: Exceptions handling on blocking calls are coming soon.
+
 ### More examples?
 
 [Look at our test classes for Java and Kotlin](https://github.com/MySocialApp/mysocialapp-java-client/tree/master/src/test)

@@ -1,5 +1,6 @@
 package io.mysocialapp.client
 
+import io.mysocialapp.client.exceptions.InvalidCredentialsMySocialAppException
 import org.junit.Test
 
 /**
@@ -11,7 +12,9 @@ class AccountTest {
         const val APP_ID = "u470584465854a194805"
     }
 
-    private fun getBadSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("alicex@mysocialapp.io", "mybadpassword")
+    private fun getBadSession() = MySocialApp.Builder().setAppId(APP_ID).build().connect("alicex@mysocialapp.io", "mybadpassword")
+
+    private fun getBlockingBadSession() = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("alicex@mysocialapp.io", "mybadpassword")
 
     private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("alicex@mysocialapp.io", "myverysecretpassw0rd")
 
@@ -37,8 +40,22 @@ class AccountTest {
 
     @Test
     fun `get not existing account`() {
-        // TODO throw access denied status 401
-        getBadSession()?.account?.blockingGet()
+        getBadSession().subscribe({
+            println("good credentials")
+        }) { throwable ->
+            if (throwable is InvalidCredentialsMySocialAppException) {
+                println("bad credentials")
+                return@subscribe
+            }
+
+            println(throwable.message)
+        }
+
+        try {
+            getBlockingBadSession()
+        } catch (e: InvalidCredentialsMySocialAppException) {
+            println("bad credentials with blocking")
+        }
     }
 
     @Test
