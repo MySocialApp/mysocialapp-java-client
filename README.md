@@ -471,6 +471,21 @@ event.save()
 event.blockingParticipate()
 ```
 
+#### Tell that you do not want to participate to an event
+```kotlin
+event.blockingUnParticipate()
+```
+
+#### Confirm event participation
+```kotlin
+event.blockingConfirmParticipation()
+```
+
+#### Cancel your event participation
+```kotlin
+event.blockingCancelParticipation()
+```
+
 #### List my 10 next events
 ```kotlin
 val s = johnSession

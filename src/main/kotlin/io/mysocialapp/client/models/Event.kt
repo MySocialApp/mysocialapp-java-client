@@ -101,9 +101,17 @@ class Event : BaseWall(), WallTextable, Localizable {
         return session?.clientService?.eventCancel?.post(idStr?.toLong()) ?: Observable.empty()
     }
 
+    fun blockingConfirmParticipation() = blockingParticipate()
+
+    fun confirmParticipation() = participate()
+
+    fun blockingParticipate(): EventMember? = participate().toBlocking()?.first()
+
     fun participate(): Observable<EventMember> {
         return session?.clientService?.eventMember?.post(idStr?.toLong()) ?: Observable.empty()
     }
+
+    fun blockingUnParticipate(): EventMember? = unParticipate().toBlocking()?.first()
 
     fun unParticipate(): Observable<EventMember> {
         return session?.clientService?.eventMember?.delete(idStr?.toLong()) ?: Observable.empty()
