@@ -607,6 +607,10 @@ MySocialAppException and children can be handle by using the non blocking way wi
 
 Note: Exceptions handling on blocking calls are coming soon.
 
+### Real time downstream notifications
+
+They are coming soon and will be part of this lib using WebSocket and `mysocialapp-android-client` additional lib for Android. Expected for June/July 2018
+
 ### More examples?
 
 [Look at our test classes for Java and Kotlin](https://github.com/MySocialApp/mysocialapp-java-client/tree/master/src/test)

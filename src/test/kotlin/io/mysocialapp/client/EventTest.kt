@@ -73,7 +73,7 @@ class EventTest {
     @Test
     fun `list my events`() {
         val s = getSession()
-        val myEvents = s?.account?.blockingGet()?.blockingStreamEvent(10)?.toList()
+        val myEvents = s?.account?.blockingGet()?.blockingStreamEvent(22)?.toList()
 
         assert(myEvents != null)
     }

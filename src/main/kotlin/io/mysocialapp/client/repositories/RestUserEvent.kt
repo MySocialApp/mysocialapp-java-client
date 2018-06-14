@@ -21,4 +21,7 @@ interface RestUserEvent {
     @GET("user/{id}/event")
     fun list(@Path("id") id: Long?, @Query("page") page: Int, @Query("size") size: Int): Observable<List<Event>>
 
+    @GET("user/{id}/event")
+    fun list(@Path("id") id: Long?, @Query("page") page: Int, @Query("size") size: Int, @QueryMap params: Map<String, String>): Observable<List<Event>>
+
 }

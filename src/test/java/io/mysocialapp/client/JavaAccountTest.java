@@ -1,9 +1,6 @@
 package io.mysocialapp.client;
 
-import io.mysocialapp.client.exceptions.MySocialAppException;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
 
 /**
  * Created by evoxmusic on 10/05/2018.
@@ -14,11 +11,7 @@ class JavaAccountTest {
     private static Session session;
 
     static {
-        try {
-            session = new MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("AliceX", "myverysecretpassw0rd");
-        } catch (MySocialAppException | IOException e) {
-            e.printStackTrace();
-        }
+        session = new MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("AliceX", "myverysecretpassw0rd");
     }
 
     @Test

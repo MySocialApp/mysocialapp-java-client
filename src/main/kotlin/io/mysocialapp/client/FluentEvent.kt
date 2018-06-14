@@ -1,9 +1,6 @@
 package io.mysocialapp.client
 
-import io.mysocialapp.client.extensions.PaginationResource
-import io.mysocialapp.client.extensions.prepareAsync
-import io.mysocialapp.client.extensions.stream
-import io.mysocialapp.client.extensions.toRequestBody
+import io.mysocialapp.client.extensions.*
 import io.mysocialapp.client.models.*
 import rx.Observable
 import java.util.*
@@ -13,16 +10,18 @@ import java.util.*
  */
 class FluentEvent(private val session: Session) {
 
-    fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<Event> = stream(limit).toBlocking().toIterable()
+    fun blockingStream(limit: Int = Int.MAX_VALUE, fromDate: Date = Date()): Iterable<Event> = stream(limit, fromDate).toBlocking().toIterable()
 
-    fun stream(limit: Int = Int.MAX_VALUE): Observable<Event> = list(0, limit)
+    fun stream(limit: Int = Int.MAX_VALUE, fromDate: Date = Date()): Observable<Event> = list(0, limit, fromDate)
 
-    fun blockingList(page: Int = 0, size: Int = 10): Iterable<Event> = list(page, size).toBlocking().toIterable()
+    fun blockingList(page: Int = 0, size: Int = 10, fromDate: Date = Date()): Iterable<Event> = list(page, size, fromDate).toBlocking().toIterable()
 
-    fun list(page: Int = 0, size: Int = 10): Observable<Event> {
+    fun list(page: Int = 0, size: Int = 10, fromDate: Date = Date()): Observable<Event> {
+        val queryMap = mapOf("sort_field" to "start_date", "date_field" to "start_date", "limited" to "false", "from_date" to fromDate.toISO8601())
+
         return stream(page, size, object : PaginationResource<Event> {
             override fun onNext(page: Int, size: Int): List<Event> {
-                return session.clientService.event.list(page, size, false).toBlocking().first()
+                return session.clientService.event.list(page, size, queryMap).toBlocking().first()
             }
         }).map { it.session = session; it }
     }
