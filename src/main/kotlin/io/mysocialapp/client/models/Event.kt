@@ -32,7 +32,7 @@ class Event : BaseWall(), WallTextable, Localizable {
     val profileCoverPhoto: Photo? = null
     val available: Boolean = true
     val remainingSecondsBeforeStart: Long = 0
-    val customFields: List<CustomField>? = null
+    var customFields: List<CustomField>? = null
 
     @JsonIgnore
     var profileImageFile: File? = null
@@ -127,6 +127,7 @@ class Event : BaseWall(), WallTextable, Localizable {
         private var mMemberAccessControl = EventMemberAccessControl.PUBLIC
         private var mImage: File? = null
         private var mCoverImage: File? = null
+        private var mCustomFields: List<CustomField>? = null
 
         fun setName(name: String): Builder {
             this.mName = name
@@ -173,6 +174,11 @@ class Event : BaseWall(), WallTextable, Localizable {
             return this
         }
 
+        fun setCustomFields(customFields: List<CustomField>?): Builder {
+            this.mCustomFields = customFields
+            return this
+        }
+
         fun build(): Event {
             if (mName.isNullOrBlank()) {
                 IllegalArgumentException("Name cannot be null or empty")
@@ -208,6 +214,7 @@ class Event : BaseWall(), WallTextable, Localizable {
                 eventMemberAccessControl = mMemberAccessControl
                 profileImageFile = mImage
                 profileCoverImageFile = mCoverImage
+                customFields = mCustomFields
             }
         }
     }

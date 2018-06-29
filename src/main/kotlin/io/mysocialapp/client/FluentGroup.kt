@@ -48,6 +48,10 @@ class FluentGroup(private val session: Session) {
         }
     }
 
+    fun blockingGetAvailableCustomFields(): Iterable<CustomField> = getAvailableCustomFields().toBlocking().toIterable()
+
+    fun getAvailableCustomFields(): Observable<CustomField> = session.clientService.groupCustomField.list().flatMapIterable { it }
+
     fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): Iterable<GroupsSearchResult> =
             search(search, page, size).toBlocking().toIterable()
 

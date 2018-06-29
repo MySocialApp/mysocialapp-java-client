@@ -1,7 +1,10 @@
 package io.mysocialapp.client
 
 import io.mysocialapp.client.exceptions.InvalidCredentialsMySocialAppException
+import io.mysocialapp.client.models.CustomField
+import io.mysocialapp.client.models.SimpleLocation
 import org.junit.Test
+import java.util.*
 
 /**
  * Created by evoxmusic on 27/04/2018.
@@ -84,6 +87,39 @@ class AccountTest {
     }
 
     @Test
+    fun `update account custom fields properties`() {
+        val s = getSession()
+
+        val newarkLocation = SimpleLocation(-22.9098755, -43.20949710000002)
+
+        val customFields = s?.account?.blockingGetAvailableCustomFields()?.map { customField ->
+            customField.value = when (customField.fieldType) {
+                CustomField.FieldType.INPUT_TEXT -> "Text test"
+                CustomField.FieldType.INPUT_TEXTAREA -> "TextArea test text"
+                CustomField.FieldType.INPUT_NUMBER -> 1337
+                CustomField.FieldType.INPUT_BOOLEAN -> false
+                CustomField.FieldType.INPUT_DATE -> Date()
+                CustomField.FieldType.INPUT_URL -> "https://mysocialapp.io"
+                CustomField.FieldType.INPUT_EMAIL -> "test@mysocialapp.io"
+                CustomField.FieldType.INPUT_PHONE -> "+33123452345"
+                CustomField.FieldType.INPUT_LOCATION -> newarkLocation
+                CustomField.FieldType.INPUT_SELECT -> customField.possibleValues?.firstOrNull()
+                CustomField.FieldType.INPUT_CHECKBOX -> customField.possibleValues?.take(2)
+                null -> null
+            }
+
+            customField
+        }
+
+        val acc = s?.account?.blockingGet()
+        acc?.customFields = customFields
+        acc?.blockingSave()
+
+        val savedCustomFields = s?.account?.blockingGet()?.customFields
+        assert(savedCustomFields != null)
+    }
+
+    @Test
     fun `take the living location of first feed owner, and set it has my own living location`() {
         val s = getSession()
 
@@ -117,6 +153,13 @@ class AccountTest {
         val receivedAccount = acc?.blockingSave()
 
         assert(receivedAccount?.userSettings?.notification?.newsletterEnabled == !originalValue)
+    }
+
+    @Test
+    fun `list account custom fields`() {
+        val s = getSession()
+        val customFields = s?.account?.blockingGetAvailableCustomFields()?.toList()
+        assert(customFields != null)
     }
 
 }

@@ -1,10 +1,12 @@
 package io.mysocialapp.client
 
+import io.mysocialapp.client.models.CustomField
 import io.mysocialapp.client.models.Group
 import io.mysocialapp.client.models.GroupMemberAccessControl
 import io.mysocialapp.client.models.SimpleLocation
 import org.junit.Test
 import java.io.File
+import java.util.*
 
 /**
  * Created by evoxmusic on 01/06/2018.
@@ -33,12 +35,32 @@ class GroupTest {
 
         val newarkLocation = SimpleLocation(-22.9098755, -43.20949710000002)
 
+        val customFields = s?.group?.blockingGetAvailableCustomFields()?.map { customField ->
+            customField.value = when (customField.fieldType) {
+                CustomField.FieldType.INPUT_TEXT -> "Text test"
+                CustomField.FieldType.INPUT_TEXTAREA -> "TextArea test text"
+                CustomField.FieldType.INPUT_NUMBER -> 1337
+                CustomField.FieldType.INPUT_BOOLEAN -> false
+                CustomField.FieldType.INPUT_DATE -> Date()
+                CustomField.FieldType.INPUT_URL -> "https://mysocialapp.io"
+                CustomField.FieldType.INPUT_EMAIL -> "test@mysocialapp.io"
+                CustomField.FieldType.INPUT_PHONE -> "+33123452345"
+                CustomField.FieldType.INPUT_LOCATION -> newarkLocation
+                CustomField.FieldType.INPUT_SELECT -> customField.possibleValues?.firstOrNull()
+                CustomField.FieldType.INPUT_CHECKBOX -> customField.possibleValues?.take(2)
+                null -> null
+            }
+
+            customField
+        }
+
         val group = Group.Builder()
                 .setName("New test event")
                 .setDescription("This is a new event create with our SDK")
                 .setLocation(newarkLocation)
                 .setMemberAccessControl(GroupMemberAccessControl.PUBLIC)
                 .setImage(File("/tmp/image.jpg"))
+                .setCustomFields(customFields)
                 .build()
 
         assert(s!!.group.blockingCreate(group) != null)
@@ -84,6 +106,13 @@ class GroupTest {
         val s = getSession()
         val group = s?.group?.blockingStream(1)?.first()
         assert(group?.members != null)
+    }
+
+    @Test
+    fun `list group custom fields`() {
+        val s = getSession()
+        val customFields = s?.group?.blockingGetAvailableCustomFields()?.toList()
+        assert(customFields != null)
     }
 
 }

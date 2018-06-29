@@ -1,5 +1,6 @@
 package io.mysocialapp.client
 
+import io.mysocialapp.client.models.CustomField
 import io.mysocialapp.client.models.Event
 import io.mysocialapp.client.models.EventMemberAccessControl
 import io.mysocialapp.client.models.SimpleLocation
@@ -44,6 +45,25 @@ class EventTest {
             add(Calendar.DATE, 2)
         }
 
+        val customFields = s?.event?.blockingGetAvailableCustomFields()?.map { customField ->
+            customField.value = when (customField.fieldType) {
+                CustomField.FieldType.INPUT_TEXT -> "Text test"
+                CustomField.FieldType.INPUT_TEXTAREA -> "TextArea test text"
+                CustomField.FieldType.INPUT_NUMBER -> 1337
+                CustomField.FieldType.INPUT_BOOLEAN -> false
+                CustomField.FieldType.INPUT_DATE -> Date()
+                CustomField.FieldType.INPUT_URL -> "https://mysocialapp.io"
+                CustomField.FieldType.INPUT_EMAIL -> "test@mysocialapp.io"
+                CustomField.FieldType.INPUT_PHONE -> "+33123452345"
+                CustomField.FieldType.INPUT_LOCATION -> newarkLocation
+                CustomField.FieldType.INPUT_SELECT -> customField.possibleValues?.firstOrNull()
+                CustomField.FieldType.INPUT_CHECKBOX -> customField.possibleValues?.take(2)
+                null -> null
+            }
+
+            customField
+        }
+
         val event = Event.Builder()
                 .setName("New test event")
                 .setDescription("This is a new event create with our SDK")
@@ -53,6 +73,7 @@ class EventTest {
                 .setMaxSeats(100)
                 .setMemberAccessControl(EventMemberAccessControl.PUBLIC)
                 .setCoverImage(File("/tmp/image.jpg"))
+                .setCustomFields(customFields)
                 .build()
 
         assert(s!!.event.blockingCreate(event) != null)
@@ -121,6 +142,13 @@ class EventTest {
         val s = getSession()
         val event = s?.event?.blockingStream(1)?.first()
         assert(event?.members != null)
+    }
+
+    @Test
+    fun `list event custom fields`() {
+        val s = getSession()
+        val customFields = s?.event?.blockingGetAvailableCustomFields()?.toList()
+        assert(customFields != null)
     }
 
 }

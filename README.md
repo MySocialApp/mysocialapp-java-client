@@ -153,6 +153,7 @@ User account = johnSession.getAccount().blockingGet();
 account.getFirstName();
 account.getDateOfBirth();
 account.getLivingLocation();
+account.getCustomFields();
 [..]
 ```
 
@@ -162,6 +163,7 @@ val account = jognSession.account.blockingGet()
 account.firstName
 account.dateOfBirth
 account.livingLocation?.completeCityAddress
+account.customFields
 [..]
 ```
 
@@ -446,6 +448,26 @@ val afterTomorrow = Calendar.getInstance().apply {
     add(Calendar.DATE, 2)
 }
 
+// list available event custom fields and fill value for each of them
+val customFields = s?.event?.blockingGetAvailableCustomFields()?.map { customField ->
+    customField.value = when (customField.fieldType) {
+        CustomField.FieldType.INPUT_TEXT -> "Text test"
+        CustomField.FieldType.INPUT_TEXTAREA -> "TextArea test text"
+        CustomField.FieldType.INPUT_NUMBER -> 1337
+        CustomField.FieldType.INPUT_BOOLEAN -> false
+        CustomField.FieldType.INPUT_DATE -> Date()
+        CustomField.FieldType.INPUT_URL -> "https://mysocialapp.io"
+        CustomField.FieldType.INPUT_EMAIL -> "test@mysocialapp.io"
+        CustomField.FieldType.INPUT_PHONE -> "+33123452345"
+        CustomField.FieldType.INPUT_LOCATION -> newarkLocation
+        CustomField.FieldType.INPUT_SELECT -> customField.possibleValues?.firstOrNull()
+        CustomField.FieldType.INPUT_CHECKBOX -> customField.possibleValues?.take(2)
+        null -> null
+    }
+
+    customField
+}
+
 val event = Event.Builder()
         .setName("New test event")
         .setDescription("This is a new event create with our SDK")
@@ -455,6 +477,7 @@ val event = Event.Builder()
         .setMaxSeats(100)
         .setMemberAccessControl(EventMemberAccessControl.PUBLIC)
         .setCoverImage(File("/tmp/image.jpg"))
+        .setCustomFields(customFields)
         .build()
 
 s?.event?.blockingCreate(event)
@@ -614,6 +637,44 @@ val post = FeedPost.Builder()
         .build()
 
 group.blockingSendWallPost(post)
+```
+
+### Custom Fields
+This feature is available on users, events, groups, and other options to allow your community to provide specific information. This feature can be managed on your MySocialApp admin console.
+
+#### Display all custom fields from an event. Note that this snippet work the same way for Group and User
+```kotlin
+[..]
+event.customFields?.forEach { customField ->
+    when (customField.fieldType) {
+        CustomField.FieldType.INPUT_TEXT -> println(customField.stringValue)
+        CustomField.FieldType.INPUT_TEXTAREA -> println(customField.stringValue)
+        CustomField.FieldType.INPUT_NUMBER -> println(customField.numberValue)
+        CustomField.FieldType.INPUT_BOOLEAN -> println(customField.booleanValue)
+        CustomField.FieldType.INPUT_DATE -> println(customField.dateValue)
+        CustomField.FieldType.INPUT_URL -> println(customField.stringValue)
+        CustomField.FieldType.INPUT_EMAIL -> println(customField.stringValue)
+        CustomField.FieldType.INPUT_PHONE -> println(customField.stringValue)
+        CustomField.FieldType.INPUT_LOCATION -> println(customField.locationValue)
+        CustomField.FieldType.INPUT_SELECT -> println(customField.stringValue)
+        CustomField.FieldType.INPUT_CHECKBOX -> println(customField.stringsValue)
+    }
+}
+```
+
+#### Set the location and url on custom fields on a group. Note that this snippet work the same way for Event and User
+```kotlin
+val s = johnSession
+
+val newarkLocation = SimpleLocation(40.736504474883915, -74.18175405)
+val url = "https://mysocialapp.io"
+
+val group = s?.group?.blockingStream(1)?.firstOrNull()
+
+group?.customFields?.find { it.fieldType == CustomField.FieldType.INPUT_LOCATION }?.value = newarkLocation
+group?.customFields?.find { it.fieldType == CustomField.FieldType.INPUT_URL }?.value = url
+
+group?.blockingSave()
 ```
 
 ### Handle exceptions

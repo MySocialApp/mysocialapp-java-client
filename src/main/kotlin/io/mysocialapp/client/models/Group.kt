@@ -88,6 +88,7 @@ class Group : BaseWall(), WallTextable {
         private var mMemberAccessControl = GroupMemberAccessControl.PUBLIC
         private var mImage: File? = null
         private var mCoverImage: File? = null
+        private var mCustomFields: List<CustomField>? = null
 
         fun setName(name: String): Builder {
             this.mName = name
@@ -119,6 +120,11 @@ class Group : BaseWall(), WallTextable {
             return this
         }
 
+        fun setCustomFields(customFields: List<CustomField>?): Builder {
+            this.mCustomFields = customFields
+            return this
+        }
+
         fun build(): Group {
             if (mName.isNullOrBlank()) {
                 IllegalArgumentException("Name cannot be null or empty")
@@ -139,6 +145,7 @@ class Group : BaseWall(), WallTextable {
                 groupMemberAccessControl = mMemberAccessControl
                 profileImageFile = mImage
                 profileCoverImageFile = mCoverImage
+                customFields = mCustomFields
             }
         }
     }
