@@ -518,7 +518,7 @@ s?.account?.blockingGet()?.blockingStreamEvent(10)
 val s = johnSession
 
 val madridLocation = SimpleLocation(40.416775, -3.703790)
-s?.event?.blockingStream(10, FluentEvent.Options.Builder().setLocation(berlinLocation).build())
+s?.event?.blockingStream(10, FluentEvent.Options.Builder().setLocation(madridLocation).build())
 ```
 
 #### Search events between two dates
