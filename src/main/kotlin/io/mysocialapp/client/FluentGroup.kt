@@ -12,16 +12,16 @@ import rx.Observable
  */
 class FluentGroup(private val session: Session) {
 
-    fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<Group> = stream(limit).toBlocking().toIterable()
+    fun blockingStream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Iterable<Group> = stream(limit, options).toBlocking().toIterable()
 
-    fun stream(limit: Int = Int.MAX_VALUE): Observable<Group> = list(0, limit)
+    fun stream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Observable<Group> = list(0, limit, options)
 
-    fun blockingList(page: Int = 0, size: Int = 10): Iterable<Group> = list(page, size).toBlocking().toIterable()
+    fun blockingList(page: Int = 0, size: Int = 10, options: Options = Options()): Iterable<Group> = list(page, size, options).toBlocking().toIterable()
 
-    fun list(page: Int = 0, size: Int = 10): Observable<Group> {
+    fun list(page: Int = 0, size: Int = 10, options: Options = Options()): Observable<Group> {
         return stream(page, size, object : PaginationResource<Group> {
             override fun onNext(page: Int, size: Int): List<Group> {
-                return session.clientService.group.list(page, size, false).toBlocking().first()
+                return session.clientService.group.list(page, size, options.queryParams).toBlocking().first()
             }
         }).map { it.session = session; it }
     }
@@ -135,5 +135,50 @@ class FluentGroup(private val session: Session) {
             return m
         }
 
+    }
+
+    data class Options(val sortField: String? = null,
+                       val location: BaseLocation? = null,
+                       val limited: Boolean? = null) {
+
+        class Builder {
+            private var mSortField: String? = null
+            private var mLocation: BaseLocation? = null
+            private var mLimited: Boolean? = false
+
+            fun setSortField(name: String): Builder {
+                this.mSortField = name
+                return this
+            }
+
+            fun setLocation(location: SimpleLocation): Builder {
+                this.mLocation = location
+                return this
+            }
+
+            fun setLimited(limited: Boolean): Builder {
+                this.mLimited = limited
+                return this
+            }
+
+            fun build(): Options {
+                return Options(sortField = mSortField, location = mLocation, limited = mLimited)
+            }
+        }
+
+        val queryParams: MutableMap<String, String> by lazy {
+            val m = mutableMapOf<String, String>()
+
+            sortField?.let { m["sort_field"] = it }
+
+            location?.takeIf { it.latitude != null && it.longitude != null }?.let {
+                m["latitude"] = it.latitude.toString()
+                m["longitude"] = it.longitude.toString()
+            }
+
+            limited?.let { m["limited"] = it.toString() }
+
+            m
+        }
     }
 }

@@ -73,6 +73,20 @@ class GroupTest {
     }
 
     @Test
+    fun `list groups by location`() {
+        val s = getSession()
+
+        val madridLocation = SimpleLocation(40.416775, -3.703790)
+        val groupsNearestMadrid = s?.group?.blockingStream(10, FluentGroup.Options.Builder().setLocation(madridLocation).build())?.toList()
+
+        val berlinLocation = SimpleLocation(52.520008, 13.404954)
+        val groupsNearestBerlin = s?.group?.blockingStream(10, FluentGroup.Options.Builder().setLocation(berlinLocation).build())?.toList()
+
+        val madridFirstEvent = groupsNearestMadrid?.firstOrNull()
+        assert(madridFirstEvent?.distanceInMeters != groupsNearestBerlin?.find { it.id == madridFirstEvent?.id }?.distanceInMeters)
+    }
+
+    @Test
     fun `search for groups`() {
         val s = getSession()
         val results = s?.group?.blockingSearch(FluentGroup.Search.Builder().setName("test").build())

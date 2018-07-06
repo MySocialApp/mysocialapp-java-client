@@ -616,6 +616,14 @@ val s = johnSession
 s?.account?.blockingGet()?.blockingStreamGroup(10)
 ```
 
+#### List nearest groups from specific location
+```kotlin
+val s = johnSession
+
+val madridLocation = SimpleLocation(40.416775, -3.703790)
+s?.group?.blockingStream(10, FluentGroup.Options.Builder().setLocation(madridLocation).build())
+```
+
 #### Search for groups by name or description
 ```kotlin
 val s = johnSession
