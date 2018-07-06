@@ -26,7 +26,8 @@ class EventTest {
     @Test
     fun `get 100 next events`() {
         val s = getSession()
-        assert(s?.event?.blockingStream(100)?.toList() != null)
+        val events = s?.event?.blockingStream(100)?.toList()
+        assert(events != null)
     }
 
     @Test
@@ -89,6 +90,20 @@ class EventTest {
                 .build()
 
         assert(s?.event?.blockingSearch(query)?.toList() != null)
+    }
+
+    @Test
+    fun `list events by location`() {
+        val s = getSession()
+
+        val madridLocation = SimpleLocation(40.416775, -3.703790)
+        val eventsNearestMadrid = s?.event?.blockingStream(10, FluentEvent.Options.Builder().setLocation(madridLocation).build())?.toList()
+
+        val berlinLocation = SimpleLocation(52.520008, 13.404954)
+        val eventsNearestBerlin = s?.event?.blockingStream(10, FluentEvent.Options.Builder().setLocation(berlinLocation).build())?.toList()
+
+        val madridFirstEvent = eventsNearestMadrid?.firstOrNull()
+        assert(madridFirstEvent?.distanceInMeters != eventsNearestBerlin?.find { it.id == madridFirstEvent?.id }?.distanceInMeters)
     }
 
     @Test

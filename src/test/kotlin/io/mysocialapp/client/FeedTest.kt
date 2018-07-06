@@ -1,5 +1,6 @@
 package io.mysocialapp.client
 
+import io.mysocialapp.client.models.Comment
 import org.junit.Test
 
 /**
@@ -60,6 +61,18 @@ class FeedTest {
         }?.firstOrNull()
 
         print("most popular feed on 100 last feeds is : '${mostPopularFeed?.bodyMessage}'")
+    }
+
+    @Test
+    fun `add comment to first feed post`() {
+        val s = getSession()
+
+        val feed = s?.newsFeed?.blockingStream(1)?.firstOrNull()
+
+        feed?.addBlockingComment(Comment("Here a comment from the SDK :) #sdk #java " +
+                "by [[user:${s.account.blockingGet().id}]] with https://mysocialapp.io"))
+
+        feed?.addBlockingLike()
     }
 
     @Test

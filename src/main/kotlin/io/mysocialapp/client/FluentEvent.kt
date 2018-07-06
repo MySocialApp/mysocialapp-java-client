@@ -10,18 +10,16 @@ import java.util.*
  */
 class FluentEvent(private val session: Session) {
 
-    fun blockingStream(limit: Int = Int.MAX_VALUE, fromDate: Date = Date()): Iterable<Event> = stream(limit, fromDate).toBlocking().toIterable()
+    fun blockingStream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Iterable<Event> = stream(limit, options).toBlocking().toIterable()
 
-    fun stream(limit: Int = Int.MAX_VALUE, fromDate: Date = Date()): Observable<Event> = list(0, limit, fromDate)
+    fun stream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Observable<Event> = list(0, limit, options)
 
-    fun blockingList(page: Int = 0, size: Int = 10, fromDate: Date = Date()): Iterable<Event> = list(page, size, fromDate).toBlocking().toIterable()
+    fun blockingList(page: Int = 0, size: Int = 10, options: Options = Options()): Iterable<Event> = list(page, size, options).toBlocking().toIterable()
 
-    fun list(page: Int = 0, size: Int = 10, fromDate: Date = Date()): Observable<Event> {
-        val queryMap = mapOf("sort_field" to "start_date", "date_field" to "start_date", "limited" to "false", "from_date" to fromDate.toISO8601())
-
+    fun list(page: Int = 0, size: Int = 10, options: Options = Options()): Observable<Event> {
         return stream(page, size, object : PaginationResource<Event> {
             override fun onNext(page: Int, size: Int): List<Event> {
-                return session.clientService.event.list(page, size, queryMap).toBlocking().first()
+                return session.clientService.event.list(page, size, options.queryParams).toBlocking().first()
             }
         }).map { it.session = session; it }
     }
@@ -158,6 +156,73 @@ class FluentEvent(private val session: Session) {
             val m = super.toQueryParams()
             m["type"] = "EVENT" // limit responses to Event type
             return m
+        }
+    }
+
+    data class Options(val sortField: String? = null,
+                       val dateField: String? = null,
+                       val fromDate: Date? = null,
+                       val location: BaseLocation? = null,
+                       val limited: Boolean? = null) {
+
+        class Builder {
+            private var mSortField: String? = "start_date"
+            private var mDateField: DateField? = DateField.START_DATE
+            private var mFromDate: Date? = Date()
+            private var mLocation: BaseLocation? = null
+            private var mLimited: Boolean? = false
+
+            fun setSortField(name: String): Builder {
+                this.mSortField = name
+                return this
+            }
+
+            fun setDateField(dateField: DateField): Builder {
+                this.mDateField = dateField
+                return this
+            }
+
+            fun setFromDate(date: Date): Builder {
+                this.mFromDate = date
+                return this
+            }
+
+            fun setLocation(location: SimpleLocation): Builder {
+                this.mLocation = location
+                return this
+            }
+
+            fun setLimited(limited: Boolean): Builder {
+                this.mLimited = limited
+                return this
+            }
+
+            fun build(): Options {
+                return Options(sortField = mSortField, dateField = mDateField?.name?.toLowerCase(), fromDate = mFromDate,
+                        location = mLocation, limited = mLimited)
+            }
+
+            enum class DateField {
+                START_DATE,
+                END_DATE
+            }
+        }
+
+        val queryParams: MutableMap<String, String> by lazy {
+            val m = mutableMapOf<String, String>()
+
+            sortField?.let { m["sort_field"] = it }
+            dateField?.let { m["date_field"] = it }
+            fromDate?.let { m["from_date"] = it.toISO8601() }
+
+            location?.takeIf { it.latitude != null && it.longitude != null }?.let {
+                m["latitude"] = it.latitude.toString()
+                m["longitude"] = it.longitude.toString()
+            }
+
+            limited?.let { m["limited"] = it.toString() }
+
+            m
         }
     }
 }

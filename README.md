@@ -515,7 +515,15 @@ val s = johnSession
 s?.account?.blockingGet()?.blockingStreamEvent(10)
 ```
 
-#### List events between two dates
+#### List nearest events from specific location
+```kotlin
+val s = johnSession
+
+val madridLocation = SimpleLocation(40.416775, -3.703790)
+s?.event?.blockingStream(10, FluentEvent.Options.Builder().setLocation(berlinLocation).build())
+```
+
+#### Search events between two dates
 ```kotlin
 val s = johnSession
 
