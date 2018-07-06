@@ -45,6 +45,19 @@ class UserTest {
     }
 
     @Test
+    fun `list users by location`() {
+        val s = getSession()
+
+        val madridLocation = SimpleLocation(40.416775, -3.703790)
+        val usersNearestMadrid = s?.user?.blockingStream(10, FluentUser.Options.Builder().setLocation(madridLocation).build())?.toList()
+
+        val berlinLocation = SimpleLocation(52.520008, 13.404954)
+        val usersNearestBerlin = s?.user?.blockingStream(10, FluentUser.Options.Builder().setLocation(berlinLocation).build())?.toList()
+
+        assert(usersNearestMadrid?.firstOrNull()?.users?.firstOrNull()?.id != usersNearestBerlin?.firstOrNull()?.users?.firstOrNull()?.id)
+    }
+
+    @Test
     fun `request some friends then cancel`() {
         val s = getSession()
         val users = s?.user?.blockingStream(3)?.map { it.users ?: emptyList() }?.flatten()

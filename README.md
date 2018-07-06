@@ -208,6 +208,15 @@ s?.account?.blockingRequestForDeleteAccount(password)
 // You are no more able to perform operations
 ```
 
+### User
+#### List nearest users from specific location
+```kotlin
+val s = johnSession
+
+val madridLocation = SimpleLocation(40.416775, -3.703790)
+s?.user?.blockingStream(10, FluentUser.Options.Builder().setLocation(madridLocation).build())
+```
+
 ### News feed
 #### List news feed from specific page and size
 Java
