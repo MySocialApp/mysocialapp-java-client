@@ -727,7 +727,7 @@ They are coming soon and will be part of this lib using WebSocket and `mysociala
 
 [Look at our test classes for Java and Kotlin](https://github.com/MySocialApp/mysocialapp-java-client/tree/master/src/test)
 
-# Demo App using MySocialApp
+# Demo apps using MySocialApp API
 
 * [MySocialApp Android](https://play.google.com/store/apps/details?id=io.mysocialapp.android)
 * [MySocialApp iOS](https://itunes.apple.com/fr/app/mysocialapp-your-social-app/id1351250650)
