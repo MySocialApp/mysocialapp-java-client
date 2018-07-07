@@ -42,10 +42,14 @@ data class User(var updatedDate: Date? = null,
         return session?.clientService?.account?.put(this)?.map { it.session = session; it } ?: Observable.empty()
     }
 
+    fun blockingChangeProfilePhoto(image: File): Photo? = changeProfilePhoto(image).toBlocking()?.first()
+
     fun changeProfilePhoto(image: File): Observable<Photo> {
         return session?.clientService?.accountProfilePhoto?.post(image.toRequestBody())?.map { it.session = session; it }
                 ?: Observable.empty()
     }
+
+    fun blockingChangeProfileCoverPhoto(image: File): Photo? = changeProfileCoverPhoto(image).toBlocking()?.first()
 
     fun changeProfileCoverPhoto(image: File): Observable<Photo> {
         return session?.clientService?.accountProfileCoverPhoto?.post(image.toRequestBody())?.map { it.session = session; it }
