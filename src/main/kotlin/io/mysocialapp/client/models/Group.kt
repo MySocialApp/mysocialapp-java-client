@@ -3,6 +3,7 @@ package io.mysocialapp.client.models
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.mysocialapp.client.extensions.PaginationResource
 import io.mysocialapp.client.extensions.stream
+import io.mysocialapp.client.extensions.toRequestBody
 import rx.Observable
 import java.io.File
 
@@ -32,6 +33,20 @@ class Group : BaseWall(), WallTextable {
 
     override val bodyImageURL: String?
         get() = if (profilePhoto != null) profilePhoto!!.bodyImageURL else null
+
+    fun blockingChangeImage(image: File): Photo? = changeImage(image).toBlocking()?.first()
+
+    fun changeImage(image: File): Observable<Photo> {
+        return session?.clientService?.groupProfilePhoto?.post(id, image.toRequestBody())?.map { it.session = session; it }
+                ?: Observable.empty()
+    }
+
+    fun blockingChangeCoverImage(image: File): Photo? = changeCoverImage(image).toBlocking()?.first()
+
+    fun changeCoverImage(image: File): Observable<Photo> {
+        return session?.clientService?.groupProfileCoverPhoto?.post(id, image.toRequestBody())?.map { it.session = session; it }
+                ?: Observable.empty()
+    }
 
     fun blockingStreamNewsFeed(limit: Int = Int.MAX_VALUE): Iterable<Feed> = streamNewsFeed(limit).toBlocking().toIterable()
 

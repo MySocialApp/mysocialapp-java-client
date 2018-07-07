@@ -639,6 +639,18 @@ group.name = "New group name"
 group.save()
 ```
 
+#### Change group image (owner only)
+```kotlin
+val s = johnSession
+s?.group?.blockingGet(123).blockingChangeImage(File("/tmp/my_image.jpg"))
+```
+
+#### Change group cover image (owner only)
+```kotlin
+val s = johnSession
+s?.group?.blockingGet(123).blockingChangeCoverImage(File("/tmp/my_image.jpg"))
+```
+
 #### Join a group
 ```kotlin
 group.blockingJoin()
