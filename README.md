@@ -535,6 +535,18 @@ val s = johnSession
 s?.account?.blockingGet()?.blockingStreamEvent(10)
 ```
 
+#### Change event image (owner only)
+```kotlin
+val s = johnSession
+s?.event?.blockingGet(123).blockingChangeImage(File("/tmp/my_image.jpg"))
+```
+
+#### Change event cover image (owner only)
+```kotlin
+val s = johnSession
+s?.event?.blockingGet(123).blockingChangeCoverImage(File("/tmp/my_image.jpg"))
+```
+
 #### List nearest events from specific location
 ```kotlin
 val s = johnSession

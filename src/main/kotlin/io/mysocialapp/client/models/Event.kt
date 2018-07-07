@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.mysocialapp.client.extensions.PaginationResource
 import io.mysocialapp.client.extensions.stream
+import io.mysocialapp.client.extensions.toRequestBody
 import rx.Observable
 import java.io.File
 import java.util.*
@@ -51,6 +52,20 @@ class Event : BaseWall(), WallTextable, Localizable {
 
     override fun getLocality(): BaseLocation? {
         return location
+    }
+
+    fun blockingChangeImage(image: File): Photo? = changeImage(image).toBlocking()?.first()
+
+    fun changeImage(image: File): Observable<Photo> {
+        return session?.clientService?.eventProfilePhoto?.post(id, image.toRequestBody())?.map { it.session = session; it }
+                ?: Observable.empty()
+    }
+
+    fun blockingChangeCoverImage(image: File): Photo? = changeCoverImage(image).toBlocking()?.first()
+
+    fun changeCoverImage(image: File): Observable<Photo> {
+        return session?.clientService?.eventProfileCoverPhoto?.post(id, image.toRequestBody())?.map { it.session = session; it }
+                ?: Observable.empty()
     }
 
     fun blockingStreamNewsFeed(limit: Int = Int.MAX_VALUE): Iterable<Feed> = streamNewsFeed(limit).toBlocking().toIterable()
