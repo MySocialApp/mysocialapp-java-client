@@ -4,6 +4,7 @@ import io.mysocialapp.client.exceptions.InvalidCredentialsMySocialAppException
 import io.mysocialapp.client.models.CustomField
 import io.mysocialapp.client.models.SimpleLocation
 import org.junit.Test
+import java.io.File
 import java.util.*
 
 /**
@@ -117,6 +118,22 @@ class AccountTest {
 
         val savedCustomFields = s?.account?.blockingGet()?.customFields
         assert(savedCustomFields != null)
+    }
+
+    @Test
+    fun `update profile photo`() {
+        val s = getSession()
+
+        s?.account?.blockingChangeProfilePhoto(File("/tmp/my_profile.png"))
+        assert(s?.account?.blockingGet()?.profilePhoto != null)
+    }
+
+    @Test
+    fun `update cover photo`() {
+        val s = getSession()
+
+        s?.account?.blockingChangeProfileCoverPhoto(File("/tmp/my_image.jpg"))
+        assert(s?.account?.blockingGet()?.profileCoverPhoto != null)
     }
 
     @Test

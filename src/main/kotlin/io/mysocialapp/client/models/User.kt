@@ -1,10 +1,8 @@
 package io.mysocialapp.client.models
 
-import io.mysocialapp.client.extensions.PaginationResource
-import io.mysocialapp.client.extensions.prepareAsync
-import io.mysocialapp.client.extensions.stream
-import io.mysocialapp.client.extensions.toISO8601
+import io.mysocialapp.client.extensions.*
 import rx.Observable
+import java.io.File
 import java.util.*
 
 /**
@@ -42,6 +40,16 @@ data class User(var updatedDate: Date? = null,
 
     override fun save(): Observable<User> {
         return session?.clientService?.account?.put(this)?.map { it.session = session; it } ?: Observable.empty()
+    }
+
+    fun changeProfilePhoto(image: File): Observable<Photo> {
+        return session?.clientService?.accountProfilePhoto?.post(image.toRequestBody())?.map { it.session = session; it }
+                ?: Observable.empty()
+    }
+
+    fun changeProfileCoverPhoto(image: File): Observable<Photo> {
+        return session?.clientService?.accountProfileCoverPhoto?.post(image.toRequestBody())?.map { it.session = session; it }
+                ?: Observable.empty()
     }
 
     fun blockingRequestAsFriend(): User? = requestAsFriend().toBlocking()?.first()

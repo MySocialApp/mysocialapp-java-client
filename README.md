@@ -180,6 +180,18 @@ account.lastName = "James"
 account.blockingSave() // or use save() to asynchronously save it with Rx
 ```
 
+#### Update profile photo
+```kotlin
+johnSession.account.blockingChangeProfilePhoto(File("/tmp/my_profile.png"))
+```
+
+#### Update profile cover photo
+The cover photo is a secondary photo that you can add to your profile.
+
+```kotlin
+johnSession.account.blockingChangeProfileCoverPhoto(File("/tmp/my_cover_image.png"))
+```
+
 #### How to integrate a MySocialApp user with an existing user in my application? 
 MySocialApp allows you to use your own user IDs to find a user using the "external_id" property. 
 
