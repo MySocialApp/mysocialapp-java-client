@@ -1,12 +1,13 @@
 # mysocialapp-java-client [![Release](https://jitpack.io/v/MySocialApp/mysocialapp-java-client.svg)](https://jitpack.io/#MySocialApp/mysocialapp-java-client)
 
-Official Kotlin and Java client to interact with apps made with [MySocialApp](https://mysocialapp.io) (turnkey iOS and Android social network app builder - SaaS).
+#### MySocialApp - Seamless Social Networking features for your app
+Official Java and Kotlin client to interact with apps made with [MySocialApp](https://mysocialapp.io)
 
 Note: This lib was made in Kotlin and can be used inside any Java and Android apps.
 
-# Why using it?
+# What is MySocialApp?
 
-MySocialApp is a very innovative way to have a turnkey native social network app for iOS and Android. Our API are open and ready to use for all your need inside one of our generated app or any thirds app. 
+MySocialApp’s powerful API lets you quickly and seamlessly implement social networking features within your websites, mobile and back-end applications. Our API powers billions of requests for hundred of apps every month, delivering responses in under 100ms.
 
 ### What can you do?
 
@@ -725,6 +726,11 @@ They are coming soon and will be part of this lib using WebSocket and `mysociala
 ### More examples?
 
 [Look at our test classes for Java and Kotlin](https://github.com/MySocialApp/mysocialapp-java-client/tree/master/src/test)
+
+# Demo App using MySocialApp
+
+* [MySocialApp Android](https://play.google.com/store/apps/details?id=io.mysocialapp.android)
+* [MySocialApp iOS](https://itunes.apple.com/fr/app/mysocialapp-your-social-app/id1351250650)
 
 # Credits
 
