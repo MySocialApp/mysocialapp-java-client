@@ -47,6 +47,7 @@ class NotificationTest {
         val s = getSession()
 
         s?.notification?.addNotificationListener(object : NotificationCallback {
+
             override fun onConversationMessage(conversationMessage: ConversationMessage) {
                 val message = ConversationMessagePost.Builder().setMessage(conversationMessage.message).build()
                 conversationMessage.replyBack(message).subscribeAsync()
@@ -60,6 +61,30 @@ class NotificationTest {
             override fun onLike(like: Like) {
                 val message = CommentPost.Builder().setMessage("Hey [[user:${like.owner?.id}]] thanks for liking this post").build()
                 s.newsFeed.blockingGet(like.id!!)?.addBlockingComment(message)
+            }
+
+            override fun onNewsFeed(feed: Feed) {
+                super.onNewsFeed(feed)
+            }
+
+            override fun onMention(feed: Feed) {
+                super.onMention(feed)
+            }
+
+            override fun onMention(comment: Comment) {
+                super.onMention(comment)
+            }
+
+            override fun onFriendRequest(user: User) {
+                super.onFriendRequest(user)
+            }
+
+            override fun onFriend(user: User) {
+                super.onFriend(user)
+            }
+
+            override fun onEvent(event: Event) {
+                super.onEvent(event)
             }
         })
 

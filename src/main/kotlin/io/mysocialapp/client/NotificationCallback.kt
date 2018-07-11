@@ -19,6 +19,14 @@ interface NotificationCallback {
 
     }
 
+    fun onMention(feed: Feed) {
+
+    }
+
+    fun onMention(comment: Comment) {
+
+    }
+
     fun onConversationMessage(conversationMessage: ConversationMessage) {
 
     }
@@ -32,6 +40,14 @@ interface NotificationCallback {
     }
 
     fun onEvent(event: Event) {
+
+    }
+
+    fun onUserJoinMyEvent(event: Event) {
+
+    }
+
+    fun onJoinEventConfirmation(event: Event) {
 
     }
 

@@ -81,7 +81,18 @@ class WebSocketService(private val configuration: Configuration,
                     }
 
                     "USER_MENTION_TAG" -> {
+                        if (notification.payload?.get("type")?.toString()?.toLowerCase() == "comment") {
+                            convert(notification.payload, Comment::class.java)?.let { v ->
+                                v.also { it.session = session }
+                                notificationListeners.forEach { it.onMention(v) }
+                            }
+                            return
+                        }
 
+                        notification.id?.let {
+                            val feed = session?.newsFeed?.blockingGet(it) ?: return@let
+                            notificationListeners.forEach { it.onMention(feed) }
+                        }
                     }
 
                     "NEW_EVENT" -> notification.id?.let {
@@ -102,7 +113,6 @@ class WebSocketService(private val configuration: Configuration,
                     "OFFER" -> {
 
                     }
-
 
                     else -> Unit
                 }
