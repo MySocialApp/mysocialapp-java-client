@@ -24,6 +24,10 @@ class FluentFeed(private val session: Session) {
         }).map { it.session = session; it }
     }
 
+    fun blockingGet(id: Long): Feed? = get(id).toBlocking()?.first()
+
+    fun get(id: Long): Observable<Feed> = session.clientService.feed.get(id).map { it.session = session; it }
+
     fun blockingSendWallPost(feedPost: FeedPost): Feed? = sendWallPost(feedPost).toBlocking().first()
 
     fun sendWallPost(feedPost: FeedPost): Observable<Feed> {

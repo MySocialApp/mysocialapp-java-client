@@ -1,6 +1,6 @@
 package io.mysocialapp.client
 
-import io.mysocialapp.client.models.Comment
+import io.mysocialapp.client.models.CommentPost
 import org.junit.Test
 
 /**
@@ -69,8 +69,8 @@ class FeedTest {
 
         val feed = s?.newsFeed?.blockingStream(1)?.firstOrNull()
 
-        feed?.addBlockingComment(Comment("Here a comment from the SDK :) #sdk #java " +
-                "by [[user:${s.account.blockingGet().id}]] with https://mysocialapp.io"))
+        feed?.addBlockingComment(CommentPost.Builder().setMessage("Here a comment from the SDK :) #sdk #java " +
+                "by [[user:${s.account.blockingGet().id}]] with https://mysocialapp.io").build())
 
         feed?.addBlockingLike()
     }

@@ -76,12 +76,8 @@ abstract class WallActivity(val action: ActivityType? = null,
         return baseObject?.getComments()?.map { it.session = session; it } ?: Observable.empty()
     }
 
-    override fun addComment(comment: Comment): Observable<Comment> {
-        return baseObject?.addComment(comment) ?: Observable.empty()
-    }
-
-    override fun addComment(multipart: MultipartPhoto): Observable<Comment> {
-        return baseObject?.addComment(multipart) ?: Observable.empty()
+    override fun addComment(commentPost: CommentPost): Observable<Comment> {
+        return baseObject?.addComment(commentPost) ?: Observable.empty()
     }
 
     override fun ignore(): Observable<Void> {

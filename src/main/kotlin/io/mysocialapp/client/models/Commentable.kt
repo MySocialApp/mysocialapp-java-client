@@ -11,13 +11,9 @@ interface Commentable : BaseImpl {
 
     fun getComments(): Observable<Comment>
 
-    fun addBlockingComment(comment: Comment): Comment?
+    fun addBlockingComment(commentPost: CommentPost): Comment?
 
-    fun addComment(comment: Comment): Observable<Comment>
-
-    fun addBlockingComment(multipartPhoto: MultipartPhoto): Comment?
-
-    fun addComment(multipartPhoto: MultipartPhoto): Observable<Comment>
+    fun addComment(commentPost: CommentPost): Observable<Comment>
 
     var commentsTotal: Int
 

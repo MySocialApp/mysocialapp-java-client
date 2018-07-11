@@ -46,13 +46,9 @@ interface Wallable : Serializable {
 
     fun getComments(): Observable<Comment>
 
-    fun addBlockingComment(comment: Comment): Comment? = addComment(comment).toBlocking()?.first()
+    fun addBlockingComment(commentPost: CommentPost): Comment? = addComment(commentPost).toBlocking()?.first()
 
-    fun addComment(comment: Comment): Observable<Comment>
-
-    fun addBlockingComment(multipart: MultipartPhoto): Comment? = addComment(multipart).toBlocking()?.first()
-
-    fun addComment(multipart: MultipartPhoto): Observable<Comment>
+    fun addComment(commentPost: CommentPost): Observable<Comment>
 
     fun blockingIgnore() = ignore().toBlocking()?.first()
 

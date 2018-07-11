@@ -1,6 +1,9 @@
 package io.mysocialapp.client
 
+import io.mysocialapp.client.extensions.subscribeAsync
+import io.mysocialapp.client.models.*
 import org.junit.Test
+import java.io.File
 
 /**
  * Created by evoxmusic on 09/05/2018.
@@ -37,6 +40,31 @@ class NotificationTest {
         val s = getSession()
         val newEventNotifications = s?.notification?.unread?.blockingStream(100)?.toList()
         assert(newEventNotifications != null)
+    }
+
+    @Test
+    fun `listen for notifications`() {
+        val s = getSession()
+
+        s?.notification?.addNotificationListener(object : NotificationCallback {
+            override fun onConversationMessage(conversationMessage: ConversationMessage) {
+                val message = ConversationMessagePost.Builder().setMessage(conversationMessage.message).build()
+                conversationMessage.replyBack(message).subscribeAsync()
+            }
+
+            override fun onComment(comment: Comment) {
+                val message = CommentPost.Builder().setMessage(comment.message).setImage(File("/tmp/my_profile.png")).build()
+                comment.replyBack(message).subscribeAsync()
+            }
+
+            override fun onLike(like: Like) {
+                val message = CommentPost.Builder().setMessage("Hey [[user:${like.owner?.id}]] thanks for liking this post").build()
+                s.newsFeed.blockingGet(like.id!!)?.addBlockingComment(message)
+            }
+        })
+
+
+        Thread.sleep(10000000L)
     }
 
 }

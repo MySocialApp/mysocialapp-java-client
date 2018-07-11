@@ -47,18 +47,24 @@ class Photo : BaseWall(), Taggable {
                 ?.flatMapIterable { it }?.map { it.session = session; it } ?: Observable.empty()
     }
 
-    override fun addComment(comment: Comment): Observable<Comment> {
-        return session?.clientService?.photoComment?.post(idStr?.toLong(), comment)?.map { it.session = session; it } ?: Observable.empty()
-    }
-
-    override fun addComment(multipartPhoto: MultipartPhoto): Observable<Comment> {
-        return if (multipartPhoto.message != null && multipartPhoto.tagEntities != null) {
-            session?.clientService?.photoComment?.post(idStr?.toLong(), multipartPhoto.photo, multipartPhoto.message, multipartPhoto.tagEntities)
+    override fun addComment(commentPost: CommentPost): Observable<Comment> {
+        if (commentPost.multipartPhoto == null && commentPost.comment == null) {
+            return Observable.empty()
+        } else if (commentPost.multipartPhoto == null && commentPost.comment != null) {
+            return session?.clientService?.photoComment?.post(idStr?.toLong(), commentPost.comment)?.map { it.session = session; it }
                     ?: Observable.empty()
-        } else if (multipartPhoto.message != null) {
-            session?.clientService?.photoComment?.post(idStr?.toLong(), multipartPhoto.photo, multipartPhoto.message)
+        }
+
+        return if (commentPost.multipartPhoto?.message != null && commentPost.multipartPhoto.tagEntities != null) {
+            session?.clientService?.photoComment?.post(idStr?.toLong(), commentPost.multipartPhoto.photo,
+                    commentPost.multipartPhoto.message, commentPost.multipartPhoto.tagEntities) ?: Observable.empty()
+        } else if (commentPost.multipartPhoto?.message != null) {
+            session?.clientService?.photoComment?.post(idStr?.toLong(),
+                    commentPost.multipartPhoto.photo, commentPost.multipartPhoto.message) ?: Observable.empty()
+        } else if (commentPost.multipartPhoto?.photo != null) {
+            session?.clientService?.photoComment?.post(idStr?.toLong(), commentPost.multipartPhoto.photo)
         } else {
-            session?.clientService?.photoComment?.post(idStr?.toLong(), multipartPhoto.photo)
+            null
         }?.map { it.session = session; it } ?: Observable.empty()
     }
 

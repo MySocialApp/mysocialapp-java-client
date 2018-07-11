@@ -13,6 +13,9 @@ class FluentNotification(private val session: Session) {
     val unread by lazy { Unread(session) }
     val read by lazy { Read(session) }
 
+    fun addNotificationListener(notificationCallback: NotificationCallback) =
+            session.webSocketService.addNotificationListener(notificationCallback)
+
     class Unread(private val session: Session) {
 
         fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<PreviewNotification> = stream(limit).toBlocking().toIterable()
