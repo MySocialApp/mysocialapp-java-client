@@ -7,7 +7,7 @@ import java.util.*
  * Created by evoxmusic on 14/02/2018.
  */
 data class CustomField(val field: Field? = null,
-                       val data: Data = Data(),
+                       var data: Data? = null,
                        var interfaceLanguage: UserSettings.InterfaceLanguage = UserSettings.InterfaceLanguage.EN) : Serializable {
 
     data class Field(val id: Long? = null,
@@ -63,64 +63,68 @@ data class CustomField(val field: Field? = null,
         get() = this.field?.values?.get(interfaceLanguage)
 
     private fun initDataFieldId() {
-        data.fieldId = this.field?.id
-        data.fieldIdStr = this.field?.idStr
+        if (data == null) {
+            data = Data()
+        }
+
+        data?.fieldId = this.field?.id
+        data?.fieldIdStr = this.field?.idStr
     }
 
     var value: Any?
-        get() = data.value
+        get() = data?.value
         set(value) {
             initDataFieldId()
-            data.value = value
+            data?.value = value
         }
 
     var booleanValue: Boolean?
-        get() = data.value as? Boolean
+        get() = data?.value as? Boolean
         set(value) {
             initDataFieldId()
-            data.value = if (value?.toString()?.isBlank() == true) null else value
+            data?.value = if (value?.toString()?.isBlank() == true) null else value
         }
 
     var dateValue: Date?
-        get() = data.value as? Date
+        get() = data?.value as? Date
         set(value) {
             initDataFieldId()
-            data.value = if (value?.toString()?.isBlank() == true) null else value
+            data?.value = if (value?.toString()?.isBlank() == true) null else value
         }
 
     var stringsValue: List<String>?
-        get() = data.value as? List<String>
+        get() = data?.value as? List<String>
         set(value) {
             initDataFieldId()
-            data.value = value
+            data?.value = value
         }
 
     var stringValue: String?
-        get() = data.value as? String
+        get() = data?.value as? String
         set(value) {
             initDataFieldId()
-            data.value = if (value?.isBlank() == true) null else value
+            data?.value = if (value?.isBlank() == true) null else value
         }
 
     var numberValue: Double?
-        get() = data.value as? Double
+        get() = data?.value as? Double
         set(value) {
             initDataFieldId()
-            data.value = if (value?.toString()?.isBlank() == true) null else value
+            data?.value = if (value?.toString()?.isBlank() == true) null else value
         }
 
     var doubleValue: Double?
-        get() = data.value as? Double
+        get() = data?.value as? Double
         set(value) {
             initDataFieldId()
-            data.value = if (value?.toString()?.isBlank() == true) null else value
+            data?.value = if (value?.toString()?.isBlank() == true) null else value
         }
 
     var locationValue: BaseLocation?
-        get() = data.value as? SimpleLocation
+        get() = data?.value as? SimpleLocation
         set(value) {
             initDataFieldId()
-            data.value = if (value?.toString()?.isBlank() == true) null else value
+            data?.value = if (value?.toString()?.isBlank() == true) null else value
         }
 
 }

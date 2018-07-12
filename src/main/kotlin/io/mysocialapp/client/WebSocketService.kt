@@ -1,6 +1,6 @@
 package io.mysocialapp.client
 
-import io.mysocialapp.client.extensions.subscribeAsync
+import io.mysocialapp.client.extensions.prepareAsyncBackground
 import io.mysocialapp.client.models.Comment
 import io.mysocialapp.client.models.ConversationMessage
 import io.mysocialapp.client.models.Like
@@ -132,7 +132,7 @@ class WebSocketService(private val configuration: Configuration,
             } catch (e: NotYetConnectedException) {
                 notificationWebSocketClient.reconnect()
             }
-        }.cache()
+        }.prepareAsyncBackground().cache()
     }
 
     fun addNotificationListener(notificationCallback: NotificationCallback) {
@@ -142,7 +142,7 @@ class WebSocketService(private val configuration: Configuration,
             notificationWebSocketClient.connect()
         }
 
-        keepConnectionAlive.subscribeAsync()
+        keepConnectionAlive.subscribe()
     }
 
 }
