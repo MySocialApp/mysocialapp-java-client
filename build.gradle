@@ -34,6 +34,7 @@ dependencies {
     compile("com.squareup.retrofit2:converter-jackson:$retrofit_version")
     compile("com.squareup.retrofit2:adapter-rxjava:$retrofit_version")
 
+    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.9.6'
     compile group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '3.10.0'
 
     testRuntime("org.junit.vintage:junit-vintage-engine:$junitVintageVersion")

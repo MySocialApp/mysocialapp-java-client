@@ -1,5 +1,6 @@
 package io.mysocialapp.client.models
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.mysocialapp.client.extensions.*
 import rx.Observable
 import java.io.File
@@ -30,8 +31,8 @@ data class User(var updatedDate: Date? = null,
                 var flag: Flag? = null,
                 var userSettings: UserSettings? = null,
                 var userStat: UserStat? = null,
-                var isFriend: Boolean? = null,
-                var isRequestAsFriend: Boolean? = null,
+                @get:JsonProperty("is_friend") var isFriend: Boolean? = null,
+                @get:JsonProperty("is_requested_as_friend") var isRequestedAsFriend: Boolean? = null,
                 var externalId: String? = null,
                 var customFields: List<CustomField>? = null) : Base() {
 

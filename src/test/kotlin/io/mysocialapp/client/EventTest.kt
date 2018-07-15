@@ -17,7 +17,7 @@ class EventTest {
         const val APP_ID = "u470584465854a194805"
     }
 
-    private fun getSession(): Session? = MySocialApp.Builder()
+    private fun getSession(): Session = MySocialApp.Builder()
             .setAppId(APP_ID)
             .setClientConfiguration(ClientConfiguration(30_000L))
             .build()
@@ -26,7 +26,7 @@ class EventTest {
     @Test
     fun `get 100 next events`() {
         val s = getSession()
-        val events = s?.event?.blockingStream(100)?.toList()
+        val events = s.event.blockingStream(100).toList()
         assert(events != null)
     }
 
@@ -46,7 +46,7 @@ class EventTest {
             add(Calendar.DATE, 2)
         }
 
-        val customFields = s?.event?.blockingGetAvailableCustomFields()?.map { customField ->
+        val customFields = s.event.blockingGetAvailableCustomFields().map { customField ->
             customField.value = when (customField.fieldType) {
                 CustomField.FieldType.INPUT_TEXT -> "Text test"
                 CustomField.FieldType.INPUT_TEXTAREA -> "TextArea test text"
@@ -77,7 +77,7 @@ class EventTest {
                 .setCustomFields(customFields)
                 .build()
 
-        assert(s!!.event.blockingCreate(event) != null)
+        assert(s.event.blockingCreate(event) != null)
     }
 
     @Test
@@ -89,7 +89,7 @@ class EventTest {
                 .setToDate(Date())
                 .build()
 
-        assert(s?.event?.blockingSearch(query)?.toList() != null)
+        assert(s.event.blockingSearch(query).toList() != null)
     }
 
     @Test
@@ -97,36 +97,44 @@ class EventTest {
         val s = getSession()
 
         val madridLocation = SimpleLocation(40.416775, -3.703790)
-        val eventsNearestMadrid = s?.event?.blockingStream(10, FluentEvent.Options.Builder().setLocation(madridLocation).build())?.toList()
+        val eventsNearestMadrid = s.event.blockingStream(10, FluentEvent.Options.Builder().setLocation(madridLocation).build()).toList()
 
         val berlinLocation = SimpleLocation(52.520008, 13.404954)
-        val eventsNearestBerlin = s?.event?.blockingStream(10, FluentEvent.Options.Builder().setLocation(berlinLocation).build())?.toList()
+        val eventsNearestBerlin = s.event.blockingStream(10, FluentEvent.Options.Builder().setLocation(berlinLocation).build()).toList()
 
-        val madridFirstEvent = eventsNearestMadrid?.firstOrNull()
-        assert(madridFirstEvent?.distanceInMeters != eventsNearestBerlin?.find { it.id == madridFirstEvent?.id }?.distanceInMeters)
+        val madridFirstEvent = eventsNearestMadrid.firstOrNull()
+        assert(madridFirstEvent?.distanceInMeters != eventsNearestBerlin.find { it.id == madridFirstEvent?.id }?.distanceInMeters)
     }
 
     @Test
     fun `list my events`() {
         val s = getSession()
-        val myEvents = s?.account?.blockingGet()?.blockingStreamEvent(22)?.toList()
+        val myEvents = s.account.blockingGet().blockingStreamEvent(22).toList()
 
         assert(myEvents != null)
     }
 
     @Test
+    fun `list events with limited=false`() {
+        val s = getSession()
+
+        val events = s.event.blockingStream(10, FluentEvent.Options.Builder().setLimited(false).build())
+        assert(events.firstOrNull()?.members?.firstOrNull()?.user?.isFriend != null)
+    }
+
+    @Test
     fun `cancel event`() {
         val s = getSession()
-        val event = s?.account?.blockingGet()?.blockingStreamEvent(1)?.firstOrNull()
+        val event = s.account.blockingGet().blockingStreamEvent(1).firstOrNull()
         event?.blockingCancel()
 
-        assert(s?.account?.blockingGet()?.blockingStreamEvent(1)?.firstOrNull()?.cancelled == true)
+        assert(s.account.blockingGet().blockingStreamEvent(1).firstOrNull()?.cancelled == true)
     }
 
     @Test
     fun `search for events`() {
         val s = getSession()
-        val results = s?.event?.blockingSearch(FluentEvent.Search.Builder().setName("test").build())
+        val results = s.event.blockingSearch(FluentEvent.Search.Builder().setName("test").build())
         assert(results != null)
     }
 
@@ -140,7 +148,7 @@ class EventTest {
                 .setLocationMaximumDistanceInKilometers(100.0)
                 .build()
 
-        val results = s?.event?.blockingSearch(query)
+        val results = s.event.blockingSearch(query)
 
         assert(results != null)
     }
@@ -148,21 +156,21 @@ class EventTest {
     @Test
     fun `search for events by their description`() {
         val s = getSession()
-        val results = s?.event?.blockingSearch(FluentEvent.Search.Builder().setDescription("test").build())
+        val results = s.event.blockingSearch(FluentEvent.Search.Builder().setDescription("test").build())
         assert(results != null)
     }
 
     @Test
     fun `list members from the first event`() {
         val s = getSession()
-        val event = s?.event?.blockingStream(1)?.first()
-        assert(event?.members != null)
+        val event = s.event.blockingStream(1, FluentEvent.Options.Builder().setLimited(false).build()).first()
+        assert(event.members != null)
     }
 
     @Test
     fun `list event custom fields`() {
         val s = getSession()
-        val customFields = s?.event?.blockingGetAvailableCustomFields()?.toList()
+        val customFields = s.event.blockingGetAvailableCustomFields().toList()
         assert(customFields != null)
     }
 

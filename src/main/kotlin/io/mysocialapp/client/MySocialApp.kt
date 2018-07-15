@@ -41,8 +41,8 @@ class MySocialApp(private val configuration: Configuration,
         fun build() = MySocialApp(this)
     }
 
-    fun blockingCreateAccount(email: String, password: String, firstName: String): Session? {
-        return createAccount(email, password, firstName).toBlocking()?.first()
+    fun blockingCreateAccount(email: String, password: String, firstName: String): Session {
+        return createAccount(email, password, firstName).toBlocking().first()
     }
 
     fun createAccount(email: String, password: String, firstName: String): Observable<Session> {
@@ -55,16 +55,16 @@ class MySocialApp(private val configuration: Configuration,
         }
     }
 
-    fun blockingConnect(email: String, password: String): Session? {
-        return connect(email, password).toBlocking()?.first()
+    fun blockingConnect(email: String, password: String): Session {
+        return connect(email, password).toBlocking().first()
     }
 
     fun connect(email: String, password: String): Observable<Session> {
         return clientService.login.post(LoginCredentials(email, password)).map { Session(configuration, clientConfiguration, it) }
     }
 
-    fun blockingConnect(accessToken: String): Session? {
-        return connect(accessToken).toBlocking()?.first()
+    fun blockingConnect(accessToken: String): Session {
+        return connect(accessToken).toBlocking().first()
     }
 
     fun connect(accessToken: String): Observable<Session> {
