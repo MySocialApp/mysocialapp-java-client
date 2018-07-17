@@ -10,14 +10,20 @@ import java.util.*
  */
 class FluentEvent(private val session: Session) {
 
+    @JvmOverloads
     fun blockingStream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Iterable<Event> = stream(limit, options).toBlocking().toIterable()
 
+    @JvmOverloads
     fun stream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Observable<Event> = list(0, limit, options)
 
+    @JvmOverloads
     fun blockingList(page: Int = 0, size: Int = 10, options: Options = Options()): Iterable<Event> = list(page, size, options).toBlocking().toIterable()
 
+    @JvmOverloads
     fun list(page: Int = 0, size: Int = 10, options: Options = Options()): Observable<Event> {
         return stream(page, size, object : PaginationResource<Event> {
+            override fun getRealResultObject(response: List<Event>): List<Any>? = response
+
             override fun onNext(page: Int, size: Int): List<Event> {
                 return session.clientService.event.list(page, size, options.queryParams).toBlocking().first()
             }
@@ -50,13 +56,17 @@ class FluentEvent(private val session: Session) {
 
     fun getAvailableCustomFields(): Observable<CustomField> = session.clientService.eventCustomField.list().flatMapIterable { it }
 
+    @JvmOverloads
     fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): Iterable<EventsSearchResult> =
             search(search, page, size).toBlocking().toIterable()
 
+    @JvmOverloads
     fun search(search: Search, page: Int = 0, size: Int = 10): Observable<EventsSearchResult> {
         val queryParams = search.toQueryParams()
 
         return stream(page, size, object : PaginationResource<EventsSearchResult?> {
+            override fun getRealResultObject(response: List<EventsSearchResult?>): List<Any>? = response.firstOrNull()?.data
+
             override fun onNext(page: Int, size: Int): List<EventsSearchResult?> {
                 return listOf(session.clientService.search.get(page, size, queryParams).map {
                     it.resultsByType?.events ?: EventsSearchResult(matchedCount = 0L)

@@ -22,6 +22,9 @@ data class ConversationMessages(var totalUnreads: Int? = null,
 
     fun list(page: Int = 0, size: Int = 10): Observable<ConversationMessage> {
         return io.mysocialapp.client.extensions.stream(page, size, object : PaginationResource<ConversationMessage> {
+
+            override fun getRealResultObject(response: List<ConversationMessage>): List<Any>? = response
+
             override fun onNext(page: Int, size: Int): List<ConversationMessage> {
                 return session?.clientService?.conversationMessage?.list(conversationId, page, size)?.toBlocking()?.first() ?: emptyList()
             }
@@ -36,6 +39,9 @@ data class ConversationMessages(var totalUnreads: Int? = null,
 
     fun listAndConsume(page: Int = 0, size: Int = 10): Observable<ConversationMessage> {
         return io.mysocialapp.client.extensions.stream(page, size, object : PaginationResource<ConversationMessage> {
+
+            override fun getRealResultObject(response: List<ConversationMessage>): List<Any>? = response
+
             override fun onNext(page: Int, size: Int): List<ConversationMessage> {
                 return session?.clientService?.conversationMessageConsume
                         ?.list(conversationId, page, size)?.toBlocking()?.first() ?: emptyList()

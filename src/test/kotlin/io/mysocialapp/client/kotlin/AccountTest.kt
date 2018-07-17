@@ -1,5 +1,7 @@
-package io.mysocialapp.client
+package io.mysocialapp.client.kotlin
 
+import io.mysocialapp.client.MySocialApp
+import io.mysocialapp.client.Session
 import io.mysocialapp.client.exceptions.InvalidCredentialsMySocialAppException
 import io.mysocialapp.client.models.CustomField
 import io.mysocialapp.client.models.SimpleLocation
@@ -13,7 +15,7 @@ import java.util.*
 class AccountTest {
 
     companion object {
-        const val APP_ID = "u470584465854a194805"
+        const val APP_ID = "u470584465854a728453"
     }
 
     private fun getBadSession() = MySocialApp.Builder().setAppId(APP_ID).build().connect("alicex@mysocialapp.io", "mybadpassword")

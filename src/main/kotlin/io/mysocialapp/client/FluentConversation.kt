@@ -9,14 +9,20 @@ import rx.Observable
  */
 class FluentConversation(private val session: Session) {
 
+    @JvmOverloads
     fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<Conversation> = stream(limit).toBlocking().toIterable()
 
+    @JvmOverloads
     fun stream(limit: Int = Int.MAX_VALUE): Observable<Conversation> = list(0, limit)
 
+    @JvmOverloads
     fun blockingList(page: Int = 0, size: Int = 10): Iterable<Conversation> = list(page, size).toBlocking().toIterable()
 
+    @JvmOverloads
     fun list(page: Int = 0, size: Int = 10): Observable<Conversation> {
         return io.mysocialapp.client.extensions.stream(page, size, object : PaginationResource<Conversation> {
+            override fun getRealResultObject(response: List<Conversation>): List<Any>? = response
+
             override fun onNext(page: Int, size: Int): List<Conversation> {
                 return session.clientService.conversation.list(page, size).toBlocking().first()
             }

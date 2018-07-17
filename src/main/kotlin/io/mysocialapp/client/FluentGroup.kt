@@ -12,14 +12,20 @@ import rx.Observable
  */
 class FluentGroup(private val session: Session) {
 
+    @JvmOverloads
     fun blockingStream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Iterable<Group> = stream(limit, options).toBlocking().toIterable()
 
+    @JvmOverloads
     fun stream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Observable<Group> = list(0, limit, options)
 
+    @JvmOverloads
     fun blockingList(page: Int = 0, size: Int = 10, options: Options = Options()): Iterable<Group> = list(page, size, options).toBlocking().toIterable()
 
+    @JvmOverloads
     fun list(page: Int = 0, size: Int = 10, options: Options = Options()): Observable<Group> {
         return stream(page, size, object : PaginationResource<Group> {
+            override fun getRealResultObject(response: List<Group>): List<Any>? = response
+
             override fun onNext(page: Int, size: Int): List<Group> {
                 return session.clientService.group.list(page, size, options.queryParams).toBlocking().first()
             }
@@ -52,13 +58,17 @@ class FluentGroup(private val session: Session) {
 
     fun getAvailableCustomFields(): Observable<CustomField> = session.clientService.groupCustomField.list().flatMapIterable { it }
 
+    @JvmOverloads
     fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): Iterable<GroupsSearchResult> =
             search(search, page, size).toBlocking().toIterable()
 
+    @JvmOverloads
     fun search(search: Search, page: Int = 0, size: Int = 10): Observable<GroupsSearchResult> {
         val queryParams = search.toQueryParams()
 
         return stream(page, size, object : PaginationResource<GroupsSearchResult?> {
+            override fun getRealResultObject(response: List<GroupsSearchResult?>): List<Any>? = response.firstOrNull()?.data
+
             override fun onNext(page: Int, size: Int): List<GroupsSearchResult?> {
                 return listOf(session.clientService.search.get(page, size, queryParams).map {
                     it.resultsByType?.groups ?: GroupsSearchResult(matchedCount = 0L)

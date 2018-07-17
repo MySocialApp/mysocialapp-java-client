@@ -8,11 +8,9 @@ import rx.Observable
 class Status(var message: String? = null) : BaseWall() {
 
     override var bodyMessage: String?
-        get() = if (message != null) message else displayedName
-        set(message) = if (this.message != null) {
+        get() = message
+        set(message) {
             this.message = message
-        } else {
-            this.displayedName = message
         }
 
     override fun getLikes(): Observable<Like> {

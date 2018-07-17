@@ -1,5 +1,8 @@
-package io.mysocialapp.client;
+package io.mysocialapp.client.java;
 
+import io.mysocialapp.client.AbstractNotificationCallback;
+import io.mysocialapp.client.MySocialApp;
+import io.mysocialapp.client.Session;
 import io.mysocialapp.client.models.*;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -7,9 +10,9 @@ import org.junit.jupiter.api.Test;
 /**
  * Created by evoxmusic on 10/05/2018.
  */
-class JavaNotificationTest {
+class NotificationTest {
 
-    private final static String APP_ID = "u470584465854a194805";
+    private final static String APP_ID = "u470584465854a728453";
     private static Session session;
 
     static {

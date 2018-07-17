@@ -1,5 +1,7 @@
-package io.mysocialapp.client
+package io.mysocialapp.client.kotlin
 
+import io.mysocialapp.client.MySocialApp
+import io.mysocialapp.client.Session
 import io.mysocialapp.client.models.Conversation
 import io.mysocialapp.client.models.ConversationMessagePost
 import org.junit.Test
@@ -11,7 +13,7 @@ import java.io.File
 class ConversationTest {
 
     companion object {
-        const val APP_ID = "u470584465854a194805"
+        const val APP_ID = "u470584465854a728453"
     }
 
     private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("AliceX", "myverysecretpassw0rd")

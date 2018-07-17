@@ -41,7 +41,7 @@ class FluentAccount(private val session: Session) {
      * This method delete all your data that belongs to this account.!!
      */
     fun requestForDeleteAccount(password: String): Observable<Void> {
-        return session.clientService.account.delete(LoginCredentials(password = password, username = ""))
+        return session.clientService.accountDelete.delete(LoginCredentials(password = password, username = ""))
     }
 
 }

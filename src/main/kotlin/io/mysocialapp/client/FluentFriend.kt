@@ -13,13 +13,13 @@ class FluentFriend(private val session: Session) {
     fun blockingListIncomingFriendRequests(): Iterable<User> = listIncomingFriendRequests().toBlocking().toIterable()
 
     fun listIncomingFriendRequests(): Observable<User> {
-        return listFriendRequests().map { it.incoming }.flatMapIterable { it }
+        return listFriendRequests().map { it.incoming ?: emptyList() }.flatMapIterable { it }
     }
 
     fun blockingListOutgoingFriendRequests(): Iterable<User> = listOutgoingFriendRequests().toBlocking().toIterable()
 
     fun listOutgoingFriendRequests(): Observable<User> {
-        return listFriendRequests().map { it.outgoing }.flatMapIterable { it }
+        return listFriendRequests().map { it.outgoing ?: emptyList() }.flatMapIterable { it }
     }
 
     fun blockingListFriendRequests(): FriendRequests = listFriendRequests().toBlocking().first()
@@ -32,8 +32,16 @@ class FluentFriend(private val session: Session) {
         }
     }
 
+    @JvmOverloads
+    fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<User> = stream(limit).toBlocking().toIterable()
+
+    @JvmOverloads
+    fun stream(limit: Int = Int.MAX_VALUE): Observable<User> = list(0, limit)
+
+    @JvmOverloads
     fun blockingList(page: Int = 0, size: Int = 10): Iterable<User> = list(page, size).toBlocking()?.toIterable() ?: emptyList()
 
+    @JvmOverloads
     fun list(page: Int = 0, size: Int = 10): Observable<User> = session.account.get().flatMap { it.listFriends(page, size).prepareAsync() }
 
 }

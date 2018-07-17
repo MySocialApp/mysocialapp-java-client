@@ -1,5 +1,9 @@
-package io.mysocialapp.client
+package io.mysocialapp.client.kotlin
 
+import io.mysocialapp.client.ClientConfiguration
+import io.mysocialapp.client.FluentGroup
+import io.mysocialapp.client.MySocialApp
+import io.mysocialapp.client.Session
 import io.mysocialapp.client.models.CustomField
 import io.mysocialapp.client.models.Group
 import io.mysocialapp.client.models.GroupMemberAccessControl
@@ -14,7 +18,7 @@ import java.util.*
 class GroupTest {
 
     companion object {
-        const val APP_ID = "u470584465854a194805"
+        const val APP_ID = "u470584465854a728453"
     }
 
     private fun getSession(): Session? = MySocialApp.Builder()

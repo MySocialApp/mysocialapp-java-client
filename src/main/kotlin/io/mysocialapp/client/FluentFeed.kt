@@ -10,14 +10,20 @@ import rx.Observable
  */
 class FluentFeed(private val session: Session) {
 
+    @JvmOverloads
     fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<Feed> = stream(limit).toBlocking().toIterable()
 
+    @JvmOverloads
     fun stream(limit: Int = Int.MAX_VALUE): Observable<Feed> = list(0, limit)
 
+    @JvmOverloads
     fun blockingList(page: Int = 0, size: Int = 10): Iterable<Feed> = list(page, size).toBlocking().toIterable()
 
+    @JvmOverloads
     fun list(page: Int = 0, size: Int = 10): Observable<Feed> {
         return stream(page, size, object : PaginationResource<Feed> {
+            override fun getRealResultObject(response: List<Feed>): List<Any>? = response
+
             override fun onNext(page: Int, size: Int): List<Feed> {
                 return session.clientService.feed.list(page, size).toBlocking().first() ?: emptyList()
             }
@@ -34,13 +40,17 @@ class FluentFeed(private val session: Session) {
         return session.account.get().map { it.blockingSendWallPost(feedPost) }
     }
 
+    @JvmOverloads
     fun blockingSearch(search: FluentFeed.Search, page: Int = 0, size: Int = 10): Iterable<FeedsSearchResult> =
             search(search, page, size).toBlocking().toIterable()
 
+    @JvmOverloads
     fun search(search: FluentFeed.Search, page: Int = 0, size: Int = 10): Observable<FeedsSearchResult> {
         val queryParams = search.toQueryParams()
 
         return stream(page, size, object : PaginationResource<FeedsSearchResult?> {
+            override fun getRealResultObject(response: List<FeedsSearchResult?>): List<Any>? = response.firstOrNull()?.data
+
             override fun onNext(page: Int, size: Int): List<FeedsSearchResult?> {
                 return listOf(session.clientService.search.get(page, size, queryParams).map {
                     it.resultsByType?.feeds ?: FeedsSearchResult(matchedCount = 0L)

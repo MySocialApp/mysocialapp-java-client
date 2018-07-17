@@ -10,14 +10,20 @@ import rx.Observable
  */
 class FluentUser(private val session: Session) {
 
+    @JvmOverloads
     fun blockingStream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Iterable<Users> = stream(limit, options).toBlocking().toIterable()
 
+    @JvmOverloads
     fun stream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Observable<Users> = list(0, limit, options)
 
+    @JvmOverloads
     fun blockingList(page: Int = 0, size: Int = 10, options: Options = Options()): Iterable<Users> = list(page, size, options).toBlocking().toIterable()
 
+    @JvmOverloads
     fun list(page: Int = 0, size: Int = 10, options: Options = Options()): Observable<Users> {
         return stream(page, size, object : PaginationResource<Users> {
+            override fun getRealResultObject(response: List<Users>): List<Any>? = response.firstOrNull()?.users
+
             override fun onNext(page: Int, size: Int): List<Users> {
                 return listOf(session.clientService.user.list(page, size, options.queryParams).toBlocking().first())
             }
@@ -32,13 +38,17 @@ class FluentUser(private val session: Session) {
 
     fun getByExternalId(id: String): Observable<User> = session.clientService.userExternal.get(id).map { it.session = session; it }
 
+    @JvmOverloads
     fun blockingSearch(search: Search, page: Int = 0, size: Int = 10): Iterable<UsersSearchResult> =
             search(search, page, size).toBlocking().toIterable()
 
+    @JvmOverloads
     fun search(search: Search, page: Int = 0, size: Int = 10): Observable<UsersSearchResult> {
         val queryParams = search.toQueryParams()
 
         return stream(page, size, object : PaginationResource<UsersSearchResult?> {
+            override fun getRealResultObject(response: List<UsersSearchResult?>): List<Any>? = response.firstOrNull()?.data
+
             override fun onNext(page: Int, size: Int): List<UsersSearchResult?> {
                 return listOf(session.clientService.search.get(page, size, queryParams).map {
                     it.resultsByType?.users ?: UsersSearchResult(matchedCount = 0L)

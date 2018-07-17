@@ -48,15 +48,21 @@ class Group : BaseWall(), WallTextable {
                 ?: Observable.empty()
     }
 
+    @JvmOverloads
     fun blockingStreamNewsFeed(limit: Int = Int.MAX_VALUE): Iterable<Feed> = streamNewsFeed(limit).toBlocking().toIterable()
 
+    @JvmOverloads
     fun streamNewsFeed(limit: Int = Int.MAX_VALUE): Observable<Feed> = listNewsFeed(0, limit)
 
+    @JvmOverloads
     fun blockingListNewsFeed(page: Int = 0, size: Int = 10): Iterable<Feed> =
             listNewsFeed(page, size).toBlocking()?.toIterable() ?: emptyList()
 
+    @JvmOverloads
     fun listNewsFeed(page: Int = 0, size: Int = 10): Observable<Feed> {
         return stream(page, size, object : PaginationResource<Feed> {
+            override fun getRealResultObject(response: List<Feed>): List<Any>? = response
+
             override fun onNext(page: Int, size: Int): List<Feed> {
                 return session?.clientService?.groupWall?.list(id, page, size)?.toBlocking()?.first() ?: emptyList()
             }
