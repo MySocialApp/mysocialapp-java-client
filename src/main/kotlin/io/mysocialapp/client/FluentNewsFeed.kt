@@ -8,7 +8,7 @@ import rx.Observable
 /**
  * Created by evoxmusic on 28/04/2018.
  */
-class FluentFeed(private val session: Session) {
+class FluentNewsFeed(private val session: Session) {
 
     @JvmOverloads
     fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<Feed> = stream(limit).toBlocking().toIterable()
@@ -41,11 +41,11 @@ class FluentFeed(private val session: Session) {
     }
 
     @JvmOverloads
-    fun blockingSearch(search: FluentFeed.Search, page: Int = 0, size: Int = 10): Iterable<FeedsSearchResult> =
+    fun blockingSearch(search: FluentNewsFeed.Search, page: Int = 0, size: Int = 10): Iterable<FeedsSearchResult> =
             search(search, page, size).toBlocking().toIterable()
 
     @JvmOverloads
-    fun search(search: FluentFeed.Search, page: Int = 0, size: Int = 10): Observable<FeedsSearchResult> {
+    fun search(search: FluentNewsFeed.Search, page: Int = 0, size: Int = 10): Observable<FeedsSearchResult> {
         val queryParams = search.toQueryParams()
 
         return stream(page, size, object : PaginationResource<FeedsSearchResult?> {

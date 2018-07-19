@@ -14,7 +14,7 @@ class Session(private val configuration: Configuration,
     val webSocketService by lazy { WebSocketService(configuration, clientConfiguration, this) }
 
     val account by lazy { FluentAccount(this) }
-    val newsFeed by lazy { FluentFeed(this) }
+    val newsFeed by lazy { FluentNewsFeed(this) }
     val user by lazy { FluentUser(this) }
     val friend by lazy { FluentFriend(this) }
     val notification by lazy { FluentNotification(this) }

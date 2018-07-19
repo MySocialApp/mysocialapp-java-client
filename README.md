@@ -13,23 +13,10 @@ MySocialApp’s powerful API lets you quickly and seamlessly implement social ne
 
 - [Dependencies](#dependencies)
 - [Getting Started](#getting-started)
-- [Account](#account)
-- [User](#user)
-- [News Feed / Activity Stream](#news-feed-/-activity-stream)
-- [Event](#event)
-- [Group](#group)
-- [Private Messaging](#private-messaging)
-- [Search](#search)
-    - [News Feed](#search-news-feed)
-    - [User](#search-user)
-    - [Event](#search-event)
-    - [Group](#search-group)
-- [Notification](#notification)
-- [Receiving Notification Event](#receiving-notification-event)
 - [Handle Exception](#handle-exception)
-- [Documentation](https://docs.mysocialapp.io?ref=github)
-- [Credits](#credits)
+- [Documentation](https://docs.mysocialapp.io/v1.0/docs/documentation-introduction)
 - [Demo app](#demo-app)
+- [Credits](#credits)
 - [Contributions](#contributions)
 
 # Dependencies
@@ -49,39 +36,13 @@ dependencies {
 }
 ```
 
-# Usage
-
-Actions are synchronous and asynchronous. We are using [RxJava](https://github.com/ReactiveX/RxJava) to provide an elegant way to handle asynchronous results.
-
 ## Getting Started
 
 [Read Java getting started](https://docs.mysocialapp.io/v1.0/docs/quick-start-java?ref=github)
 
-## Account
+## Documentation
 
-## User
-
-## News Feed / Activity Stream
-
-## Event
-
-## Group
-
-## Private Messaging
-
-## Search
-
-#### Search News Feed
-
-#### Search User
-
-#### Search Event
-
-#### Search Group
-
-## Notification
-
-## Receiving Notification Event
+[Complete documentation is available here](https://docs.mysocialapp.io/v1.0/docs/documentation-introduction?ref=github)
 
 ## Handle Exception
 

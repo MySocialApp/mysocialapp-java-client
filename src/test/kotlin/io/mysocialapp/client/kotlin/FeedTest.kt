@@ -1,6 +1,6 @@
 package io.mysocialapp.client.kotlin
 
-import io.mysocialapp.client.FluentFeed
+import io.mysocialapp.client.FluentNewsFeed
 import io.mysocialapp.client.MySocialApp
 import io.mysocialapp.client.Session
 import io.mysocialapp.client.models.CommentPost
@@ -81,7 +81,7 @@ class FeedTest {
     @Test
     fun `search for feeds containing "hello"`() {
         val s = getSession()
-        val results = s?.newsFeed?.blockingSearch(FluentFeed.Search.Builder().setTextToSearch("hello").build())
+        val results = s?.newsFeed?.blockingSearch(FluentNewsFeed.Search.Builder().setTextToSearch("hello").build())
         assert(results != null)
     }
 
