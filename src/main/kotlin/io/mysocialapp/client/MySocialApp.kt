@@ -71,6 +71,8 @@ class MySocialApp(private val configuration: Configuration,
         return Observable.just(AuthenticationToken(accessToken = accessToken)).map { Session(configuration, clientConfiguration, it) }
     }
 
+    val publicSession: Session by lazy { Session(configuration, clientConfiguration, AuthenticationToken()) }
+
     fun blockingResetPasswordByEmail(email: String) = resetPasswordByEmail(email).toBlocking()?.first()
 
     fun resetPasswordByEmail(email: String): Observable<Void> = resetPassword(ResetIdentifier(email = email))

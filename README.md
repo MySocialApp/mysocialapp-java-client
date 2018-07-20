@@ -40,9 +40,9 @@ dependencies {
 
 [Read Java getting started](https://docs.mysocialapp.io/v1.0/docs/quick-start-java?ref=github)
 
-## Documentation
+## API Documentation
 
-[Complete documentation is available here](https://docs.mysocialapp.io/v1.0/docs/documentation-introduction?ref=github)
+[Complete API documentation is available here](https://docs.mysocialapp.io/reference?ref=github)
 
 ## Handle Exception
 
