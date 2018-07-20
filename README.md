@@ -14,7 +14,7 @@ MySocialApp’s powerful API lets you quickly and seamlessly implement social ne
 - [Dependencies](#dependencies)
 - [Getting Started](#getting-started)
 - [Handle Exception](#handle-exception)
-- [Documentation](https://docs.mysocialapp.io/v1.0/docs/documentation-introduction)
+- [API Documentation](https://docs.mysocialapp.io/reference?ref=github)
 - [Demo app](#demo-app)
 - [Credits](#credits)
 - [Contributions](#contributions)
