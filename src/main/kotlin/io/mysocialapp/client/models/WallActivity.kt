@@ -60,7 +60,7 @@ abstract class WallActivity(val action: ActivityType? = null,
     override val location: BaseLocation?
         get() = (baseObject as? Localizable)?.getLocality()
 
-    override fun getLikes(): Observable<Like> {
+    override fun listLikes(): Observable<Like> {
         return baseObject?.getLikes()?.map { it.session = session; it } ?: Observable.empty()
     }
 
@@ -68,12 +68,12 @@ abstract class WallActivity(val action: ActivityType? = null,
         return baseObject?.addLike()?.map { it.session = session; it } ?: Observable.empty()
     }
 
-    override fun deleteLike(): Observable<Void> {
-        return baseObject?.deleteLike() ?: Observable.empty()
+    override fun removeLike(): Observable<Void> {
+        return baseObject?.removeLike() ?: Observable.empty()
     }
 
-    override fun getComments(): Observable<Comment> {
-        return baseObject?.getComments()?.map { it.session = session; it } ?: Observable.empty()
+    override fun listComments(): Observable<Comment> {
+        return baseObject?.listComments()?.map { it.session = session; it } ?: Observable.empty()
     }
 
     override fun addComment(commentPost: CommentPost): Observable<Comment> {
@@ -90,6 +90,10 @@ abstract class WallActivity(val action: ActivityType? = null,
 
     override fun delete(): Observable<Void> {
         return session?.clientService?.feed?.delete(baseObject?.id) ?: Observable.empty()
+    }
+
+    override fun save(): Observable<*> {
+        return baseObject?.save() ?: Observable.empty<Void>()
     }
 
 }

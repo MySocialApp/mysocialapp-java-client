@@ -35,35 +35,35 @@ open class BaseWall : Base(), Likable, Commentable {
             likes?.hasLike = like
         }
 
-    override fun getBlockingLikes(): Iterable<Like> = getLikes().toBlocking()?.toIterable() ?: emptyList()
+    override fun blockingListLikes(): Iterable<Like> = getLikes().toBlocking()?.toIterable() ?: emptyList()
 
     override fun getLikes(): Observable<Like> {
         return session?.clientService?.feedLike?.list(idStr?.toLong())
                 ?.flatMapIterable { it }?.map { it.session = session; it } ?: Observable.empty()
     }
 
-    override fun addBlockingLike(): Like? = addLike().toBlocking()?.first()
+    override fun blockingAddLike(): Like? = addLike().toBlocking()?.first()
 
     override fun addLike(): Observable<Like> {
         return session?.clientService?.feedLike?.post(idStr?.toLong())?.map { it.session = session; it } ?: Observable.empty()
     }
 
-    override fun deleteBlockingLike() {
-        deleteLike().toBlocking()?.first()
+    override fun blockingRemoveLike() {
+        removeLike().toBlocking()?.first()
     }
 
-    override fun deleteLike(): Observable<Void> {
+    override fun removeLike(): Observable<Void> {
         return session?.clientService?.feedLike?.delete(idStr?.toLong()) ?: Observable.empty()
     }
 
-    override fun getBlockingComments(): Iterable<Comment> = getComments().toBlocking()?.toIterable() ?: emptyList()
+    override fun blockingListComments(): Iterable<Comment> = listComments().toBlocking()?.toIterable() ?: emptyList()
 
-    override fun getComments(): Observable<Comment> {
+    override fun listComments(): Observable<Comment> {
         return session?.clientService?.feedComment?.list(idStr?.toLong())
                 ?.flatMapIterable { it }?.map { it.session = session; it } ?: Observable.empty()
     }
 
-    override fun addBlockingComment(commentPost: CommentPost): Comment? = addComment(commentPost).toBlocking()?.first()
+    override fun blockingAddComment(commentPost: CommentPost): Comment? = addComment(commentPost).toBlocking()?.first()
 
     override fun addComment(commentPost: CommentPost): Observable<Comment> {
         if (commentPost.multipartPhoto == null && commentPost.comment == null) {

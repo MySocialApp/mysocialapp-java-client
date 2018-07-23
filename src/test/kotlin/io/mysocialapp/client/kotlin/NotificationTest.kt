@@ -63,7 +63,7 @@ class NotificationTest {
 
             override fun onLike(like: Like) {
                 val message = CommentPost.Builder().setMessage("Hey [[user:${like.owner?.id}]] thanks for liking this post").build()
-                s.newsFeed.blockingGet(like.id!!)?.addBlockingComment(message)
+                s.newsFeed.blockingGet(like.id!!)?.blockingAddComment(message)
             }
 
             override fun onNewsFeed(feed: Feed) {

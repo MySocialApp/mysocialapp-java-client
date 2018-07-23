@@ -22,4 +22,12 @@ class Comment(var message: String? = null,
         return session?.newsFeed?.get(parent?.id!!)?.flatMap { it?.addComment(commentPost)?.prepareAsync() } ?: Observable.empty()
     }
 
+    override fun save(): Observable<Comment> {
+        return session?.clientService?.feedComment?.put(id, id, this)?.map { it.session = session; it } ?: Observable.empty()
+    }
+
+    override fun delete(): Observable<Void> {
+        return session?.clientService?.feedComment?.delete(id, id) ?: Observable.empty()
+    }
+
 }

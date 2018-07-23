@@ -38,11 +38,11 @@ class Photo : BaseWall(), Taggable {
         return session?.clientService?.photoLike?.post(idStr?.toLong())?.map { it.session = session; it } ?: Observable.empty()
     }
 
-    override fun deleteLike(): Observable<Void> {
+    override fun removeLike(): Observable<Void> {
         return session?.clientService?.photoLike?.delete(idStr?.toLong()) ?: Observable.empty()
     }
 
-    override fun getComments(): Observable<Comment> {
+    override fun listComments(): Observable<Comment> {
         return session?.clientService?.photoComment?.list(idStr?.toLong())
                 ?.flatMapIterable { it }?.map { it.session = session; it } ?: Observable.empty()
     }
@@ -70,6 +70,10 @@ class Photo : BaseWall(), Taggable {
 
     override fun delete(): Observable<Void> {
         return session?.clientService?.photo?.delete(idStr?.toLong()) ?: Observable.empty()
+    }
+
+    override fun save(): Observable<Photo> {
+        return session?.clientService?.photo?.put(id, this)?.map { it.session = session; it } ?: Observable.empty()
     }
 
 }

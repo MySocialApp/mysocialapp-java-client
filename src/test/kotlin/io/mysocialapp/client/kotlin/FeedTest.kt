@@ -50,7 +50,7 @@ class FeedTest {
         val s = getSession()
 
         val feedsWithoutLikes = s?.newsFeed?.blockingStream(300)?.filter { it.baseObject?.likersTotal == 0 }
-        feedsWithoutLikes?.forEach { it.addBlockingLike() }
+        feedsWithoutLikes?.forEach { it.blockingAddLike() }
     }
 
     @Test
@@ -72,10 +72,10 @@ class FeedTest {
 
         val feed = s?.newsFeed?.blockingStream(1)?.firstOrNull()
 
-        feed?.addBlockingComment(CommentPost.Builder().setMessage("Here a comment from the SDK :) #sdk #java " +
+        feed?.blockingAddComment(CommentPost.Builder().setMessage("Here a comment from the SDK :) #sdk #java " +
                 "by [[user:${s.account.blockingGet().id}]] with https://mysocialapp.io").build())
 
-        feed?.addBlockingLike()
+        feed?.blockingAddLike()
     }
 
     @Test

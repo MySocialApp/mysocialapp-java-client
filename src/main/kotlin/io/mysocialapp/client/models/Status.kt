@@ -22,11 +22,11 @@ class Status(var message: String? = null) : BaseWall() {
         return session?.clientService?.statusLike?.post(idStr?.toLong()) ?: Observable.empty()
     }
 
-    override fun deleteLike(): Observable<Void> {
+    override fun removeLike(): Observable<Void> {
         return session?.clientService?.statusLike?.delete(idStr?.toLong()) ?: Observable.empty()
     }
 
-    override fun getComments(): Observable<Comment> {
+    override fun listComments(): Observable<Comment> {
         return session?.clientService?.statusComment?.list(idStr?.toLong())
                 ?.flatMapIterable { it }?.map { it.session = session; it } ?: Observable.empty()
     }

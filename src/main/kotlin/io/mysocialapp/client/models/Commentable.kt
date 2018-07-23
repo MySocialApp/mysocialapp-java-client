@@ -7,11 +7,11 @@ import rx.Observable
  */
 interface Commentable : BaseImpl {
 
-    fun getBlockingComments(): Iterable<Comment>
+    fun blockingListComments(): Iterable<Comment>
 
-    fun getComments(): Observable<Comment>
+    fun listComments(): Observable<Comment>
 
-    fun addBlockingComment(commentPost: CommentPost): Comment?
+    fun blockingAddComment(commentPost: CommentPost): Comment?
 
     fun addComment(commentPost: CommentPost): Observable<Comment>
 

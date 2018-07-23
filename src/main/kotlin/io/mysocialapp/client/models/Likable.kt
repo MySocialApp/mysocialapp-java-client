@@ -7,7 +7,7 @@ import rx.Observable
  */
 interface Likable : BaseImpl {
 
-    fun getBlockingLikes(): Iterable<Like>
+    fun blockingListLikes(): Iterable<Like>
 
     fun getLikes(): Observable<Like>
 
@@ -17,12 +17,12 @@ interface Likable : BaseImpl {
 
     var isLiked: Boolean
 
-    fun addBlockingLike(): Like?
+    fun blockingAddLike(): Like?
 
     fun addLike(): Observable<Like>
 
-    fun deleteBlockingLike()
+    fun blockingRemoveLike()
 
-    fun deleteLike(): Observable<Void>
+    fun removeLike(): Observable<Void>
 
 }

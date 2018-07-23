@@ -30,23 +30,23 @@ interface Wallable : Serializable {
 
     val location: BaseLocation?
 
-    fun getBlockingLikes(): Iterable<Like> = getLikes().toBlocking()?.toIterable() ?: emptyList()
+    fun blockingListLikes(): Iterable<Like> = listLikes().toBlocking()?.toIterable() ?: emptyList()
 
-    fun getLikes(): Observable<Like>
+    fun listLikes(): Observable<Like>
 
-    fun addBlockingLike(): Like? = addLike().toBlocking()?.first()
+    fun blockingAddLike(): Like? = addLike().toBlocking()?.first()
 
     fun addLike(): Observable<Like>
 
-    fun deleteBlockingLike() = deleteLike().toBlocking()?.first()
+    fun blockingRemoveLike() = removeLike().toBlocking()?.first()
 
-    fun deleteLike(): Observable<Void>
+    fun removeLike(): Observable<Void>
 
-    fun getBlockingComments(): Iterable<Comment> = getComments().toBlocking()?.toIterable() ?: emptyList()
+    fun blockingListComments(): Iterable<Comment> = listComments().toBlocking()?.toIterable() ?: emptyList()
 
-    fun getComments(): Observable<Comment>
+    fun listComments(): Observable<Comment>
 
-    fun addBlockingComment(commentPost: CommentPost): Comment? = addComment(commentPost).toBlocking()?.first()
+    fun blockingAddComment(commentPost: CommentPost): Comment? = addComment(commentPost).toBlocking()?.first()
 
     fun addComment(commentPost: CommentPost): Observable<Comment>
 
@@ -61,6 +61,10 @@ interface Wallable : Serializable {
     fun blockingDelete() = delete().toBlocking()?.first()
 
     fun delete(): Observable<Void>
+
+    fun blockingSave() = save().toBlocking()?.first()
+
+    fun save(): Observable<*>
 
     var session: Session?
 

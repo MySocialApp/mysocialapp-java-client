@@ -1,15 +1,18 @@
 package io.mysocialapp.client.java;
 
+import io.mysocialapp.client.FluentNewsFeed;
 import io.mysocialapp.client.MySocialApp;
 import io.mysocialapp.client.Session;
-import io.mysocialapp.client.models.AccessControl;
-import io.mysocialapp.client.models.Feed;
-import io.mysocialapp.client.models.FeedPost;
+import io.mysocialapp.client.models.*;
 import org.junit.jupiter.api.Test;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
 import java.io.File;
+import java.util.Objects;
+
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Created by evoxmusic on 17/07/2018.
@@ -91,6 +94,19 @@ class NewsFeedTest {
 
         final FeedPost feedPost = new FeedPost.Builder()
                 .setMessage(message)
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        session.getNewsFeed().blockingCreate(feedPost);
+    }
+
+    @Test
+    void createNewsFeed_withImage() {
+        String message = "Hey I am [[user:" + session.getAccount().blockingGet().getId() + "]] and happy to be here with you :) " +
+                "visit my website https://mysocialapp.io #hello";
+
+        final FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
                 .setImage(new File("hello.jpg"))
                 .setVisibility(AccessControl.PUBLIC)
                 .build();
@@ -98,5 +114,152 @@ class NewsFeedTest {
         session.getNewsFeed().blockingCreate(feedPost);
     }
 
+    @Test
+    void editNewsFeed() {
+        String message = "Hey I am [[user:" + session.getAccount().blockingGet().getId() + "]] and happy to be here with you :) " +
+                "visit my website https://mysocialapp.io #hello";
+
+        final FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        Feed feed = session.getNewsFeed().blockingCreate(feedPost);
+
+        feed.setBodyMessage(feed.getBodyMessage() + " (edited)");
+
+        Feed editedFeed = (Feed) feed.blockingSave();
+        assertTrue(editedFeed.getBodyMessage().endsWith("(edited)"));
+    }
+
+    @Test
+    void listLikes() {
+        Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
+
+        for (Like like : feed.blockingListLikes()) {
+            System.out.println(like.getOwner().getDisplayedName() + " has liked " + feed.getBaseObject().getDisplayedName());
+        }
+    }
+
+    @Test
+    void findById() {
+        Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
+        assertNotNull(session.getNewsFeed().blockingGet(feed.getBaseObject().getId()));
+    }
+
+    @Test
+    void doLike() {
+        Iterable<Feed> newsFeedIterable = session.getNewsFeed().blockingStream(1);
+        newsFeedIterable.forEach(Feed::blockingAddLike);
+    }
+
+    @Test
+    void removeLike() {
+        Iterable<Feed> newsFeedIterable = session.getNewsFeed().blockingStream(1);
+        newsFeedIterable.forEach(Feed::blockingRemoveLike);
+    }
+
+    @Test
+    void listComments() {
+        Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
+
+        for (Comment comment : feed.blockingListComments()) {
+            System.out.println(comment.getOwner().getDisplayedName() +
+                    " has commented '" + comment.getMessage() +
+                    "' from " + feed.getBaseObject().getDisplayedName());
+        }
+    }
+
+    @Test
+    void doComment() {
+        Iterable<Feed> newsFeedIterable = session.getNewsFeed().blockingStream(1);
+        newsFeedIterable.forEach(f -> {
+            CommentPost commentPost = new CommentPost.Builder()
+                    .setMessage("Hey this is incredible [[user:" + f.getActor().getId() + "]]")
+                    .build();
+
+            f.blockingAddComment(commentPost);
+        });
+    }
+
+    @Test
+    void doComment_withImage() {
+        Iterable<Feed> newsFeedIterable = session.getNewsFeed().blockingStream(1);
+        newsFeedIterable.forEach(f -> {
+            CommentPost commentPost = new CommentPost.Builder()
+                    .setMessage("Hey this is incredible [[user:" + f.getActor().getId() + "]]")
+                    .setImage(new File(System.class.getResource("/hello.jpg").getFile()))
+                    .build();
+
+            f.blockingAddComment(commentPost);
+        });
+    }
+
+    @Test
+    void editComment() {
+        // add comment before
+        doComment();
+
+        Iterable<Feed> newsFeedIterable = session.getNewsFeed().blockingStream(1);
+        User myProfile = session.getAccount().blockingGet();
+
+        newsFeedIterable.forEach(feed -> {
+            feed.blockingListComments().forEach(comment -> {
+                if (Objects.equals(myProfile.getId(), comment.getOwner().getId())) {
+                    // then edit comment
+                    comment.setMessage(comment.getMessage() + " (edited)");
+                    Comment editedComment = (Comment) comment.blockingSave();
+
+                    System.out.println(editedComment.getMessage());
+                }
+            });
+        });
+    }
+
+    @Test
+    void deleteComment() {
+        // add comment before
+        doComment();
+
+        Iterable<Feed> newsFeedIterable = session.getNewsFeed().blockingStream(1);
+        User myProfile = session.getAccount().blockingGet();
+
+        newsFeedIterable.forEach(feed -> {
+            feed.blockingListComments().forEach(comment -> {
+                if (Objects.equals(myProfile.getId(), comment.getOwner().getId())) {
+                    // then edit comment
+                    comment.blockingDelete();
+                }
+            });
+        });
+    }
+
+    @Test
+    void findByText() {
+        FluentNewsFeed.Search query = new FluentNewsFeed.Search.Builder()
+                .setTextToSearch("happy to be here")
+                .build();
+
+        Iterable<FeedsSearchResult> results = session.getNewsFeed().blockingSearch(query, 0, 10);
+        assertNotNull(results.iterator().next().getMatchedCount());
+    }
+
+    @Test
+    void feedIgnore() {
+        Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
+        feed.blockingIgnore();
+    }
+
+    @Test
+    void feedAbuse() {
+        Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
+        feed.blockingAbuse();
+    }
+
+    @Test
+    void deleteFeed() {
+        Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
+        feed.blockingDelete();
+    }
 
 }

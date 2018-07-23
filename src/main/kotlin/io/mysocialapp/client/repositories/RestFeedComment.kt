@@ -19,6 +19,9 @@ interface RestFeedComment {
     @PUT("feed/{id}/comment/{commentId}")
     fun put(@Path("id") id: Long?, @Path("commentId") commentId: Long?, @Body comment: Comment): Observable<Comment>
 
+    @DELETE("feed/{id}/comment/{commentId}")
+    fun delete(@Path("id") id: Long?, @Path("commentId") commentId: Long?): Observable<Void>
+
     @Multipart
     @POST("feed/{id}/comment/photo")
     fun post(@Path("id") id: Long?, @Part("file\"; filename=\"image\"") photo: RequestBody, @Part("name") message: RequestBody): Observable<Comment>
