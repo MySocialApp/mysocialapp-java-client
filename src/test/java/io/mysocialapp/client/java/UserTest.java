@@ -3,10 +3,7 @@ package io.mysocialapp.client.java;
 import io.mysocialapp.client.FluentUser;
 import io.mysocialapp.client.MySocialApp;
 import io.mysocialapp.client.Session;
-import io.mysocialapp.client.models.SimpleLocation;
-import io.mysocialapp.client.models.User;
-import io.mysocialapp.client.models.Users;
-import io.mysocialapp.client.models.UsersSearchResult;
+import io.mysocialapp.client.models.*;
 import org.junit.jupiter.api.Test;
 import rx.Observable;
 import rx.observers.TestSubscriber;
@@ -128,7 +125,7 @@ class UserTest {
     @Test
     void findUserByExternalId() {
         // set my own external ID
-        User myAccount = session.getAccount().blockingGet();
+        Account myAccount = session.getAccount().blockingGet();
 
         // reset external ID
         myAccount.setExternalId(null);
@@ -209,6 +206,20 @@ class UserTest {
             result.getData().forEach(user -> {
                 System.out.println("ID: " + user.getId() + " Name: " + user.getDisplayedName());
             });
+        });
+    }
+
+    @Test
+    void listUserNewsFeed() {
+        session.getAccount().blockingGet().blockingListNewsFeed(0, 10).forEach(v -> {
+            System.out.println(v.getBodyMessage());
+        });
+    }
+
+    @Test
+    void listUserPhotoAlbum() {
+        session.getAccount().blockingGet().blockingListPhotoAlbum(0, 10).forEach(v -> {
+            System.out.println(v.getName());
         });
     }
 

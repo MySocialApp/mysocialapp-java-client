@@ -13,11 +13,13 @@ import org.junit.jupiter.api.Test;
 class NotificationTest {
 
     private final static String APP_ID = "u470584465854a728453";
-    private static Session session;
+    private final static String EMAIL = "alice.jeith@mysocialapp.io";
+    private final static String PASSWORD = "myverysecretpassw0rd";
 
-    static {
-        session = new MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("AliceX", "myverysecretpassw0rd");
-    }
+    private final static Session session = new MySocialApp.Builder()
+            .setAppId(APP_ID)
+            .build()
+            .blockingConnect(EMAIL, PASSWORD);
 
     @Test
     void listenForNotifications() {

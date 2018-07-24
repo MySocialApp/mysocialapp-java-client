@@ -1,24 +1,30 @@
 package io.mysocialapp.client.models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.mysocialapp.client.extensions.imageMediaType
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import rx.Observable
+import java.io.File
 
 /**
  * Created by evoxmusic on 09/01/15.
  */
-class Photo : BaseWall(), Taggable {
+class Photo(var message: String? = null,
+            val url: String? = null,
+            @get:JsonProperty("small_url")
+            val smallURL: String? = null,
+            @get:JsonProperty("medium_url")
+            val mediumURL: String? = null,
+            @get:JsonProperty("high_url")
+            val highURL: String? = null,
+            val target: Base? = null,
+            var visible: Boolean? = null,
+            override var tagEntities: TagEntities? = null) : BaseWall(), Taggable {
 
-    var message: String? = null
-    var url: String? = null
-    @JsonProperty("small_url")
-    val smallURL: String? = null
-    @JsonProperty("medium_url")
-    val mediumURL: String? = null
-    @JsonProperty("high_url")
-    val highURL: String? = null
-    val target: Base? = null
-    var visible: Boolean? = null
-    override var tagEntities: TagEntities? = null
+    @JsonIgnore
+    var multipartPhoto: MultipartPhoto? = null
 
     override var bodyMessage: String?
         get() = message
@@ -74,6 +80,46 @@ class Photo : BaseWall(), Taggable {
 
     override fun save(): Observable<Photo> {
         return session?.clientService?.photo?.put(id, this)?.map { it.session = session; it } ?: Observable.empty()
+    }
+
+    class Builder {
+        private var mMessage: String? = null
+        private var mImageFile: File? = null
+        private var mVisibility: AccessControl = AccessControl.FRIEND
+
+        fun setName(name: String): Builder {
+            this.mMessage = name
+            return this
+        }
+
+        fun setImage(image: File): Builder {
+            this.mImageFile = image
+            return this
+        }
+
+        fun setVisibility(visibility: AccessControl): Builder {
+            this.mVisibility = visibility
+            return this
+        }
+
+        fun build(): Photo {
+            if (mImageFile == null) {
+                throw IllegalArgumentException("Image is mandatory")
+            }
+
+            val photo = Photo()
+            val photoRequestBody = RequestBody.create(mImageFile?.name?.imageMediaType(), mImageFile!!)
+            val accessControlRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), mVisibility.name)
+
+            if (mMessage.isNullOrBlank()) {
+                return photo.apply { multipartPhoto = MultipartPhoto(photoRequestBody, accessControl = accessControlRequestBody) }
+            }
+
+            val messageRequestBody = if (mMessage.isNullOrBlank()) null else RequestBody.create(MediaType.parse("multipart/form-data"), mMessage!!)
+
+            return photo.apply { multipartPhoto = MultipartPhoto(photoRequestBody, messageRequestBody, accessControl = accessControlRequestBody) }
+        }
+
     }
 
 }

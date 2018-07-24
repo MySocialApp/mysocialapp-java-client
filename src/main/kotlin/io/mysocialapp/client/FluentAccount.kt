@@ -1,9 +1,9 @@
 package io.mysocialapp.client
 
+import io.mysocialapp.client.models.Account
 import io.mysocialapp.client.models.CustomField
 import io.mysocialapp.client.models.LoginCredentials
 import io.mysocialapp.client.models.Photo
-import io.mysocialapp.client.models.User
 import rx.Observable
 import java.io.File
 
@@ -12,9 +12,9 @@ import java.io.File
  */
 class FluentAccount(private val session: Session) {
 
-    fun blockingGet(): User = get().toBlocking().first()
+    fun blockingGet(): Account = get().toBlocking().first()
 
-    fun get(): Observable<User> = session.clientService.account.get().map { it.session = session; it }
+    fun get(): Observable<Account> = session.clientService.account.get().map { it.session = session; it }
 
     fun blockingGetAvailableCustomFields(): Iterable<CustomField> = getAvailableCustomFields().toBlocking().toIterable()
 

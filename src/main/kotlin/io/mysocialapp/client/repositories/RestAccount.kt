@@ -1,6 +1,6 @@
 package io.mysocialapp.client.repositories
 
-import io.mysocialapp.client.models.User
+import io.mysocialapp.client.models.Account
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
@@ -12,9 +12,9 @@ import rx.Observable
 interface RestAccount {
 
     @GET("account")
-    fun get(): Observable<User>
+    fun get(): Observable<Account>
 
     @PUT("account")
-    fun put(@Body user: User): Observable<User>
+    fun put(@Body account: Account): Observable<Account>
 
 }

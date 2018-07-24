@@ -1,61 +1,42 @@
 package io.mysocialapp.client.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.mysocialapp.client.extensions.*
+import io.mysocialapp.client.extensions.PaginationResource
+import io.mysocialapp.client.extensions.prepareAsync
+import io.mysocialapp.client.extensions.stream
+import io.mysocialapp.client.extensions.toISO8601
 import rx.Observable
-import java.io.File
 import java.util.*
 
 /**
  * Created by evoxmusic on 27/04/2018.
  */
-data class User(val updatedDate: Date? = null,
-                val profilePhoto: Photo? = null,
-                val profileCoverPhoto: Photo? = null,
-                var livingLocation: Location? = null,
-                val currentStatus: Status? = null,
-                @Deprecated("please do not use username anymore, only e-mail is valid as username for registration") val username: String? = null,
-                var firstName: String? = null,
-                var lastName: String? = null,
-                var password: String? = null,
-                var email: String? = null,
-                val validatedEmail: Boolean? = null,
-                var gender: Gender? = null,
-                var dateOfBirth: Date? = null,
-                var presentation: String? = null,
-                val authorities: Set<String>? = null,
-                val accountEnabled: Boolean? = null,
-                val accountExpired: Boolean? = null,
-                val facebookId: String? = null,
-                val facebookAccessToken: String? = null,
-                val flag: Flag? = null,
-                val userSettings: UserSettings? = null,
-                val userStat: UserStat? = null,
-                @get:JsonProperty("is_friend") val isFriend: Boolean? = null,
-                @get:JsonProperty("is_requested_as_friend") val isRequestedAsFriend: Boolean? = null,
-                var externalId: String? = null,
-                var customFields: List<CustomField>? = null) : Base() {
-
-
-    override fun blockingSave(): User? = save().toBlocking()?.first()
-
-    override fun save(): Observable<User> {
-        return session?.clientService?.account?.put(this)?.map { it.session = session; it } ?: Observable.empty()
-    }
-
-    fun blockingChangeProfilePhoto(image: File): Photo? = changeProfilePhoto(image).toBlocking()?.first()
-
-    fun changeProfilePhoto(image: File): Observable<Photo> {
-        return session?.clientService?.accountProfilePhoto?.post(image.toRequestBody())?.map { it.session = session; it }
-                ?: Observable.empty()
-    }
-
-    fun blockingChangeProfileCoverPhoto(image: File): Photo? = changeProfileCoverPhoto(image).toBlocking()?.first()
-
-    fun changeProfileCoverPhoto(image: File): Observable<Photo> {
-        return session?.clientService?.accountProfileCoverPhoto?.post(image.toRequestBody())?.map { it.session = session; it }
-                ?: Observable.empty()
-    }
+open class User(open val updatedDate: Date? = null,
+                open val profilePhoto: Photo? = null,
+                open val profileCoverPhoto: Photo? = null,
+                open var livingLocation: Location? = null,
+                open val currentStatus: Status? = null,
+                @Deprecated("please do not use username anymore, only e-mail is valid as username for registration") open val username: String? = null,
+                open val firstName: String? = null,
+                open val lastName: String? = null,
+                open val password: String? = null,
+                open val email: String? = null,
+                open val validatedEmail: Boolean? = null,
+                open val gender: Gender? = null,
+                open val dateOfBirth: Date? = null,
+                open val presentation: String? = null,
+                open val authorities: Set<String>? = null,
+                open val accountEnabled: Boolean? = null,
+                open val accountExpired: Boolean? = null,
+                open val facebookId: String? = null,
+                open val facebookAccessToken: String? = null,
+                open val flag: Flag? = null,
+                open val userSettings: UserSettings? = null,
+                open val userStat: UserStat? = null,
+                @get:JsonProperty("is_friend") open val isFriend: Boolean? = null,
+                @get:JsonProperty("is_requested_as_friend") open val isRequestedAsFriend: Boolean? = null,
+                open val externalId: String? = null,
+                open val customFields: List<CustomField>? = null) : Base() {
 
     fun blockingRemoveFriend() {
         cancelFriendRequest().toBlocking()?.first()
@@ -64,7 +45,6 @@ data class User(val updatedDate: Date? = null,
     fun removeFriend(): Observable<Void> {
         return session?.clientService?.userFriend?.delete(idStr?.toLong()) ?: Observable.empty()
     }
-
 
     fun blockingRequestAsFriend(): User? = requestAsFriend().toBlocking()?.first()
 
@@ -130,9 +110,9 @@ data class User(val updatedDate: Date? = null,
         }).map { it.session = session; it }
     }
 
-    fun blockingSendWallPost(feedPost: FeedPost): Feed? = sendWallPost(feedPost).toBlocking().first()
+    fun blockingCreateFeedPost(feedPost: FeedPost): Feed? = createFeedPost(feedPost).toBlocking().first()
 
-    fun sendWallPost(feedPost: FeedPost): Observable<Feed> {
+    fun createFeedPost(feedPost: FeedPost): Observable<Feed> {
         if (feedPost.multipartPhoto == null) {
             return feedPost.textWallMessage?.let { session?.clientService?.userWallMessage?.post(idStr?.toLong(), it) }?.map {
                 it.session = session; it
@@ -201,6 +181,27 @@ data class User(val updatedDate: Date? = null,
 
             override fun onNext(page: Int, size: Int): List<Event> {
                 return session?.clientService?.userEvent?.list(id, page, size, queryMap)?.toBlocking()?.first() ?: emptyList()
+            }
+        }).map { it.session = session; it }
+    }
+
+    @JvmOverloads
+    fun blockingStreamPhotoAlbum(limit: Int = Int.MAX_VALUE): Iterable<PhotoAlbum> = streamPhotoAlbum(limit).toBlocking().toIterable()
+
+    @JvmOverloads
+    fun streamPhotoAlbum(limit: Int = Int.MAX_VALUE): Observable<PhotoAlbum> = listPhotoAlbum(0, limit)
+
+    @JvmOverloads
+    fun blockingListPhotoAlbum(page: Int = 0, size: Int = 10): Iterable<PhotoAlbum> =
+            listPhotoAlbum(page, size).toBlocking()?.toIterable() ?: emptyList()
+
+    @JvmOverloads
+    fun listPhotoAlbum(page: Int = 0, size: Int = 10): Observable<PhotoAlbum> {
+        return stream(page, size, object : PaginationResource<PhotoAlbum> {
+            override fun getRealResultObject(response: List<PhotoAlbum>): List<Any>? = response
+
+            override fun onNext(page: Int, size: Int): List<PhotoAlbum> {
+                return session?.clientService?.photoAlbum?.list(page, size)?.toBlocking()?.first() ?: emptyList()
             }
         }).map { it.session = session; it }
     }

@@ -103,7 +103,7 @@ class WallTest {
                 .setVisibility(AccessControl.FRIEND)
                 .build()
 
-        assert(friend.blockingSendWallPost(post) != null)
+        assert(friend.blockingCreateFeedPost(post) != null)
     }
 
 }

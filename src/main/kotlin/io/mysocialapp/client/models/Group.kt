@@ -69,9 +69,9 @@ class Group : BaseWall(), WallTextable {
         }).map { it.session = session; it }
     }
 
-    fun blockingSendWallPost(feedPost: FeedPost): Feed? = sendWallPost(feedPost).toBlocking().first()
+    fun blockingCreateFeedPost(feedPost: FeedPost): Feed? = createFeedPost(feedPost).toBlocking().first()
 
-    fun sendWallPost(feedPost: FeedPost): Observable<Feed> {
+    fun createFeedPost(feedPost: FeedPost): Observable<Feed> {
         if (feedPost.multipartPhoto == null) {
             return feedPost.textWallMessage?.let { session?.clientService?.groupWallMessage?.post(idStr?.toLong(), it) }?.map {
                 it.session = session; it

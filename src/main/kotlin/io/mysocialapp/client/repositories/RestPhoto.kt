@@ -42,6 +42,28 @@ interface RestPhoto {
              @Part("access_control") accessControl: RequestBody,
              @Part("tag_entities") tagEntities: RequestBody): Observable<Feed>
 
+    @Multipart
+    @POST("photo")
+    fun postWithAlbumName(@Part("file\"; filename=\"image\"") photo: RequestBody,
+                          @Part("album") albumName: RequestBody,
+                          @Part("access_control") accessControl: RequestBody): Observable<Feed>
+
+    @Multipart
+    @POST("photo")
+    fun postWithAlbumName(@Part("file\"; filename=\"image\"") photo: RequestBody,
+                          @Part("album") albumName: RequestBody,
+                          @Part("access_control") accessControl: RequestBody,
+                          @Part("message") message: RequestBody): Observable<Feed>
+
+    @Multipart
+    @POST("photo")
+    fun postWithAlbumName(@Part("file\"; filename=\"image\"") photo: RequestBody,
+                          @Part("album") albumName: RequestBody,
+                          @Part("access_control") accessControl: RequestBody,
+                          @Part("message") message: RequestBody,
+                          @Part("tag_entities") tagEntities: RequestBody): Observable<Feed>
+
+
     @PUT("photo/{id}")
     fun put(@Path("id") id: Long?, @Body photo: Photo): Observable<Photo>
 

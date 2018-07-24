@@ -52,7 +52,7 @@ class AccountTest {
 
     @Test
     void updateProfile() {
-        User profile = session.getAccount().blockingGet();
+        Account profile = session.getAccount().blockingGet();
 
         Calendar cal = Calendar.getInstance();
         cal.set(2018, Calendar.JANUARY, 1);

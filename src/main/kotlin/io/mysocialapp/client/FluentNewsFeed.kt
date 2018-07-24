@@ -34,10 +34,10 @@ class FluentNewsFeed(private val session: Session) {
 
     fun get(id: Long): Observable<Feed> = session.clientService.feed.get(id).map { it.session = session; it }
 
-    fun blockingCreate(feedPost: FeedPost): Feed? = sendWallPost(feedPost).toBlocking().first()
+    fun blockingCreate(feedPost: FeedPost): Feed? = create(feedPost).toBlocking().first()
 
     fun create(feedPost: FeedPost): Observable<Feed> {
-        return session.account.get().map { it.blockingSendWallPost(feedPost) }
+        return session.account.get().map { it.blockingCreateFeedPost(feedPost) }
     }
 
     @Deprecated("use blockingCreate(..) instead", ReplaceWith("blockingCreate(feedPost)"))
@@ -45,7 +45,7 @@ class FluentNewsFeed(private val session: Session) {
 
     @Deprecated("use create(..) instead")
     fun sendWallPost(feedPost: FeedPost): Observable<Feed> {
-        return session.account.get().map { it.blockingSendWallPost(feedPost) }
+        return session.account.get().map { it.blockingCreateFeedPost(feedPost) }
     }
 
     @JvmOverloads

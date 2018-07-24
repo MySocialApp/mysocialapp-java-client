@@ -30,6 +30,7 @@ class ClientService(private val configuration: Configuration,
     val feedComment: RestFeedComment by lazy { retrofit.create(RestFeedComment::class.java) }
     val feedLike: RestFeedLike by lazy { retrofit.create(RestFeedLike::class.java) }
     val photo: RestPhoto by lazy { retrofit.create(RestPhoto::class.java) }
+    val photoAlbum: RestPhotoAlbum by lazy { retrofit.create(RestPhotoAlbum::class.java) }
     val photoComment: RestPhotoComment by lazy { retrofit.create(RestPhotoComment::class.java) }
     val photoLike: RestPhotoLike by lazy { retrofit.create(RestPhotoLike::class.java) }
     val status: RestStatus by lazy { retrofit.create(RestStatus::class.java) }
@@ -95,22 +96,6 @@ class ClientService(private val configuration: Configuration,
                     session?.authenticationToken?.accessToken?.let { builder.addHeader("Authorization", it) }
 
                     chain.proceed(builder.build())
-                }
-                .addInterceptor { chain ->
-
-                    val res = chain.proceed(chain.request().newBuilder().build())
-
-                    if (res.code() >= 400 || res.code() < 200) {
-                        //val responseBody = res.peekBody(Long.MAX_VALUE)?.string()
-                        if (res.code() == 401) {
-                            //throw MyObjectMapper.objectMapper.readValue(responseBody, InvalidCredentialsMySocialAppException::class.java)
-                        }
-
-                        //throw MyObjectMapper.objectMapper.readValue(responseBody, MySocialAppException::class.java)
-                        res.newBuilder()
-                    }
-
-                    res
                 }
                 .addInterceptor(httpLoggingInterceptor)
                 .build()
