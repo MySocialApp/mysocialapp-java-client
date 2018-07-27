@@ -75,11 +75,11 @@ open class User(open val updatedDate: Date? = null,
     }
 
     @JvmOverloads
-    fun blockingListFriends(page: Int = 0, size: Int = 10): Iterable<User> =
-            listFriends(page, size).toBlocking()?.toIterable() ?: emptyList()
+    fun blockingListFriend(page: Int = 0, size: Int = 10): Iterable<User> =
+            listFriend(page, size).toBlocking()?.toIterable() ?: emptyList()
 
     @JvmOverloads
-    fun listFriends(page: Int = 0, size: Int = 10): Observable<User> {
+    fun listFriend(page: Int = 0, size: Int = 10): Observable<User> {
         return stream(page, size, object : PaginationResource<User> {
             override fun getRealResultObject(response: List<User>): List<Any>? = response
 
@@ -110,9 +110,9 @@ open class User(open val updatedDate: Date? = null,
         }).map { it.session = session; it }
     }
 
-    fun blockingCreateFeedPost(feedPost: FeedPost): Feed? = createFeedPost(feedPost).toBlocking().first()
+    fun blockingCreateNewsFeed(feedPost: FeedPost): Feed? = createNewsFeed(feedPost).toBlocking().first()
 
-    fun createFeedPost(feedPost: FeedPost): Observable<Feed> {
+    fun createNewsFeed(feedPost: FeedPost): Observable<Feed> {
         if (feedPost.multipartPhoto == null) {
             return feedPost.textWallMessage?.let { session?.clientService?.userWallMessage?.post(idStr?.toLong(), it) }?.map {
                 it.session = session; it

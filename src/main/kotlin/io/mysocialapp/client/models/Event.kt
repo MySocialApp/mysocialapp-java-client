@@ -89,9 +89,9 @@ class Event : BaseWall(), WallTextable, Localizable {
         }).map { it.session = session; it }
     }
 
-    fun blockingCreateFeedPost(feedPost: FeedPost): Feed? = createFeedPost(feedPost).toBlocking().first()
+    fun blockingCreateNewsFeed(feedPost: FeedPost): Feed? = createNewsFeed(feedPost).toBlocking().first()
 
-    fun createFeedPost(feedPost: FeedPost): Observable<Feed> {
+    fun createNewsFeed(feedPost: FeedPost): Observable<Feed> {
         if (feedPost.multipartPhoto == null) {
             return feedPost.textWallMessage?.let { session?.clientService?.eventWallMessage?.post(idStr?.toLong(), it) }?.map {
                 it.session = session; it

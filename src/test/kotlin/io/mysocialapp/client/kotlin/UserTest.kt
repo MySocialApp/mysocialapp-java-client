@@ -45,7 +45,7 @@ class UserTest {
     fun `list some users friends`() {
         val s = getSession()
         val users = s?.user?.blockingStream(3)?.map { it.users ?: emptyList() }?.flatten()
-        assert(users?.map { it.blockingListFriends().map { it.displayedName } }?.flatten() != null)
+        assert(users?.map { it.blockingListFriend().map { it.displayedName } }?.flatten() != null)
     }
 
     @Test

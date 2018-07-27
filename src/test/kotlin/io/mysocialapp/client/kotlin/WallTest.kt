@@ -27,7 +27,7 @@ class WallTest {
                 .setVisibility(AccessControl.FRIEND)
                 .build()
 
-        assert(s?.newsFeed?.blockingSendWallPost(post) != null)
+        assert(s?.newsFeed?.blockingCreate(post) != null)
     }
 
     @Test
@@ -39,7 +39,7 @@ class WallTest {
                 .setVisibility(AccessControl.FRIEND)
                 .build()
 
-        assert(s?.newsFeed?.blockingSendWallPost(post) != null)
+        assert(s?.newsFeed?.blockingCreate(post) != null)
     }
 
     @Test
@@ -51,7 +51,7 @@ class WallTest {
                 .setVisibility(AccessControl.FRIEND)
                 .build()
 
-        assert(s?.newsFeed?.blockingSendWallPost(post) != null)
+        assert(s?.newsFeed?.blockingCreate(post) != null)
     }
 
     @Test
@@ -63,7 +63,7 @@ class WallTest {
                 .setVisibility(AccessControl.FRIEND)
                 .build()
 
-        assert(s?.newsFeed?.blockingSendWallPost(post) != null)
+        assert(s?.newsFeed?.blockingCreate(post) != null)
     }
 
     @Test
@@ -75,7 +75,7 @@ class WallTest {
                 .setVisibility(AccessControl.FRIEND)
                 .build()
 
-        val feed = s?.newsFeed?.blockingSendWallPost(post)
+        val feed = s?.newsFeed?.blockingCreate(post)
         assert(feed != null)
     }
 
@@ -89,21 +89,21 @@ class WallTest {
                 .setVisibility(AccessControl.FRIEND)
                 .build()
 
-        assert(s?.newsFeed?.blockingSendWallPost(post) != null)
+        assert(s?.newsFeed?.blockingCreate(post) != null)
     }
 
     @Test
     fun `add text post with mention on a friend wall`() {
         val s = getSession()
 
-        val friend = s?.account?.blockingGet()?.blockingListFriends()?.firstOrNull() ?: return
+        val friend = s?.account?.blockingGet()?.blockingListFriend()?.firstOrNull() ?: return
 
         val post = FeedPost.Builder()
                 .setMessage("Hey [[user:${friend.id}]] what's up?")
                 .setVisibility(AccessControl.FRIEND)
                 .build()
 
-        assert(friend.blockingCreateFeedPost(post) != null)
+        assert(friend.blockingCreateNewsFeed(post) != null)
     }
 
 }

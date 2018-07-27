@@ -158,7 +158,7 @@ class AccountTest {
     fun `accept all friends requests`() {
         val s = getSession()
 
-        s?.account?.blockingGet()?.blockingListFriends()
+        s?.account?.blockingGet()?.blockingListFriend()
     }
 
     @Test
