@@ -1,7 +1,8 @@
 package io.mysocialapp.client.models
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.mysocialapp.client.Session
-import io.mysocialapp.client.utils.MyObjectMapper
+import io.mysocialapp.client.extensions.convertToBase
 import rx.Observable
 import java.util.*
 
@@ -9,91 +10,81 @@ import java.util.*
  * Created by evoxmusic on 04/09/2017.
  */
 abstract class WallActivity(val action: ActivityType? = null,
-                            val `object`: Map<String, Any?>? = null,
+                            @get:JsonProperty("object") val rawObject: Map<String, Any?>? = null,
                             val languageZone: UserSettings.LanguageZone? = null,
                             val actor: User? = null,
-                            val target: Map<String, Any?>? = null,
+                            @get:JsonProperty("target") val rawTarget: Map<String, Any?>? = null,
                             val accessControl: AccessControl? = null,
                             val summary: String? = null) : Wallable {
 
-    private fun convert(map: Map<String, Any?>?): BaseWall? {
-        return when (map?.get("entity_type")?.let { EntityType.valueOf(it.toString()) }) {
-            EntityType.TEXT_WALL_MESSAGE -> MyObjectMapper.objectMapper.convertValue(map, TextWallMessage::class.java)
-            EntityType.PHOTO -> MyObjectMapper.objectMapper.convertValue(map, Photo::class.java)
-            EntityType.EVENT -> MyObjectMapper.objectMapper.convertValue(map, Event::class.java)
-            EntityType.RIDE -> MyObjectMapper.objectMapper.convertValue(map, Ride::class.java)
-            EntityType.GROUP -> MyObjectMapper.objectMapper.convertValue(map, Group::class.java)
-            EntityType.STATUS -> MyObjectMapper.objectMapper.convertValue(map, Status::class.java)
-            else -> null
-        }
-    }
+    private fun convert(map: Map<String, Any?>?): BaseWall? = map?.convertToBase() as? BaseWall
 
     override var session: Session? = null
 
-    override val baseObject: BaseWall? by lazy { convert(`object`)?.also { it.session = session } }
-    override val baseTarget: BaseWall? by lazy { convert(target)?.also { it.session = session } }
+    override val `object`: BaseWall? by lazy { convert(rawObject)?.also { it.session = session } }
+    override val target: BaseWall? by lazy { convert(rawTarget)?.also { it.session = session } }
 
     override val createdDate: Date?
-        get() = baseObject?.createdDate
+        get() = `object`?.createdDate
 
     override val owner: User?
         get() = actor
 
     override var bodyMessage: String?
-        get() = baseObject?.bodyMessage
+        get() = `object`?.bodyMessage
         set(message) {
-            baseObject?.bodyMessage = message
+            `object`?.bodyMessage = message
         }
 
     override val bodyMessageTagEntities: TagEntities?
-        get() = (baseObject as? Taggable)?.tagEntities
+        get() = (`object` as? Taggable)?.tagEntities
 
     override val bodyImageURL: String?
-        get() = baseObject?.bodyImageURL
+        get() = `object`?.bodyImageURL
 
     override val bodyImageText: String?
-        get() = baseObject?.bodyImageText
+        get() = `object`?.bodyImageText
 
     override val firstURLTagEntity: URLTag?
-        get() = (baseObject as? Taggable)?.tagEntities?.urlTags?.firstOrNull()
+        get() = (`object` as? Taggable)?.tagEntities?.urlTags?.firstOrNull()
 
     override val location: BaseLocation?
-        get() = (baseObject as? Localizable)?.getLocality()
+        get() = (`object` as? Localizable)?.getLocality()
 
     override fun listLikes(): Observable<Like> {
-        return baseObject?.getLikes()?.map { it.session = session; it } ?: Observable.empty()
+        return `object`?.getLikes()?.map { it.session = session; it } ?: Observable.empty()
     }
 
     override fun addLike(): Observable<Like> {
-        return baseObject?.addLike()?.map { it.session = session; it } ?: Observable.empty()
+        return `object`?.addLike()?.map { it.session = session; it } ?: Observable.empty()
     }
 
     override fun removeLike(): Observable<Void> {
-        return baseObject?.removeLike() ?: Observable.empty()
+        return `object`?.removeLike() ?: Observable.empty()
     }
 
     override fun listComments(): Observable<Comment> {
-        return baseObject?.listComments()?.map { it.session = session; it } ?: Observable.empty()
+        return `object`?.listComments()?.map { it.session = session; it } ?: Observable.empty()
     }
 
     override fun addComment(commentPost: CommentPost): Observable<Comment> {
-        return baseObject?.addComment(commentPost) ?: Observable.empty()
+        return `object`?.addComment(commentPost) ?: Observable.empty()
     }
 
     override fun ignore(): Observable<Void> {
-        return session?.clientService?.feedIgnore?.post(baseObject?.id) ?: Observable.empty()
+        return session?.clientService?.feedIgnore?.post(`object`?.id) ?: Observable.empty()
     }
 
     override fun abuse(): Observable<Void> {
-        return session?.clientService?.feedAbuse?.post(baseObject?.id) ?: Observable.empty()
+        return session?.clientService?.feedAbuse?.post(`object`?.id) ?: Observable.empty()
     }
 
     override fun delete(): Observable<Void> {
-        return session?.clientService?.feed?.delete(baseObject?.id) ?: Observable.empty()
+        return session?.clientService?.feed?.delete(`object`?.id) ?: Observable.empty()
     }
 
     override fun save(): Observable<*> {
-        return baseObject?.save() ?: Observable.empty<Void>()
+        return `object`?.save() ?: Observable.empty<Void>()
     }
 
 }

@@ -14,9 +14,9 @@ interface Wallable : Serializable {
 
     val owner: User?
 
-    val baseTarget: BaseWall?
+    val target: BaseWall?
 
-    val baseObject: BaseWall?
+    val `object`: BaseWall?
 
     var bodyMessage: String?
 

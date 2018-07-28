@@ -32,7 +32,7 @@ class FeedTest {
 
         session?.newsFeed?.stream(33)?.doOnError { it.printStackTrace() }?.subscribe({ feed ->
             count++
-            println("$count - ${feed.baseObject?.type} - ${feed.bodyMessage}")
+            println("$count - ${feed.`object`?.type} - ${feed.bodyMessage}")
         }, {
             it.printStackTrace()
         }, {
@@ -49,7 +49,7 @@ class FeedTest {
     fun `like news feed that have no likes`() {
         val s = getSession()
 
-        val feedsWithoutLikes = s?.newsFeed?.blockingStream(300)?.filter { it.baseObject?.likersTotal == 0 }
+        val feedsWithoutLikes = s?.newsFeed?.blockingStream(300)?.filter { it.`object`?.likersTotal == 0 }
         feedsWithoutLikes?.forEach { it.blockingAddLike() }
     }
 
@@ -60,7 +60,7 @@ class FeedTest {
         val lastFeeds = s?.newsFeed?.blockingStream(1000)
 
         val mostPopularFeed = lastFeeds?.sortedByDescending {
-            it.baseObject?.likersTotal?.plus((it.baseObject?.commentsTotal?.times(1.5)) ?: 0.0)
+            it.`object`?.likersTotal?.plus((it.`object`?.commentsTotal?.times(1.5)) ?: 0.0)
         }?.firstOrNull()
 
         print("most popular feed on 100 last feeds is : '${mostPopularFeed?.bodyMessage}'")

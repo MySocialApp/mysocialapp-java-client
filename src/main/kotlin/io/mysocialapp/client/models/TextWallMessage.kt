@@ -16,7 +16,7 @@ class TextWallMessage(var message: String? = null) : BaseWall(), Taggable {
         }
 
     override fun save(): Observable<TextWallMessage> {
-        return session?.clientService?.feedMessage?.put(id, this)?.map { it.session = session; it.baseObject as TextWallMessage }
+        return session?.clientService?.feedMessage?.put(id, this)?.map { it.session = session; it.`object` as TextWallMessage }
                 ?: Observable.empty<TextWallMessage>()
     }
 

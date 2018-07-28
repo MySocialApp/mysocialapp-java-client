@@ -40,7 +40,7 @@ class NewsFeedTest {
         newsFeedIterable.forEach(feed -> {
             System.out.println(feed.getActor().getDisplayedName() +
                     " do " + feed.getAction().name() +
-                    " on" + feed.getBaseObject().getDisplayedName());
+                    " on" + feed.getObject().getDisplayedName());
         });
     }
 
@@ -56,7 +56,7 @@ class NewsFeedTest {
         observable.subscribe(feed -> {
             System.out.println(feed.getActor().getDisplayedName() +
                     " do " + feed.getAction().name() +
-                    " on" + feed.getBaseObject().getDisplayedName());
+                    " on" + feed.getObject().getDisplayedName());
         });
     }
 
@@ -67,7 +67,7 @@ class NewsFeedTest {
         newsFeedIterable.forEach(feed -> {
             System.out.println(feed.getActor().getDisplayedName() +
                     " do " + feed.getAction().name() +
-                    " on" + feed.getBaseObject().getDisplayedName());
+                    " on" + feed.getObject().getDisplayedName());
         });
     }
 
@@ -83,7 +83,7 @@ class NewsFeedTest {
         observable.subscribe(feed -> {
             System.out.println(feed.getActor().getDisplayedName() +
                     " do " + feed.getAction().name() +
-                    " on" + feed.getBaseObject().getDisplayedName());
+                    " on" + feed.getObject().getDisplayedName());
         });
     }
 
@@ -137,14 +137,14 @@ class NewsFeedTest {
         Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
 
         for (Like like : feed.blockingListLikes()) {
-            System.out.println(like.getOwner().getDisplayedName() + " has liked " + feed.getBaseObject().getDisplayedName());
+            System.out.println(like.getOwner().getDisplayedName() + " has liked " + feed.getObject().getDisplayedName());
         }
     }
 
     @Test
     void findById() {
         Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
-        assertNotNull(session.getNewsFeed().blockingGet(feed.getBaseObject().getId()));
+        assertNotNull(session.getNewsFeed().blockingGet(feed.getObject().getId()));
     }
 
     @Test
@@ -166,7 +166,7 @@ class NewsFeedTest {
         for (Comment comment : feed.blockingListComments()) {
             System.out.println(comment.getOwner().getDisplayedName() +
                     " has commented '" + comment.getMessage() +
-                    "' from " + feed.getBaseObject().getDisplayedName());
+                    "' from " + feed.getObject().getDisplayedName());
         }
     }
 

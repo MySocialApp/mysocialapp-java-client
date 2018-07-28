@@ -60,17 +60,17 @@ class WebSocketService(private val configuration: Configuration,
 
                 when (notification.type) {
 
-                    "COMMENT" -> convert(notification.payload, Comment::class.java)?.let { v ->
+                    "COMMENT" -> convert(notification.rawPayload, Comment::class.java)?.let { v ->
                         v.also { it.session = session }
                         notificationListeners.forEach { it.onComment(v) }
                     }
 
-                    "LIKE" -> convert(notification.payload, Like::class.java)?.let { v ->
+                    "LIKE" -> convert(notification.rawPayload, Like::class.java)?.let { v ->
                         v.also { it.session = session }
                         notificationListeners.forEach { it.onLike(v) }
                     }
 
-                    "CONVERSATION_MESSAGE" -> convert(notification.payload, ConversationMessage::class.java)?.let { v ->
+                    "CONVERSATION_MESSAGE" -> convert(notification.rawPayload, ConversationMessage::class.java)?.let { v ->
                         v.also { it.session = session }
                         notificationListeners.forEach { it.onConversationMessage(v) }
                     }
@@ -81,8 +81,8 @@ class WebSocketService(private val configuration: Configuration,
                     }
 
                     "USER_MENTION_TAG" -> {
-                        if (notification.payload?.get("type")?.toString()?.toLowerCase() == "comment") {
-                            convert(notification.payload, Comment::class.java)?.let { v ->
+                        if (notification.rawPayload?.get("type")?.toString()?.toLowerCase() == "comment") {
+                            convert(notification.rawPayload, Comment::class.java)?.let { v ->
                                 v.also { it.session = session }
                                 notificationListeners.forEach { it.onMention(v) }
                             }

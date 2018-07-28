@@ -14,7 +14,7 @@ data class PhotoAlbum(var name: String? = null,
     fun blockingAddPhoto(photo: Photo): Photo? = addPhoto(photo).toBlocking()?.first()
 
     fun addPhoto(photo: Photo): Observable<Photo> {
-        return addPhotoWithFeedResult(photo).map { it.baseObject as Photo }
+        return addPhotoWithFeedResult(photo).map { it.`object` as Photo }
     }
 
     fun blockingAddPhotoWithFeedResult(photo: Photo): Feed? = addPhotoWithFeedResult(photo).toBlocking()?.first()
