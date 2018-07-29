@@ -38,6 +38,12 @@ class FluentNotification(private val session: Session) {
             }).map { it?.session = session; it }
         }
 
+        fun blockingListAndConsume(): Iterable<PreviewNotification> = listAndConsume().toBlocking().toIterable()
+
+        fun listAndConsume(): Observable<PreviewNotification> {
+            return session.clientService.notificationUnreadConsume.list().flatMapIterable { it }.map { it?.session = session; it }
+        }
+
     }
 
     class Read(private val session: Session) {

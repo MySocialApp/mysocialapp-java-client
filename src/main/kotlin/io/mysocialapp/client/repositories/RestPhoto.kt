@@ -14,32 +14,31 @@ interface RestPhoto {
     @GET("photo")
     fun list(@Query("page") page: Int): Observable<List<Photo>>
 
+    @GET("photo")
+    fun list(@Query("page") page: Int, @Query("size") size: Int): Observable<List<Photo>>
+
     @GET("photo/{id}")
-    operator fun get(@Path("id") id: Long?): Observable<Photo>
+    fun get(@Path("id") id: Long?): Observable<Photo>
 
     @DELETE("photo/{id}")
     fun delete(@Path("id") id: Long?): Observable<Void>
 
     @Multipart
     @POST("photo")
-    fun post(@Part("file\"; filename=\"image\"") photo: RequestBody): Observable<Feed>
-
-    @Multipart
-    @POST("photo")
     fun post(@Part("file\"; filename=\"image\"") photo: RequestBody,
              @Part("access_control") accessControl: RequestBody): Observable<Feed>
 
     @Multipart
     @POST("photo")
     fun post(@Part("file\"; filename=\"image\"") photo: RequestBody,
-             @Part("message") message: RequestBody,
-             @Part("access_control") accessControl: RequestBody): Observable<Feed>
-
-    @Multipart
-    @POST("photo")
-    fun post(@Part("file\"; filename=\"image\"") photo: RequestBody,
-             @Part("message") message: RequestBody,
              @Part("access_control") accessControl: RequestBody,
+             @Part("message") message: RequestBody): Observable<Feed>
+
+    @Multipart
+    @POST("photo")
+    fun post(@Part("file\"; filename=\"image\"") photo: RequestBody,
+             @Part("access_control") accessControl: RequestBody,
+             @Part("message") message: RequestBody,
              @Part("tag_entities") tagEntities: RequestBody): Observable<Feed>
 
     @Multipart

@@ -44,4 +44,12 @@ class FluentPhotoAlbum(private val session: Session) {
         }.map { it.session = session; it }
     }
 
+    fun blockingDelete(id: Long) {
+        delete(id).toBlocking()?.first()
+    }
+
+    fun delete(id: Long): Observable<Void> {
+        return session.clientService.photoAlbum.delete(id)
+    }
+
 }

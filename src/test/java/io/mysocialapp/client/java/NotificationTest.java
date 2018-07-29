@@ -29,5 +29,32 @@ class NotificationTest {
         });
     }
 
+    @Test
+    void listUnreadNotifications_and_consume() {
+        Iterable<PreviewNotification> notifications = session.getNotification().getUnread().blockingList(0, 10);
+        notifications.forEach(v -> {
+            PreviewNotification consumedPreviewNotification = v.blockingConsume();
+            Base payload = consumedPreviewNotification.getLastNotification().getPayload();
+            System.out.println(payload.getDisplayedName());
+        });
+    }
+
+    @Test
+    void consumeUnreadNotifications() {
+        Iterable<PreviewNotification> notifications = session.getNotification().getUnread().blockingListAndConsume();
+        notifications.forEach(v -> {
+            Base payload = v.getLastNotification().getPayload();
+            System.out.println(payload.getDisplayedName());
+        });
+    }
+
+    @Test
+    void listReadNotifications() {
+        Iterable<PreviewNotification> notifications = session.getNotification().getRead().blockingList(0, 10);
+        notifications.forEach(v -> {
+            Base payload = v.getLastNotification().getPayload();
+            System.out.println(payload.getDisplayedName());
+        });
+    }
 
 }

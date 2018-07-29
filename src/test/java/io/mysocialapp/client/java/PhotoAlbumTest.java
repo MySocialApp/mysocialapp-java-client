@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by evoxmusic on 10/05/2018.
@@ -68,6 +68,36 @@ class PhotoAlbumTest {
 
         PhotoAlbum finalPhotoAlbum = session.getPhotoAlbum().blockingCreate(photoAlbum);
         assertTrue(finalPhotoAlbum.getPreviewPhotos().getTotal() == 3);
+    }
+
+    @Test
+    void deletePhotoAlbum() {
+        PhotoAlbum photoAlbum = new PhotoAlbum.Builder()
+                .setName("Photo Album " + new Date().toString())
+                .build();
+
+        PhotoAlbum createdPhotoAlbum = session.getPhotoAlbum().blockingCreate(photoAlbum);
+
+        createdPhotoAlbum.blockingDelete();
+
+        assertNull(session.getPhotoAlbum().blockingGet(createdPhotoAlbum.getId()));
+    }
+
+    @Test
+    void changeNamePhotoAlbum() {
+        String now = new Date().toString();
+
+        PhotoAlbum photoAlbum = new PhotoAlbum.Builder()
+                .setName("Photo Album " + now)
+                .build();
+
+        PhotoAlbum createdPhotoAlbum = session.getPhotoAlbum().blockingCreate(photoAlbum);
+
+        String albumName = "Edited Photo Album " + now;
+        createdPhotoAlbum.setName(albumName);
+        createdPhotoAlbum.blockingSave();
+
+        assertEquals(session.getPhotoAlbum().blockingGet(createdPhotoAlbum.getId()).getName(), albumName);
     }
 
 }

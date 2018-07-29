@@ -52,7 +52,7 @@ class WebSocketService(private val configuration: Configuration,
                 }
 
                 val notification = try {
-                    MyObjectMapper.objectMapper.readValue(message, Notification::class.java)
+                    MyObjectMapper.objectMapper.readValue(message, Notification::class.java).also { it.session = session }
                 } catch (e: IllegalArgumentException) {
                     e.printStackTrace()
                     null

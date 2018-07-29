@@ -5,6 +5,7 @@ import io.mysocialapp.client.MySocialApp;
 import io.mysocialapp.client.Session;
 import io.mysocialapp.client.models.*;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -15,11 +16,45 @@ class ReceivingEventNotificationTest {
     private final static String APP_ID = "u470584465854a728453";
     private final static String EMAIL = "alice.jeith@mysocialapp.io";
     private final static String PASSWORD = "myverysecretpassw0rd";
+    private final static String EMAIL_2 = "john.clemz@mysocialapp.io";
 
-    private final static Session session = new MySocialApp.Builder()
+    private final static MySocialApp msa = new MySocialApp.Builder()
             .setAppId(APP_ID)
-            .build()
-            .blockingConnect(EMAIL, PASSWORD);
+            .build();
+
+    private final static Session session = msa.blockingConnect(EMAIL, PASSWORD);
+    private final static Session bSession = msa.blockingConnect(EMAIL_2, PASSWORD);
+
+    @Test
+    void signUp2() {
+        Session s = new MySocialApp.Builder()
+                .setAppId(APP_ID)
+                .build()
+                .blockingCreateAccount(EMAIL_2, PASSWORD, "John");
+
+        Account account = s.getAccount().blockingGet();
+        account.setLastName("Clemz");
+        account.blockingSave();
+    }
+
+    @Test
+    void listenForNewsFeed() {
+        session.getNotification().addNotificationListener(new AbstractNotificationCallback() {
+
+            @Override
+            public void onNewsFeed(@NotNull Feed feed) {
+                Assert.assertEquals(feed.getOwner().getId(), bSession.getAccount().blockingGet().getId());
+            }
+
+        });
+
+        FeedPost feedPost = new FeedPost.Builder()
+                .setMessage("Hey this is an incredible message")
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        bSession.getNewsFeed().blockingCreate(feedPost);
+    }
 
     @Test
     void listenForNotificationEvents() {

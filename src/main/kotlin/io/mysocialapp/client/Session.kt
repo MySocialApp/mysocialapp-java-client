@@ -21,12 +21,13 @@ class Session(private val configuration: Configuration,
     val conversation by lazy { FluentConversation(this) }
     val group by lazy { FluentGroup(this) }
     val event by lazy { FluentEvent(this) }
+    val photo by lazy { FluentPhoto(this) }
     val photoAlbum by lazy { FluentPhotoAlbum(this) }
 
     fun blockingDisconnect() {
         disconnect().toBlocking()?.first()
     }
-    
+
     fun disconnect(): Observable<Void> = clientService.logout.post()
 
 }
