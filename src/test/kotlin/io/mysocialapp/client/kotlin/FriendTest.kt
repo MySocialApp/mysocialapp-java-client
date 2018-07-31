@@ -13,7 +13,7 @@ class FriendTest {
         const val APP_ID = "u470584465854a728453"
     }
 
-    private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("AliceX", "myverysecretpassw0rd")
+    private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("alice.jeith@mysocialapp.io", "myverysecretpassw0rd")
 
     @Test
     fun `accept all incoming friends requests`() {

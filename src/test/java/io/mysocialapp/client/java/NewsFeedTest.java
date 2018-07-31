@@ -9,6 +9,7 @@ import rx.Observable;
 import rx.observers.TestSubscriber;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static junit.framework.TestCase.assertNotNull;
@@ -255,6 +256,58 @@ class NewsFeedTest {
         Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
         feed.blockingAbuse();
     }
+
+    @Test
+    void listHashTagsFromFeed() {
+        String message = "This is a #hashtag message";
+
+        FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        Feed createdFeed = session.getNewsFeed().blockingCreate(feedPost);
+        List<HashTag> hashTags = createdFeed.getBodyMessageTagEntities().getHashTags();
+
+        for (HashTag hashTag : hashTags) {
+            System.out.println(hashTag.getText());
+        }
+    }
+
+    @Test
+    void listUserMentionsFromFeed() {
+        String message = "Hey [[user:" + session.getAccount().blockingGet().getId() + "]] what's up today?";
+
+        FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        Feed createdFeed = session.getNewsFeed().blockingCreate(feedPost);
+        List<UserMentionTag> userMentionTags = createdFeed.getBodyMessageTagEntities().getUserMentionTags();
+
+        for (UserMentionTag userMentionTag : userMentionTags) {
+            System.out.println(userMentionTag.getMentionedUser().getDisplayedName() + "has been mentioned");
+        }
+    }
+
+    @Test
+    void listURLTagsFromFeed() {
+        String message = "This is a web link shared with all https://blog.algolia.com/supporting-open-source-projects";
+
+        FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        Feed createdFeed = session.getNewsFeed().blockingCreate(feedPost);
+        List<URLTag> urlTags = createdFeed.getBodyMessageTagEntities().getUrlTags();
+
+        for (URLTag urlTag : urlTags) {
+            System.out.println(urlTag.getTitle());
+        }
+    }
+
 
     @Test
     void deleteFeed() {

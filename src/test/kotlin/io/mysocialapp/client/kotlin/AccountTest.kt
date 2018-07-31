@@ -29,7 +29,7 @@ class AccountTest {
         val msa = MySocialApp.Builder().setAppId(APP_ID).build()
 
         val s = try {
-            msa.blockingCreateAccount("alicex@mysocialapp.io", "myverysecretpassw0rd", "AliceX")
+            msa.blockingCreateAccount("alicex@mysocialapp.io", "myverysecretpassw0rd", "alice.jeith@mysocialapp.io")
         } catch (e: Exception) {
             msa.blockingConnect("alicex@mysocialapp.io", "myverysecretpassw0rd")
         }

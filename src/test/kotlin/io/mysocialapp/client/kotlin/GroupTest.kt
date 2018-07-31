@@ -25,7 +25,7 @@ class GroupTest {
             .setAppId(APP_ID)
             .setClientConfiguration(ClientConfiguration(30_000L))
             .build()
-            .blockingConnect("AliceX", "myverysecretpassw0rd")
+            .blockingConnect("alice.jeith@mysocialapp.io", "myverysecretpassw0rd")
 
     @Test
     fun `get 100 groups`() {

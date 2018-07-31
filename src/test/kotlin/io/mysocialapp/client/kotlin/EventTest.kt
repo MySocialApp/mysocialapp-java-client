@@ -25,7 +25,11 @@ class EventTest {
             .setAppId(APP_ID)
             .setClientConfiguration(ClientConfiguration(30_000L))
             .build()
-            .blockingConnect("AliceX", "myverysecretpassw0rd")
+            .blockingConnect("alice.jeith@mysocialapp.io", "myverysecretpassw0rd")
+
+    private fun getFile(filePath: String): File {
+        return File(System::class.java.getResource(filePath).file)
+    }
 
     @Test
     fun `get 100 next events`() {
@@ -77,7 +81,7 @@ class EventTest {
                 .setLocation(newarkLocation)
                 .setMaxSeats(100)
                 .setMemberAccessControl(EventMemberAccessControl.PUBLIC)
-                .setCoverImage(File("/tmp/image.jpg"))
+                .setCoverImage(getFile("/cover_image.jpg"))
                 .setCustomFields(customFields)
                 .build()
 
@@ -176,6 +180,16 @@ class EventTest {
         val s = getSession()
         val customFields = s.event.blockingGetAvailableCustomFields().toList()
         assert(customFields != null)
+    }
+
+    @Test
+    fun `check event member count on un-join`() {
+        val s = getSession()
+        val event = s.account.blockingGet().blockingStreamEvent(1).firstOrNull() ?: return
+
+        val totalMembers = event.totalMembers
+
+        assert(event.blockingUnParticipate()?.event?.totalMembers == (totalMembers ?: 0) - 1)
     }
 
 }

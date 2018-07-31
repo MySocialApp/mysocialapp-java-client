@@ -39,13 +39,15 @@ class FluentEvent(private val session: Session) {
     fun create(event: Event): Observable<Event> {
         return session.clientService.event.post(event).map { it.session = session; it }.flatMap { e ->
             if (event.profileImageFile != null) {
-                session.clientService.eventProfilePhoto.post(e.id, event.profileImageFile?.toRequestBody()!!).map { it.session = session;e }.prepareAsync()
+                session.clientService.eventProfilePhoto.post(e.id, event.profileImageFile?.toRequestBody()!!)
+                        .map { it.session = session;e }.prepareAsync()
             } else {
                 Observable.just(e)
             }
         }.flatMap { e ->
             if (event.profileCoverImageFile != null) {
-                session.clientService.eventProfileCoverPhoto.post(e.id, event.profileCoverImageFile?.toRequestBody()!!).map { it.session = session;e }.prepareAsync()
+                session.clientService.eventProfileCoverPhoto.post(e.id, event.profileCoverImageFile?.toRequestBody()!!)
+                        .map { it.session = session;e }.prepareAsync()
             } else {
                 Observable.just(e)
             }
