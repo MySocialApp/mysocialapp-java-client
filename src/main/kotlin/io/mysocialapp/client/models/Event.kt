@@ -56,8 +56,9 @@ data class Event(var name: String? = null,
         return location
     }
 
-    @JsonIgnore
-    val image: Photo? = profilePhoto
+    val image: Photo?
+        @JsonIgnore
+        get() = profilePhoto
 
     fun blockingChangeImage(image: File): Photo? = changeImage(image).toBlocking()?.first()
 
@@ -66,8 +67,9 @@ data class Event(var name: String? = null,
                 ?: Observable.empty()
     }
 
-    @JsonIgnore
-    val coverImage: Photo? = profileCoverPhoto
+    val coverImage: Photo?
+        @JsonIgnore
+        get() = profileCoverPhoto
 
     fun blockingChangeCoverImage(image: File): Photo? = changeCoverImage(image).toBlocking()?.first()
 

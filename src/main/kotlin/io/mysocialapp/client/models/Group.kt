@@ -34,8 +34,9 @@ data class Group(var name: String? = null,
     override val bodyImageURL: String?
         get() = if (profilePhoto != null) profilePhoto!!.bodyImageURL else null
 
-    @JsonIgnore
-    val image: Photo? = profilePhoto
+    val image: Photo?
+        @JsonIgnore
+        get() = profilePhoto
 
     fun blockingChangeImage(image: File): Photo? = changeImage(image).toBlocking()?.first()
 
@@ -44,8 +45,9 @@ data class Group(var name: String? = null,
                 ?: Observable.empty()
     }
 
-    @JsonIgnore
-    val coverImage: Photo? = profileCoverPhoto
+    val coverImage: Photo?
+        @JsonIgnore
+        get() = profileCoverPhoto
 
     fun blockingChangeCoverImage(image: File): Photo? = changeCoverImage(image).toBlocking()?.first()
 
