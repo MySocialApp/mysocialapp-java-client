@@ -41,13 +41,15 @@ class FluentGroup(private val session: Session) {
     fun create(group: Group): Observable<Group> {
         return session.clientService.group.post(group).map { it.session = session; it }.flatMap { g ->
             if (group.profileImageFile != null) {
-                session.clientService.groupProfilePhoto.post(g.id, group.profileImageFile?.toRequestBody()!!).map { it.session = session;g }.prepareAsync()
+                session.clientService.groupProfilePhoto.post(g.id, group.profileImageFile?.toRequestBody()!!)
+                        .map { it.session = session;g }.prepareAsync()
             } else {
                 Observable.just(g)
             }
         }.flatMap { g ->
             if (group.profileCoverImageFile != null) {
-                session.clientService.groupProfileCoverPhoto.post(g.id, group.profileCoverImageFile?.toRequestBody()!!).map { it.session = session;g }.prepareAsync()
+                session.clientService.groupProfileCoverPhoto.post(g.id, group.profileCoverImageFile?.toRequestBody()!!)
+                        .map { it.session = session;g }.prepareAsync()
             } else {
                 Observable.just(g)
             }
@@ -161,7 +163,7 @@ class FluentGroup(private val session: Session) {
                 return this
             }
 
-            fun setLocation(location: SimpleLocation): Builder {
+            fun setLocation(location: BaseLocation): Builder {
                 this.mLocation = location
                 return this
             }

@@ -56,12 +56,18 @@ data class Event(var name: String? = null,
         return location
     }
 
+    @JsonIgnore
+    val image: Photo? = profilePhoto
+
     fun blockingChangeImage(image: File): Photo? = changeImage(image).toBlocking()?.first()
 
     fun changeImage(image: File): Observable<Photo> {
         return session?.clientService?.eventProfilePhoto?.post(id, image.toRequestBody())?.map { it.session = session; it }
                 ?: Observable.empty()
     }
+
+    @JsonIgnore
+    val coverImage: Photo? = profileCoverPhoto
 
     fun blockingChangeCoverImage(image: File): Photo? = changeCoverImage(image).toBlocking()?.first()
 

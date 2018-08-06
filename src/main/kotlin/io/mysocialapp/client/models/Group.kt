@@ -1,6 +1,7 @@
 package io.mysocialapp.client.models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.mysocialapp.client.extensions.PaginationResource
 import io.mysocialapp.client.extensions.stream
 import io.mysocialapp.client.extensions.toRequestBody
@@ -18,9 +19,10 @@ data class Group(var name: String? = null,
                  var profileCoverPhoto: Photo? = null,
                  var members: List<GroupMember>? = null,
                  var member: Boolean = false,
-                 var approvable: Boolean = false,
                  var distanceInMeters: Int = 0,
                  var totalMembers: Int = 0,
+                 @get:JsonProperty("is_member")
+                 var isMember: Boolean? = false,
                  var groupMemberAccessControl: GroupMemberAccessControl? = null,
                  var customFields: List<CustomField>? = null) : BaseWall(), WallTextable {
 
@@ -32,12 +34,18 @@ data class Group(var name: String? = null,
     override val bodyImageURL: String?
         get() = if (profilePhoto != null) profilePhoto!!.bodyImageURL else null
 
+    @JsonIgnore
+    val image: Photo? = profilePhoto
+
     fun blockingChangeImage(image: File): Photo? = changeImage(image).toBlocking()?.first()
 
     fun changeImage(image: File): Observable<Photo> {
         return session?.clientService?.groupProfilePhoto?.post(id, image.toRequestBody())?.map { it.session = session; it }
                 ?: Observable.empty()
     }
+
+    @JsonIgnore
+    val coverImage: Photo? = profileCoverPhoto
 
     fun blockingChangeCoverImage(image: File): Photo? = changeCoverImage(image).toBlocking()?.first()
 
@@ -92,11 +100,15 @@ data class Group(var name: String? = null,
         return session?.clientService?.group?.put(idStr?.toLong(), this)?.map { it.session = session; it } ?: Observable.empty()
     }
 
+    fun blockingJoin(): GroupMember? = join().toBlocking()?.first()
+
     fun join(): Observable<GroupMember> {
         return session?.clientService?.groupMember?.post(idStr?.toLong()) ?: Observable.empty()
     }
 
-    fun unJoin(): Observable<GroupMember> {
+    fun blockingQuit(): GroupMember? = quit().toBlocking()?.first()
+
+    fun quit(): Observable<GroupMember> {
         return session?.clientService?.groupMember?.delete(idStr?.toLong()) ?: Observable.empty()
     }
 
