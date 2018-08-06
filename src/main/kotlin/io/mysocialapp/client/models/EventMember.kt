@@ -10,4 +10,5 @@ data class EventMember(val createdDate: Date? = null,
                        val updatedDate: Date? = null,
                        val event: Event? = null,
                        val user: User? = null,
+                       val previousStatus: EventStatus? = null,
                        val status: EventStatus? = null) : Serializable

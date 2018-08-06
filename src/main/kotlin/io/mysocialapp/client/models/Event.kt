@@ -30,6 +30,7 @@ data class Event(var name: String? = null,
                  @get:JsonProperty("static_maps_url")
                  val staticMapsURL: String? = null,
                  val distanceInMeters: Int? = null,
+                 val profilePhoto: Photo? = null,
                  val profileCoverPhoto: Photo? = null,
                  @get:JsonProperty("is_available")
                  var isAvailable: Boolean = true,
