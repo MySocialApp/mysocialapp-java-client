@@ -12,28 +12,29 @@ import java.util.*
 /**
  * Created by evoxmusic on 31/03/15.
  */
-class Event : BaseWall(), WallTextable, Localizable {
-
-    var name: String? = null
-    var description: String? = null
-    val cancelled: Boolean = false
-    var maxSeats: Int = 0
-    val freeSeats: Int = 0 // can be used, but only when in query param or direct /event/:id limited=false
-    val takenSeats: Int = 0 // can be used, but only when in query param or direct /event/:id limited=false
-    val totalMembers: Int? = null
-    var startDate: Date? = null
-    var endDate: Date? = null
-    val members: ArrayList<EventMember>? = null
-    var eventMemberAccessControl: EventMemberAccessControl? = null
-    var location: Location? = null
-    val member: Boolean = false
-    @JsonProperty("static_maps_url")
-    val staticMapsURL: String? = null
-    val distanceInMeters: Int? = null
-    val profileCoverPhoto: Photo? = null
-    val available: Boolean = true
-    val remainingSecondsBeforeStart: Long = 0
-    var customFields: List<CustomField>? = null
+data class Event(var name: String? = null,
+                 var description: String? = null,
+                 @get:JsonProperty("is_cancelled")
+                 var isCancelled: Boolean = false,
+                 var maxSeats: Int = 0,
+                 val freeSeats: Int = 0, // can be used, but only when in query param or direct /event/:id limited=false
+                 val takenSeats: Int = 0, // can be used, but only when in query param or direct /event/:id limited=false
+                 val totalMembers: Int? = null,
+                 var startDate: Date? = null,
+                 var endDate: Date? = null,
+                 val members: List<EventMember>? = null,
+                 var eventMemberAccessControl: EventMemberAccessControl? = null,
+                 var location: Location? = null,
+                 @get:JsonProperty("is_member")
+                 var isMember: Boolean? = false,
+                 @get:JsonProperty("static_maps_url")
+                 val staticMapsURL: String? = null,
+                 val distanceInMeters: Int? = null,
+                 val profileCoverPhoto: Photo? = null,
+                 @get:JsonProperty("is_available")
+                 var isAvailable: Boolean = true,
+                 val remainingSecondsBeforeStart: Long = 0,
+                 var customFields: List<CustomField>? = null) : BaseWall(), WallTextable, Localizable {
 
     @JsonIgnore
     var profileImageFile: File? = null
@@ -131,6 +132,10 @@ class Event : BaseWall(), WallTextable, Localizable {
     fun participate(): Observable<EventMember> {
         return session?.clientService?.eventMember?.post(idStr?.toLong()) ?: Observable.empty()
     }
+
+    fun blockingCancelParticipation() = blockingUnParticipate()
+
+    fun cancelParticipation() = unParticipate()
 
     fun blockingUnParticipate(): EventMember? = unParticipate().toBlocking()?.first()
 

@@ -136,7 +136,7 @@ class EventTest {
         val event = s.account.blockingGet().blockingStreamEvent(1).firstOrNull()
         event?.blockingCancel()
 
-        assert(s.account.blockingGet().blockingStreamEvent(1).firstOrNull()?.cancelled == true)
+        assert(s.account.blockingGet().blockingStreamEvent(1).firstOrNull()?.isCancelled == true)
     }
 
     @Test

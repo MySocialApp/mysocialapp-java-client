@@ -1,8 +1,10 @@
 buildscript {
     // Kotlin
-    ext.kotlin_version = '1.2.51'
+    ext.kotlin_version = '1.2.60'
     // Retrofit
     ext.retrofit_version = '2.4.0'
+    // Jackson
+    ext.jackson_version = '2.9.6'
     // JUnit 5
     ext.junitPlatformVersion = "1.1.1"
     ext.junitVintageVersion = "5.1.1"
@@ -34,7 +36,11 @@ dependencies {
     compile("com.squareup.retrofit2:converter-jackson:$retrofit_version")
     compile("com.squareup.retrofit2:adapter-rxjava:$retrofit_version")
 
-    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.9.6'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "$jackson_version"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "$jackson_version"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "$jackson_version"
+    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: "$jackson_version"
+    
     compile group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '3.10.0'
 
     testRuntime("org.junit.vintage:junit-vintage-engine:$junitVintageVersion")

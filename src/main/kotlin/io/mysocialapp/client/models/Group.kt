@@ -10,21 +10,19 @@ import java.io.File
 /**
  * Created by evoxmusic on 03/08/15.
  */
-class Group : BaseWall(), WallTextable {
-
-    var name: String? = null
-    var description: String? = null
-    var open: Boolean = false
-    var location: Location? = null
-    var profilePhoto: Photo? = null
-    var profileCoverPhoto: Photo? = null
-    var members: List<GroupMember>? = null
-    var member: Boolean = false
-    var approvable: Boolean = false
-    var distanceInMeters: Int = 0
-    var totalMembers: Int = 0
-    var groupMemberAccessControl: GroupMemberAccessControl? = null
-    var customFields: List<CustomField>? = null
+data class Group(var name: String? = null,
+                 var description: String? = null,
+                 var open: Boolean = false,
+                 var location: Location? = null,
+                 var profilePhoto: Photo? = null,
+                 var profileCoverPhoto: Photo? = null,
+                 var members: List<GroupMember>? = null,
+                 var member: Boolean = false,
+                 var approvable: Boolean = false,
+                 var distanceInMeters: Int = 0,
+                 var totalMembers: Int = 0,
+                 var groupMemberAccessControl: GroupMemberAccessControl? = null,
+                 var customFields: List<CustomField>? = null) : BaseWall(), WallTextable {
 
     @JsonIgnore
     var profileImageFile: File? = null

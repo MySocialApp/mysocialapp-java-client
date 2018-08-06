@@ -175,7 +175,7 @@ class FluentEvent(private val session: Session) {
                        val dateField: String? = null,
                        val fromDate: Date? = null,
                        val location: BaseLocation? = null,
-                       val limited: Boolean? = null) {
+                       val limited: Boolean? = false) {
 
         class Builder {
             private var mSortField: String? = "start_date"
@@ -199,7 +199,7 @@ class FluentEvent(private val session: Session) {
                 return this
             }
 
-            fun setLocation(location: SimpleLocation): Builder {
+            fun setLocation(location: BaseLocation): Builder {
                 this.mLocation = location
                 return this
             }
