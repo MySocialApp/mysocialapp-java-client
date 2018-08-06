@@ -148,8 +148,6 @@ public class GroupTest {
                 .setDescription("This is a new group create with our SDK")
                 .setLocation(newarkLocation)
                 .setMemberAccessControl(GroupMemberAccessControl.PUBLIC)
-                .setImage(getFile("/hello.jpg"))
-                .setCoverImage(getFile("/cover_image.jpg"))
                 .build();
 
         Group createdGroup = session.getGroup().blockingCreate(group);

@@ -18,7 +18,6 @@ data class Group(var name: String? = null,
                  var profilePhoto: Photo? = null,
                  var profileCoverPhoto: Photo? = null,
                  var members: List<GroupMember>? = null,
-                 var member: Boolean = false,
                  var distanceInMeters: Int = 0,
                  var totalMembers: Int = 0,
                  @get:JsonProperty("is_member")
@@ -28,6 +27,7 @@ data class Group(var name: String? = null,
 
     @JsonIgnore
     var profileImageFile: File? = null
+
     @JsonIgnore
     var profileCoverImageFile: File? = null
 

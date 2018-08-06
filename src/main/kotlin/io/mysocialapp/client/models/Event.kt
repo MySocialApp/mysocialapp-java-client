@@ -39,6 +39,7 @@ data class Event(var name: String? = null,
 
     @JsonIgnore
     var profileImageFile: File? = null
+
     @JsonIgnore
     var profileCoverImageFile: File? = null
 

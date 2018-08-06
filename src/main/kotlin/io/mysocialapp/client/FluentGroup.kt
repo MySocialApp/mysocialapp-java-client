@@ -151,7 +151,7 @@ class FluentGroup(private val session: Session) {
 
     data class Options(val sortField: String? = null,
                        val location: BaseLocation? = null,
-                       val limited: Boolean? = null) {
+                       val limited: Boolean? = false) {
 
         class Builder {
             private var mSortField: String? = null

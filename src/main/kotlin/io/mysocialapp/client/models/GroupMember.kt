@@ -10,4 +10,5 @@ data class GroupMember(val createdDate: Date? = null,
                        val updatedDate: Date? = null,
                        val group: Group? = null,
                        val user: User? = null,
+                       val previousStatus: GroupStatus? = null,
                        val status: GroupStatus? = null) : Serializable
