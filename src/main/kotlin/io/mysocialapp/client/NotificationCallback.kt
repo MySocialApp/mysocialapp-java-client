@@ -51,4 +51,8 @@ interface NotificationCallback {
 
     }
 
+    fun onGroup(group: Group) {
+
+    }
+
 }

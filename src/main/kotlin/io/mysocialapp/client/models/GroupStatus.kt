@@ -5,7 +5,6 @@ package io.mysocialapp.client.models
  */
 enum class GroupStatus {
     WAITING_FOR_APPROVAL,
-    NOT_AVAILABLE,
     MEMBER,
     WAS_MEMBER,
     WAS_WAITING_FOR_APPROVAL

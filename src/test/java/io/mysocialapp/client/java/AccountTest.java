@@ -21,10 +21,36 @@ class AccountTest {
     private final static String EMAIL = "alice.jeith@mysocialapp.io";
     private final static String PASSWORD = "myverysecretpassw0rd";
 
+    private final static String JOHN_EMAIL = "john.paul@mysocialapp.io";
+
     private final static Session session = new MySocialApp.Builder()
             .setAppId(APP_ID)
             .build()
             .blockingConnect(EMAIL, PASSWORD);
+
+    @Test
+    void signUpAlice() {
+        Session s = new MySocialApp.Builder()
+                .setAppId(APP_ID)
+                .build()
+                .blockingCreateAccount(EMAIL, PASSWORD, "Alice");
+
+        Account account = s.getAccount().blockingGet();
+        account.setLastName("Jeith");
+        account.blockingSave();
+    }
+
+    @Test
+    void signUpJohn() {
+        Session s = new MySocialApp.Builder()
+                .setAppId(APP_ID)
+                .build()
+                .blockingCreateAccount(JOHN_EMAIL, PASSWORD, "John");
+
+        Account account = s.getAccount().blockingGet();
+        account.setLastName("Paul");
+        account.blockingSave();
+    }
 
     @Test
     void signUp() {

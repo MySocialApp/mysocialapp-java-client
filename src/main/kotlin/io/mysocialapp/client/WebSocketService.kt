@@ -75,8 +75,8 @@ class WebSocketService(private val configuration: Configuration,
                         notificationListeners.forEach { it.onConversationMessage(v) }
                     }
 
-                    "FEED" -> notification.id?.let {
-                        val feed = session?.newsFeed?.blockingGet(it) ?: return@let
+                    "FEED" -> notification.id?.let { v ->
+                        val feed = session?.newsFeed?.blockingGet(v) ?: return@let
                         notificationListeners.forEach { it.onNewsFeed(feed) }
                     }
 
@@ -89,24 +89,24 @@ class WebSocketService(private val configuration: Configuration,
                             return
                         }
 
-                        notification.id?.let {
-                            val feed = session?.newsFeed?.blockingGet(it) ?: return@let
+                        notification.id?.let { v ->
+                            val feed = session?.newsFeed?.blockingGet(v) ?: return@let
                             notificationListeners.forEach { it.onMention(feed) }
                         }
                     }
 
-                    "NEW_EVENT" -> notification.id?.let {
-                        val event = session?.event?.blockingGet(it) ?: return@let
+                    "NEW_EVENT" -> notification.id?.let { v ->
+                        val event = session?.event?.blockingGet(v) ?: return@let
                         notificationListeners.forEach { it.onEvent(event) }
                     }
 
-                    "FRIEND_REQUEST" -> notification.id?.let {
-                        val user = session?.user?.blockingGet(it) ?: return@let
+                    "FRIEND_REQUEST" -> notification.id?.let { v ->
+                        val user = session?.user?.blockingGet(v) ?: return@let
                         notificationListeners.forEach { it.onFriendRequest(user) }
                     }
 
-                    "FRIEND" -> notification.id?.let {
-                        val user = session?.user?.blockingGet(it) ?: return@let
+                    "FRIEND" -> notification.id?.let { v ->
+                        val user = session?.user?.blockingGet(v) ?: return@let
                         notificationListeners.forEach { it.onFriendRequest(user) }
                     }
 

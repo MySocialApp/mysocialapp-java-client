@@ -106,6 +106,21 @@ class ReceivingEventNotificationTest {
                 // called when a new event near to me has been created
             }
 
+            @Override
+            public void onUserJoinMyEvent(@NotNull Event event) {
+                // called when user receive an event invitation
+            }
+
+            @Override
+            public void onJoinEventConfirmation(@NotNull Event event) {
+                // called when user receive event confirmation
+            }
+
+            @Override
+            public void onGroup(@NotNull Group group) {
+                // called when a new group near to me has been created
+            }
+
         });
     }
 

@@ -40,4 +40,7 @@ abstract class AbstractNotificationCallback : NotificationCallback {
     override fun onJoinEventConfirmation(event: Event) {
     }
 
+    override fun onGroup(group: Group) {
+    }
+
 }
