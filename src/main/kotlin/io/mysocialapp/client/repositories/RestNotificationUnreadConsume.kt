@@ -14,6 +14,6 @@ interface RestNotificationUnreadConsume {
     fun list(): Observable<List<PreviewNotification>>
 
     @GET("notification/{id}/unread/consume")
-    operator fun get(@Path("id") id: Long?): Observable<PreviewNotification>
+    fun get(@Path("id") id: Long?): Observable<PreviewNotification>
 
 }

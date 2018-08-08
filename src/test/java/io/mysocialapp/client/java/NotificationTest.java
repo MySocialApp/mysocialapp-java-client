@@ -3,7 +3,9 @@ package io.mysocialapp.client.java;
 import io.mysocialapp.client.MySocialApp;
 import io.mysocialapp.client.Session;
 import io.mysocialapp.client.models.Base;
+import io.mysocialapp.client.models.NotificationAck;
 import io.mysocialapp.client.models.PreviewNotification;
+import io.mysocialapp.client.models.SimpleLocation;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -55,6 +57,19 @@ class NotificationTest {
             Base payload = v.getLastNotification().getPayload();
             System.out.println(payload.getDisplayedName());
         });
+    }
+
+    @Test
+    void ackNotification() {
+        SimpleLocation newarkLocation = new SimpleLocation(40.736504474883915, -74.18175405);
+
+        NotificationAck notificationAck = new NotificationAck.Builder()
+                .setDeviceId("your generated device UUID")
+                .setAppPlatform(NotificationAck.AppPlatform.SDK)
+                .setAppVersion("v1.0.2")
+                .setAdvertisingId("device IDFA")
+                .setLocation(newarkLocation)
+                .build();
     }
 
 }

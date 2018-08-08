@@ -13,7 +13,7 @@ data class NotificationAck(val deviceId: String? = null,
 
     enum class AppPlatform {
         ANDROID,
-        JAVA_SDK
+        SDK
     }
 
     class Builder {
