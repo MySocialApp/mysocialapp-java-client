@@ -43,11 +43,11 @@ interface NotificationCallback {
 
     }
 
-    fun onUserJoinMyEvent(event: Event) {
+    fun onUserJoinMyEvent(user: User, event: Event) {
 
     }
 
-    fun onJoinEventConfirmation(event: Event) {
+    fun onUserJoinMyEventConfirmation(user: User, event: Event) {
 
     }
 

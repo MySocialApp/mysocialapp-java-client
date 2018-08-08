@@ -107,12 +107,12 @@ class ReceivingEventNotificationTest {
             }
 
             @Override
-            public void onUserJoinMyEvent(@NotNull Event event) {
+            public void onUserJoinMyEvent(@NotNull User user, @NotNull Event event) {
                 // called when user receive an event invitation
             }
 
             @Override
-            public void onJoinEventConfirmation(@NotNull Event event) {
+            public void onUserJoinMyEventConfirmation(@NotNull User user, @NotNull Event event) {
                 // called when user receive event confirmation
             }
 
