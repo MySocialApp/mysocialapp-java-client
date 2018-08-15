@@ -9,6 +9,18 @@ import rx.Observable
  */
 class FluentFriend(private val session: Session) {
 
+    fun blockingListActiveFriends(): Iterable<User> = listActiveFriends().toBlocking().toIterable()
+
+    fun listActiveFriends(): Observable<User> {
+        return session.clientService.userActive.list().flatMapIterable { it }.map { it.session = session; it }
+    }
+
+    fun blockingTotalIncomingFriendRequests(): Int = totalIncomingFriendRequests().toBlocking().first()
+
+    fun totalIncomingFriendRequests(): Observable<Int> {
+        return session.clientService.accountEvent.get().map { it.friendRequest?.totalIncomingRequests ?: 0 }
+    }
+
     fun blockingListIncomingFriendRequests(): Iterable<User> = listIncomingFriendRequests().toBlocking().toIterable()
 
     fun listIncomingFriendRequests(): Observable<User> {
@@ -24,10 +36,10 @@ class FluentFriend(private val session: Session) {
     fun blockingListFriendRequests(): FriendRequests = listFriendRequests().toBlocking().first()
 
     fun listFriendRequests(): Observable<FriendRequests> {
-        return session.clientService.friendRequest.list().map {
-            it.incoming?.forEach { it.session = session }
-            it.outgoing?.forEach { it.session = session }
-            it
+        return session.clientService.friendRequest.list().map { v ->
+            v.incoming?.forEach { it.session = session }
+            v.outgoing?.forEach { it.session = session }
+            v
         }
     }
 

@@ -18,6 +18,12 @@ class FluentNotification(private val session: Session) {
 
     class Unread(private val session: Session) {
 
+        fun blockingTotal(): Int = total().toBlocking().first()
+
+        fun total(): Observable<Int> {
+            return session.clientService.accountEvent.get().map { it.notification?.totalUnreads ?: 0 }
+        }
+
         @JvmOverloads
         fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<PreviewNotification> = stream(limit).toBlocking().toIterable()
 

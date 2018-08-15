@@ -9,6 +9,12 @@ import rx.Observable
  */
 class FluentConversation(private val session: Session) {
 
+    fun blockingTotalUnread(): Int = totalUnread().toBlocking().first()
+
+    fun totalUnread(): Observable<Int> {
+        return session.clientService.accountEvent.get().map { it.conversation?.totalUnreads ?: 0 }
+    }
+
     @JvmOverloads
     fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<Conversation> = stream(limit).toBlocking().toIterable()
 

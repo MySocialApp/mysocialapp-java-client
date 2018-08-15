@@ -158,4 +158,9 @@ public class ConversationTest {
         Thread.sleep(10000L);
     }
 
+    @Test
+    void getTotalUnreadConversations() {
+        assertNotNull(session.getConversation().blockingTotalUnread());
+    }
+
 }

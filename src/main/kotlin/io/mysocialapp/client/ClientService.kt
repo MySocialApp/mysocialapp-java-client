@@ -21,6 +21,7 @@ class ClientService(private val configuration: Configuration,
     val register: RestRegister by lazy { retrofit.create(RestRegister::class.java) }
     val account: RestAccount by lazy { retrofit.create(RestAccount::class.java) }
     val friend: RestFriend by lazy { retrofit.create(RestFriend::class.java) }
+    val accountEvent: RestAccountEvent by lazy { retrofit.create(RestAccountEvent::class.java) }
     val accountDelete: RestAccountDelete by lazy { retrofit.create(RestAccountDelete::class.java) }
     val accountProfilePhoto: RestAccountProfilePhoto by lazy { retrofit.create(RestAccountProfilePhoto::class.java) }
     val accountProfileCoverPhoto: RestAccountProfileCoverPhoto by lazy { retrofit.create(RestAccountProfileCoverPhoto::class.java) }
