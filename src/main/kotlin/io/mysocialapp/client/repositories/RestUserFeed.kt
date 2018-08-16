@@ -7,11 +7,11 @@ import retrofit2.http.Query
 import rx.Observable
 
 /**
- * Created by evoxmusic on 04/04/15.
+ * Created by evoxmusic on 10/01/15.
  */
-interface RestGroupWall {
+interface RestUserFeed {
 
-    @GET("group/{id}/wall")
+    @GET("user/{id}/wall")
     fun list(@Path("id") id: Long?, @Query("page") page: Int, @Query("size") size: Int): Observable<List<Feed>>
 
 }

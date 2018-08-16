@@ -315,4 +315,23 @@ class NewsFeedTest {
         feed.blockingDelete();
     }
 
+    @Test
+    void getDynamicNewsFeed() {
+        assertNotNull(session.getNewsFeed().getDynamic().blockingList(123));
+    }
+
+    @Test
+    void createDynamicNewsFeed() {
+        String message = "Hey I am [[user:" + session.getAccount().blockingGet().getId() + "]] and happy to be here with you :) " +
+                "visit my website https://mysocialapp.io #hello";
+
+        final FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
+                .setImage(new File("hello.jpg"))
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        session.getNewsFeed().getDynamic().blockingCreate(123, feedPost);
+    }
+
 }

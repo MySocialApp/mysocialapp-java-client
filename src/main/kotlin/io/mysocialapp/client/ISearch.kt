@@ -22,9 +22,9 @@ interface ISearch {
         searchQuery.user?.lastName?.let { m["last_name"] = it }
         searchQuery.user?.presentation?.let { m["content"] = it }
         searchQuery.user?.gender?.let { m["gender"] = it.name }
-        searchQuery.user?.livingLocation?.let {
-            it.latitude?.toString()?.let { m["latitude"] = it }
-            it.longitude?.toString()?.let { m["longitude"] = it }
+        searchQuery.user?.livingLocation?.let { v ->
+            v.latitude?.toString()?.let { m["latitude"] = it }
+            v.longitude?.toString()?.let { m["longitude"] = it }
         }
 
         searchQuery.maximumDistanceInMeters?.toString()?.let { m["maximum_distance"] = it }

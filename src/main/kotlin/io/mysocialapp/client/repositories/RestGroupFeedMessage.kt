@@ -8,7 +8,7 @@ import rx.Observable
 /**
  * Created by evoxmusic on 06/04/15.
  */
-interface RestGroupWallMessage {
+interface RestGroupFeedMessage {
 
     @GET("group/{groupId}/wall/message")
     fun list(@Path("groupId") groupId: Long?, @Query("page") page: Int): Observable<List<Feed>>

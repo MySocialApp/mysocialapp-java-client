@@ -8,7 +8,7 @@ import rx.Observable
 /**
  * Created by evoxmusic on 28/01/15.
  */
-interface RestUserWallMessage {
+interface RestUserFeedMessage {
 
     @GET("user/{userId}/wall/message")
     fun list(@Path("userId") userId: Long?, @Query("page") page: Int): Observable<List<Feed>>

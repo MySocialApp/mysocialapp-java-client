@@ -9,6 +9,7 @@ import rx.observers.TestSubscriber;
 
 import java.util.Date;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -101,6 +102,11 @@ class FriendTest {
         usersIterable.forEach(user -> {
             System.out.println("ID: " + user.getId() + " Name: " + user.getDisplayedName());
         });
+    }
+
+    @Test
+    void listActiveFriends() {
+        assertNotNull(session.getFriend().blockingListActiveFriends());
     }
 
 }

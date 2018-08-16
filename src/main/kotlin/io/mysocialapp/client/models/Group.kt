@@ -72,7 +72,7 @@ data class Group(var name: String? = null,
             override fun getRealResultObject(response: List<Feed>): List<Any>? = response
 
             override fun onNext(page: Int, size: Int): List<Feed> {
-                return session?.clientService?.groupWall?.list(id, page, size)?.toBlocking()?.first() ?: emptyList()
+                return session?.clientService?.groupFeed?.list(id, page, size)?.toBlocking()?.first() ?: emptyList()
             }
         }).map { it.session = session; it }
     }
@@ -81,7 +81,7 @@ data class Group(var name: String? = null,
 
     fun createNewsFeed(feedPost: FeedPost): Observable<Feed> {
         if (feedPost.multipartPhoto == null) {
-            return feedPost.textWallMessage?.let { session?.clientService?.groupWallMessage?.post(idStr?.toLong(), it) }?.map {
+            return feedPost.textWallMessage?.let { session?.clientService?.groupFeedMessage?.post(idStr?.toLong(), it) }?.map {
                 it.session = session; it
             } ?: Observable.empty()
         }

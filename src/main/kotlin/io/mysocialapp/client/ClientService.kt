@@ -44,8 +44,8 @@ class ClientService(private val configuration: Configuration,
     val userGroup: RestUserGroup by lazy { retrofit.create(RestUserGroup::class.java) }
     val userEvent: RestUserEvent by lazy { retrofit.create(RestUserEvent::class.java) }
     val userFriend: RestUserFriend by lazy { retrofit.create(RestUserFriend::class.java) }
-    val userWall: RestUserWall by lazy { retrofit.create(RestUserWall::class.java) }
-    val userWallMessage: RestUserWallMessage by lazy { retrofit.create(RestUserWallMessage::class.java) }
+    val userFeed: RestUserFeed by lazy { retrofit.create(RestUserFeed::class.java) }
+    val userFeedMessage: RestUserFeedMessage by lazy { retrofit.create(RestUserFeedMessage::class.java) }
     val friendRequest: RestFriendRequest by lazy { retrofit.create(RestFriendRequest::class.java) }
     val notificationRead: RestNotificationRead by lazy { retrofit.create(RestNotificationRead::class.java) }
     val notificationUnread: RestNotificationUnread by lazy { retrofit.create(RestNotificationUnread::class.java) }
@@ -64,16 +64,21 @@ class ClientService(private val configuration: Configuration,
     val eventProfilePhoto: RestEventProfilePhoto by lazy { retrofit.create(RestEventProfilePhoto::class.java) }
     val eventProfileCoverPhoto: RestEventProfileCoverPhoto by lazy { retrofit.create(RestEventProfileCoverPhoto::class.java) }
     val eventRide: RestEventRide by lazy { retrofit.create(RestEventRide::class.java) }
-    val eventWall: RestEventWall by lazy { retrofit.create(RestEventWall::class.java) }
-    val eventWallMessage: RestEventWallMessage by lazy { retrofit.create(RestEventWallMessage::class.java) }
+    val eventFeed: RestEventFeed by lazy { retrofit.create(RestEventFeed::class.java) }
+    val eventFeedMessage: RestEventFeedMessage by lazy { retrofit.create(RestEventFeedMessage::class.java) }
     val group: RestGroup by lazy { retrofit.create(RestGroup::class.java) }
     val groupCustomField: RestGroupCustomField by lazy { retrofit.create(RestGroupCustomField::class.java) }
     val groupMember: RestGroupMember by lazy { retrofit.create(RestGroupMember::class.java) }
     val groupPhoto: RestGroupPhoto by lazy { retrofit.create(RestGroupPhoto::class.java) }
     val groupProfilePhoto: RestGroupProfilePhoto by lazy { retrofit.create(RestGroupProfilePhoto::class.java) }
     val groupProfileCoverPhoto: RestGroupProfileCoverPhoto by lazy { retrofit.create(RestGroupProfileCoverPhoto::class.java) }
-    val groupWall: RestGroupWall by lazy { retrofit.create(RestGroupWall::class.java) }
-    val groupWallMessage: RestGroupWallMessage by lazy { retrofit.create(RestGroupWallMessage::class.java) }
+    val groupFeed: RestGroupFeed by lazy { retrofit.create(RestGroupFeed::class.java) }
+    val groupFeedMessage: RestGroupFeedMessage by lazy { retrofit.create(RestGroupFeedMessage::class.java) }
+    val shadowEntityFeed: RestShadowEntityFeed by lazy { retrofit.create(RestShadowEntityFeed::class.java) }
+    val shadowEntityFeedMessage: RestShadowEntityFeedMessage by lazy { retrofit.create(RestShadowEntityFeedMessage::class.java) }
+    val shadowEntityPhoto: RestShadowEntityPhoto by lazy { retrofit.create(RestShadowEntityPhoto::class.java) }
+    val shadowEntityProfilePhoto: RestShadowEntityProfilePhoto by lazy { retrofit.create(RestShadowEntityProfilePhoto::class.java) }
+    val shadowEntityProfileCoverPhoto: RestShadowEntityProfileCoverPhoto by lazy { retrofit.create(RestShadowEntityProfileCoverPhoto::class.java) }
 
     private val retrofit by lazy {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
