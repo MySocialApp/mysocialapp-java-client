@@ -2,6 +2,7 @@ package io.mysocialapp.client.java;
 
 import io.mysocialapp.client.MySocialApp;
 import io.mysocialapp.client.Session;
+import io.mysocialapp.client.exceptions.InvalidCredentialsMySocialAppException;
 import io.mysocialapp.client.models.*;
 import org.junit.jupiter.api.Test;
 
@@ -61,6 +62,26 @@ class AccountTest {
                 .setAppId(APP_ID)
                 .build()
                 .blockingCreateAccount(fakeEmail, PASSWORD, fakeName);
+    }
+
+    @Test
+    void badSignIn() throws InterruptedException {
+        new MySocialApp.Builder()
+                .setAppId(APP_ID)
+                .build()
+                .connect("badAccount@mail.com", "badPassword" + new Date().getTime())
+                .subscribe(v -> {
+                    v.getAccount().blockingGet();
+                }, err -> {
+                    if (err instanceof InvalidCredentialsMySocialAppException) {
+                        assertTrue(true);
+                        return;
+                    }
+
+                    fail();
+                });
+
+        Thread.sleep(3000);
     }
 
     @Test

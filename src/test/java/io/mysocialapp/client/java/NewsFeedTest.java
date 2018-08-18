@@ -34,6 +34,10 @@ class NewsFeedTest {
             .build()
             .blockingConnect(EMAIL, PASSWORD);
 
+    private File getFile(String filePath) {
+        return new File(System.class.getResource(filePath).getFile());
+    }
+
     @Test
     void publicListNewsFeed() {
         Iterable<Feed> newsFeedIterable = publicSession.getNewsFeed().blockingList(0, 10);
@@ -108,7 +112,7 @@ class NewsFeedTest {
 
         final FeedPost feedPost = new FeedPost.Builder()
                 .setMessage(message)
-                .setImage(new File("hello.jpg"))
+                .setImage(getFile("/hello.jpg"))
                 .setVisibility(AccessControl.PUBLIC)
                 .build();
 
@@ -313,25 +317,6 @@ class NewsFeedTest {
     void deleteFeed() {
         Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
         feed.blockingDelete();
-    }
-
-    @Test
-    void getDynamicNewsFeed() {
-        assertNotNull(session.getNewsFeed().getDynamic().blockingList(123));
-    }
-
-    @Test
-    void createDynamicNewsFeed() {
-        String message = "Hey I am [[user:" + session.getAccount().blockingGet().getId() + "]] and happy to be here with you :) " +
-                "visit my website https://mysocialapp.io #hello";
-
-        final FeedPost feedPost = new FeedPost.Builder()
-                .setMessage(message)
-                .setImage(new File("hello.jpg"))
-                .setVisibility(AccessControl.PUBLIC)
-                .build();
-
-        session.getNewsFeed().getDynamic().blockingCreate(123, feedPost);
     }
 
 }

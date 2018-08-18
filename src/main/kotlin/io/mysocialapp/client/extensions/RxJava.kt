@@ -10,8 +10,6 @@ import java.util.concurrent.TimeUnit
  */
 
 fun <T> Observable<T>.prepareAsync(): Observable<T> = this.subscribeOn(Schedulers.io())
-        .onErrorResumeNext(Observable.empty<T>())
-        .doOnError { it.printStackTrace() }
 
 fun <T> Observable<T>.subscribeAsync(cls: (onNext: T) -> Unit = {}): Subscription = this.prepareAsync().subscribe { cls(it) }
 
@@ -20,8 +18,6 @@ fun <T> Observable<T>.subscribeAsync(doOnError: (throwable: Throwable) -> Unit, 
 
 fun <T> Observable<T>.prepareAsyncBackground(): Observable<T> = this.subscribeOn(Schedulers.io())
         .observeOn(Schedulers.computation())
-        .onErrorResumeNext(Observable.empty<T>())
-        .doOnError { it.printStackTrace() }
 
 fun <T> Observable<T>.subscribeAsyncBackground(cls: (onNext: T) -> Unit = {}): Subscription = this.prepareAsyncBackground().subscribe { cls(it) }
 

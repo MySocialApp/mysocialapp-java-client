@@ -10,8 +10,6 @@ import rx.Observable
  */
 class FluentNewsFeed(private val session: Session) {
 
-    val dynamic by lazy { Dynamic(session) }
-
     @JvmOverloads
     fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<Feed> = stream(limit).toBlocking().toIterable()
 
@@ -59,55 +57,6 @@ class FluentNewsFeed(private val session: Session) {
                 }.toBlocking().first())
             }
         }).map { it?.data?.forEach { u -> u.session = session }; it }
-    }
-
-    class Dynamic(private val session: Session) {
-
-        @JvmOverloads
-        fun blockingStream(feedId: Long, limit: Int = Int.MAX_VALUE): Iterable<Feed> = stream(feedId, limit).toBlocking().toIterable()
-
-        @JvmOverloads
-        fun stream(feedId: Long, limit: Int = Int.MAX_VALUE): Observable<Feed> = list(feedId, 0, limit)
-
-        @JvmOverloads
-        fun blockingList(feedId: Long, page: Int = 0, size: Int = 10): Iterable<Feed> = list(feedId, page, size).toBlocking().toIterable()
-
-        @JvmOverloads
-        fun list(feedId: Long, page: Int = 0, size: Int = 10): Observable<Feed> {
-            return stream(page, size, object : PaginationResource<Feed> {
-                override fun getRealResultObject(response: List<Feed>): List<Any>? = response
-
-                override fun onNext(page: Int, size: Int): List<Feed> {
-                    return session.clientService.shadowEntityFeed.list(feedId, page, size).toBlocking().first() ?: emptyList()
-                }
-            }).map { it.session = session; it }
-        }
-
-        fun blockingGet(id: Long): Feed? = get(id).toBlocking()?.first()
-
-        fun get(id: Long): Observable<Feed> = session.clientService.shadowEntityFeed.get(id).map { it.session = session; it }
-
-        fun blockingCreate(feedId: Long, feedPost: FeedPost): Feed? = create(feedId, feedPost).toBlocking().first()
-
-        fun create(feedId: Long, feedPost: FeedPost): Observable<Feed> {
-            if (feedPost.multipartPhoto == null) {
-                return feedPost.textWallMessage?.let { session.clientService.shadowEntityFeedMessage.post(feedId, it) }?.map {
-                    it.session = session; it
-                } ?: Observable.empty()
-            }
-
-            val obs = when {
-                feedPost.multipartPhoto.message == null -> session.clientService.shadowEntityPhoto.post(feedId, feedPost.multipartPhoto.photo,
-                        feedPost.multipartPhoto.accessControl!!)
-                feedPost.multipartPhoto.tagEntities == null -> session.clientService.shadowEntityPhoto.post(feedId, feedPost.multipartPhoto.photo,
-                        feedPost.multipartPhoto.message, feedPost.multipartPhoto.accessControl!!)
-                else -> session.clientService.shadowEntityPhoto.post(feedId, feedPost.multipartPhoto.photo,
-                        feedPost.multipartPhoto.message, feedPost.multipartPhoto.accessControl!!, feedPost.multipartPhoto.tagEntities)
-            }
-
-            return obs.map { it.session = session; it } ?: Observable.empty()
-        }
-
     }
 
     class Search(override val searchQuery: SearchQuery) : ISearch {
