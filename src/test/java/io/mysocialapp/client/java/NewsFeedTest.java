@@ -24,6 +24,8 @@ class NewsFeedTest {
     private final static String EMAIL = "alice.jeith@mysocialapp.io";
     private final static String PASSWORD = "myverysecretpassw0rd";
 
+    private final static String JOHN_EMAIL = "john.paul@mysocialapp.io";
+
     private final static Session publicSession = new MySocialApp.Builder()
             .setAppId(APP_ID)
             .build()
@@ -33,6 +35,11 @@ class NewsFeedTest {
             .setAppId(APP_ID)
             .build()
             .blockingConnect(EMAIL, PASSWORD);
+
+    private final static Session session2 = new MySocialApp.Builder()
+            .setAppId(APP_ID)
+            .build()
+            .blockingConnect(JOHN_EMAIL, PASSWORD);
 
     private File getFile(String filePath) {
         return new File(System.class.getResource(filePath).getFile());
@@ -106,6 +113,19 @@ class NewsFeedTest {
     }
 
     @Test
+    void createNewsFeed_session2() {
+        String message = "Hey [[user:" + session.getAccount().blockingGet().getId() + "]] welcome here !! I am happy to be here with you :) " +
+                "visit my website https://mysocialapp.io #hello";
+
+        final FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        session2.getNewsFeed().blockingCreate(feedPost);
+    }
+
+    @Test
     void createNewsFeed_withImage() {
         String message = "Hey I am [[user:" + session.getAccount().blockingGet().getId() + "]] and happy to be here with you :) " +
                 "visit my website https://mysocialapp.io #hello";
@@ -117,6 +137,20 @@ class NewsFeedTest {
                 .build();
 
         session.getNewsFeed().blockingCreate(feedPost);
+    }
+
+    @Test
+    void createNewsFeed_withImage_from_session2() {
+        String message = "Hey [[user:" + session.getAccount().blockingGet().getId() + "]] welcome here ! Happy to be here with you :) " +
+                "visit my website https://mysocialapp.io #hello";
+
+        final FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
+                .setImage(getFile("/hello.jpg"))
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        session2.getNewsFeed().blockingCreate(feedPost);
     }
 
     @Test
