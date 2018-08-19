@@ -65,6 +65,16 @@ public class ConversationTest {
     }
 
     @Test
+    void oneToOneConversation() {
+        ConversationMessagePost conversationMessagePost = new ConversationMessagePost.Builder()
+                .setMessage("This is a conversation message with Image from SDK #yeah")
+                .setImage(getFile("/hello.jpg"))
+                .build();
+
+        session2.getUser().blockingGet(session.getAccount().blockingGet().getId()).blockingSendPrivateMessage(conversationMessagePost);
+    }
+
+    @Test
     void updateConversation() {
         User user = session.getUser().blockingStream(1).iterator().next().getUsers().get(0);
 
