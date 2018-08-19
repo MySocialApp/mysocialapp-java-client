@@ -12,6 +12,7 @@ import java.util.*
  * Created by evoxmusic on 25/01/15.
  */
 data class Notification(val configId: String? = null,
+                        val topic: String? = null,
                         val type: String? = null,
                         val createdDate: Date? = null,
                         val title: String? = null,

@@ -58,7 +58,7 @@ class WebSocketService(private val configuration: Configuration,
                     null
                 } ?: return
 
-                when (notification.type) {
+                when (notification.topic) {
 
                     "COMMENT" -> convert(notification.rawPayload, Comment::class.java)?.let { v ->
                         v.also { it.session = session }
