@@ -17,6 +17,7 @@ data class Account(override val updatedDate: Date? = null,
                    @Deprecated("please do not use username anymore, only e-mail is valid as username for registration") override val username: String? = null,
                    override var firstName: String? = null,
                    override var lastName: String? = null,
+                   override var fullName: String? = null,
                    override var password: String? = null,
                    override var email: String? = null,
                    override val validatedEmail: Boolean? = null,
@@ -35,8 +36,8 @@ data class Account(override val updatedDate: Date? = null,
                    @get:JsonProperty("is_requested_as_friend") override val isRequestedAsFriend: Boolean? = null,
                    override var externalId: String? = null,
                    override var customFields: List<CustomField>? = null) : User(updatedDate, profilePhoto, profileCoverPhoto,
-        livingLocation, currentStatus, username, firstName, lastName, password, email, validatedEmail, gender, dateOfBirth, presentation,
-        authorities, accountEnabled, accountExpired, facebookId, facebookAccessToken, flag, userSettings, userStat, isFriend,
+        livingLocation, currentStatus, username, firstName, lastName, fullName, password, email, validatedEmail, gender, dateOfBirth,
+        presentation, authorities, accountEnabled, accountExpired, facebookId, facebookAccessToken, flag, userSettings, userStat, isFriend,
         isRequestedAsFriend, externalId, customFields) {
 
     override fun blockingSave(): Account? = save().toBlocking()?.first()
