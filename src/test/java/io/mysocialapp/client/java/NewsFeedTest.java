@@ -183,7 +183,7 @@ class NewsFeedTest {
     @Test
     void findById() {
         Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
-        assertNotNull(session.getNewsFeed().blockingGet(feed.getObject().getId()));
+        assertNotNull(session.getNewsFeed().blockingGet(feed.getId()));
     }
 
     @Test

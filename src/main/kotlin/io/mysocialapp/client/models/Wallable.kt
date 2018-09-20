@@ -10,6 +10,11 @@ import java.util.*
  */
 interface Wallable : Serializable {
 
+    val id: Long?
+
+    val idStr: String?
+        get() = id?.toString()
+
     val createdDate: Date?
 
     val owner: User?

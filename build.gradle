@@ -1,6 +1,6 @@
 buildscript {
     // Kotlin
-    ext.kotlin_version = '1.2.60'
+    ext.kotlin_version = '1.2.70'
     // Retrofit
     ext.retrofit_version = '2.4.0'
     // Jackson

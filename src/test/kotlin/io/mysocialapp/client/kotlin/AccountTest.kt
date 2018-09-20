@@ -34,7 +34,7 @@ class AccountTest {
             msa.blockingConnect("alicex@mysocialapp.io", "myverysecretpassw0rd")
         }
 
-        assert(s?.authenticationToken?.accessToken?.isNotEmpty() == true)
+        assert(s.authenticationToken.accessToken?.isNotEmpty() == true)
     }
 
     @Test
