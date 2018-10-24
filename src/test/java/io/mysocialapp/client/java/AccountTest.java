@@ -24,10 +24,12 @@ class AccountTest {
 
     private final static String JOHN_EMAIL = "john.paul@mysocialapp.io";
 
-    private final static Session session = new MySocialApp.Builder()
-            .setAppId(APP_ID)
-            .build()
-            .blockingConnect(EMAIL, PASSWORD);
+    private Session getSession() {
+        return new MySocialApp.Builder()
+                .setAppId(APP_ID)
+                .build()
+                .blockingConnect(EMAIL, PASSWORD);
+    }
 
     @Test
     void signUpAlice() {
@@ -94,12 +96,12 @@ class AccountTest {
 
     @Test
     void getProfile() {
-        session.getAccount().blockingGet();
+        getSession().getAccount().blockingGet();
     }
 
     @Test
     void updateProfile() {
-        Account profile = session.getAccount().blockingGet();
+        Account profile = getSession().getAccount().blockingGet();
 
         Calendar cal = Calendar.getInstance();
         cal.set(2018, Calendar.JANUARY, 1);
@@ -145,32 +147,32 @@ class AccountTest {
     @Test
     void updateProfilePhoto() {
         File profileImage = new File(System.class.getResource("/profile_image.png").getFile());
-        session.getAccount().changeProfilePhoto(profileImage);
+        getSession().getAccount().changeProfilePhoto(profileImage);
 
-        assertNotNull(session.getAccount().blockingGet().getProfilePhoto());
+        assertNotNull(getSession().getAccount().blockingGet().getProfilePhoto());
     }
 
     @Test
     void updateProfileCoverPhoto() {
         File profileImage = new File(System.class.getResource("/cover_image.jpg").getFile());
-        session.getAccount().changeProfileCoverPhoto(profileImage);
+        getSession().getAccount().changeProfileCoverPhoto(profileImage);
 
-        assertNotNull(session.getAccount().blockingGet().getProfileCoverPhoto());
+        assertNotNull(getSession().getAccount().blockingGet().getProfileCoverPhoto());
     }
 
     @Test
     void getAvailableCustomFields() {
-        assertNotNull(session.getAccount().blockingGetAvailableCustomFields().iterator());
+        assertNotNull(getSession().getAccount().blockingGetAvailableCustomFields().iterator());
     }
 
     @Test
     void getAvailableCustomFields_2() {
-        assertNotNull(session.getAccount().blockingGet().getCustomFields());
+        assertNotNull(getSession().getAccount().blockingGet().getCustomFields());
     }
 
     @Test
     void updateCustomFields() {
-        User profile = session.getAccount().blockingGet();
+        User profile = getSession().getAccount().blockingGet();
 
         for (CustomField customField : profile.getCustomFields()) {
             CustomField.FieldType customFieldType = customField.getFieldType();
