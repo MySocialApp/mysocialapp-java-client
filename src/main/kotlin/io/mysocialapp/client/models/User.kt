@@ -202,7 +202,7 @@ open class User(open val updatedDate: Date? = null,
             override fun getRealResultObject(response: List<PhotoAlbum>): List<Any>? = response
 
             override fun onNext(page: Int, size: Int): List<PhotoAlbum> {
-                return session?.clientService?.photoAlbum?.list(page, size)?.toBlocking()?.first() ?: emptyList()
+                return session?.clientService?.userPhotoAlbum?.list(id, page, size)?.toBlocking()?.first() ?: emptyList()
             }
         }).map { it.session = session; it }
     }

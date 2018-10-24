@@ -46,6 +46,7 @@ class ClientService(private val configuration: Configuration,
     val userFriend: RestUserFriend by lazy { retrofit.create(RestUserFriend::class.java) }
     val userFeed: RestUserFeed by lazy { retrofit.create(RestUserFeed::class.java) }
     val userFeedMessage: RestUserFeedMessage by lazy { retrofit.create(RestUserFeedMessage::class.java) }
+    val userPhotoAlbum: RestUserPhotoAlbum by lazy { retrofit.create(RestUserPhotoAlbum::class.java) }
     val friendRequest: RestFriendRequest by lazy { retrofit.create(RestFriendRequest::class.java) }
     val notificationRead: RestNotificationRead by lazy { retrofit.create(RestNotificationRead::class.java) }
     val notificationUnread: RestNotificationUnread by lazy { retrofit.create(RestNotificationUnread::class.java) }
