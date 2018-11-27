@@ -9,8 +9,7 @@ import rx.Observable;
 import rx.observers.TestSubscriber;
 
 import java.io.File;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
@@ -126,6 +125,25 @@ class NewsFeedTest {
     }
 
     @Test
+    void createNewsFeed_withPayload() {
+        String message = "Hello [[user:" + session.getAccount().blockingGet().getId() + "]] !! I have attached a payload over this post";
+
+        final Map payload = new HashMap<String, Object>();
+        payload.put("score", 123);
+        payload.put("time", new Date());
+
+        final FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
+                .setPayload(payload)
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        Feed feed = session.getNewsFeed().blockingCreate(feedPost);
+        assertTrue(feed.getPayload() != null);
+        assertTrue(((Integer) feed.getPayload().get("score")) == 123);
+    }
+
+    @Test
     void createNewsFeed_withImage() {
         String message = "Hey I am [[user:" + session.getAccount().blockingGet().getId() + "]] and happy to be here with you :) " +
                 "visit my website https://mysocialapp.io #hello";
@@ -137,6 +155,26 @@ class NewsFeedTest {
                 .build();
 
         session.getNewsFeed().blockingCreate(feedPost);
+    }
+
+    @Test
+    void createNewsFeed_withImageAndPayload() {
+        String message = "Hello [[user:" + session.getAccount().blockingGet().getId() + "]] !! I have attached a payload over this post";
+
+        final Map payload = new HashMap<String, Object>();
+        payload.put("score", 123);
+        payload.put("time", new Date());
+
+        final FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
+                .setImage(getFile("/hello.jpg"))
+                .setPayload(payload)
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        Feed feed = session.getNewsFeed().blockingCreate(feedPost);
+        assertTrue(feed.getPayload() != null);
+        assertTrue(((Integer) feed.getPayload().get("score")) == 123);
     }
 
     @Test

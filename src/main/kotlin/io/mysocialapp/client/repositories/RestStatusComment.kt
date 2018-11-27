@@ -21,17 +21,10 @@ interface RestStatusComment {
 
     @Multipart
     @POST("status/{id}/comment/photo")
-    fun post(@Path("id") id: Long?, @Part("file\"; filename=\"image\"") photo: RequestBody, @Part("name") message: RequestBody): Observable<Comment>
-
-    @Multipart
-    @POST("status/{id}/comment/photo")
     fun post(@Path("id") id: Long?,
              @Part("file\"; filename=\"image\"") photo: RequestBody,
+             @Part("payload") payload: RequestBody,
              @Part("name") message: RequestBody,
              @Part("tag_entities") tagEntities: RequestBody): Observable<Comment>
-
-    @Multipart
-    @POST("status/{id}/comment/photo")
-    fun post(@Path("id") id: Long?, @Part("file\"; filename=\"image\"") photo: RequestBody): Observable<Comment>
 
 }

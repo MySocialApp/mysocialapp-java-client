@@ -35,6 +35,8 @@ interface Wallable : Serializable {
 
     val location: BaseLocation?
 
+    val payload: Map<String, Any?>?
+
     fun blockingListLikes(): Iterable<Like> = listLikes().toBlocking()?.toIterable() ?: emptyList()
 
     fun listLikes(): Observable<Like>

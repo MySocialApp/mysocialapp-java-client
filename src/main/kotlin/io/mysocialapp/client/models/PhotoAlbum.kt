@@ -26,20 +26,9 @@ data class PhotoAlbum(var name: String? = null,
 
         val albumName = RequestBody.create(MediaType.parse("multipart/form-data"), name!!)
 
-        return if (photo.multipartPhoto?.message != null && photo.multipartPhoto?.tagEntities != null) {
-            session?.clientService?.photo?.postWithAlbumName(photo.multipartPhoto!!.photo, albumName, photo.multipartPhoto?.accessControl!!,
-                    photo.multipartPhoto?.message!!, photo.multipartPhoto?.tagEntities!!) ?: Observable.empty()
-
-        } else if (photo.multipartPhoto?.message != null) {
-            session?.clientService?.photo?.postWithAlbumName(photo.multipartPhoto!!.photo, albumName, photo.multipartPhoto?.accessControl!!,
-                    photo.multipartPhoto?.message!!) ?: Observable.empty()
-
-        } else if (photo.multipartPhoto?.photo != null) {
-            session?.clientService?.photo?.postWithAlbumName(photo.multipartPhoto!!.photo, albumName, photo.multipartPhoto?.accessControl!!)
-            
-        } else {
-            null
-        }?.map { it.session = session; it } ?: Observable.empty()
+        return session?.clientService?.photo?.postWithAlbumName(photo.multipartPhoto!!.photo, albumName,
+                photo.multipartPhoto!!.accessControl, photo.multipartPhoto!!.payload, photo.multipartPhoto!!.message,
+                photo.multipartPhoto!!.tagEntities)?.map { it.session = session; it } ?: Observable.empty()
     }
 
     override fun delete(): Observable<Void> {

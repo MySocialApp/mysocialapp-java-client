@@ -1,7 +1,7 @@
 package io.mysocialapp.client.models
 
 import io.mysocialapp.client.extensions.imageMediaType
-import okhttp3.MediaType
+import io.mysocialapp.client.extensions.toRequestBody
 import okhttp3.RequestBody
 import java.io.File
 
@@ -33,9 +33,8 @@ data class CommentPost(val comment: Comment? = null,
             }
 
             val photoRequestBody = RequestBody.create(mImage?.name?.imageMediaType(), mImage!!)
-            val messageRequestBody = if (mMessage.isNullOrBlank()) null else RequestBody.create(MediaType.parse("multipart/form-data"), mMessage!!)
 
-            return CommentPost(multipartPhoto = MultipartPhoto(photoRequestBody, messageRequestBody))
+            return CommentPost(multipartPhoto = MultipartPhoto(photoRequestBody, mMessage.toRequestBody()))
         }
     }
 

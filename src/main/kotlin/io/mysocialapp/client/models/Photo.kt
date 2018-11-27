@@ -3,7 +3,8 @@ package io.mysocialapp.client.models
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.mysocialapp.client.extensions.imageMediaType
-import okhttp3.MediaType
+import io.mysocialapp.client.extensions.toJSONString
+import io.mysocialapp.client.extensions.toRequestBody
 import okhttp3.RequestBody
 import rx.Observable
 import java.io.File
@@ -61,17 +62,9 @@ class Photo(var message: String? = null,
                     ?: Observable.empty()
         }
 
-        return if (commentPost.multipartPhoto?.message != null && commentPost.multipartPhoto.tagEntities != null) {
-            session?.clientService?.photoComment?.post(idStr?.toLong(), commentPost.multipartPhoto.photo,
-                    commentPost.multipartPhoto.message, commentPost.multipartPhoto.tagEntities) ?: Observable.empty()
-        } else if (commentPost.multipartPhoto?.message != null) {
-            session?.clientService?.photoComment?.post(idStr?.toLong(),
-                    commentPost.multipartPhoto.photo, commentPost.multipartPhoto.message) ?: Observable.empty()
-        } else if (commentPost.multipartPhoto?.photo != null) {
-            session?.clientService?.photoComment?.post(idStr?.toLong(), commentPost.multipartPhoto.photo)
-        } else {
-            null
-        }?.map { it.session = session; it } ?: Observable.empty()
+        return session?.clientService?.photoComment?.post(idStr?.toLong(), commentPost.multipartPhoto!!.photo,
+                commentPost.multipartPhoto.payload, commentPost.multipartPhoto.message,
+                commentPost.multipartPhoto.tagEntities)?.map { it.session = session; it } ?: Observable.empty()
     }
 
     override fun delete(): Observable<Void> {
@@ -86,6 +79,7 @@ class Photo(var message: String? = null,
         private var mMessage: String? = null
         private var mImageFile: File? = null
         private var mVisibility: AccessControl = AccessControl.FRIEND
+        private var mPayload: Map<String, Any?>? = null
 
         fun setName(name: String): Builder {
             this.mMessage = name
@@ -102,6 +96,11 @@ class Photo(var message: String? = null,
             return this
         }
 
+        fun setPayload(payload: Map<String, Any?>): Builder {
+            this.mPayload = payload
+            return this
+        }
+
         fun build(): Photo {
             if (mImageFile == null) {
                 throw IllegalArgumentException("Image is mandatory")
@@ -109,15 +108,13 @@ class Photo(var message: String? = null,
 
             val photo = Photo()
             val photoRequestBody = RequestBody.create(mImageFile?.name?.imageMediaType(), mImageFile!!)
-            val accessControlRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), mVisibility.name)
 
-            if (mMessage.isNullOrBlank()) {
-                return photo.apply { multipartPhoto = MultipartPhoto(photoRequestBody, accessControl = accessControlRequestBody) }
+            return photo.apply {
+                multipartPhoto = MultipartPhoto(photoRequestBody,
+                        mMessage.toRequestBody(),
+                        accessControl = mVisibility.name.toRequestBody(),
+                        payload = mPayload?.toJSONString().toRequestBody())
             }
-
-            val messageRequestBody = if (mMessage.isNullOrBlank()) null else RequestBody.create(MediaType.parse("multipart/form-data"), mMessage!!)
-
-            return photo.apply { multipartPhoto = MultipartPhoto(photoRequestBody, messageRequestBody, accessControl = accessControlRequestBody) }
         }
 
     }

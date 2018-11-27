@@ -21,17 +21,10 @@ interface RestPhotoComment {
 
     @Multipart
     @POST("photo/{id}/comment/photo")
-    fun post(@Path("id") id: Long?, @Part("file\"; filename=\"image\"") photo: RequestBody, @Part("message") message: RequestBody): Observable<Comment>
-
-    @Multipart
-    @POST("photo/{id}/comment/photo")
     fun post(@Path("id") id: Long?,
              @Part("file\"; filename=\"image\"") photo: RequestBody,
+             @Part("payload") payload: RequestBody,
              @Part("message") message: RequestBody,
              @Part("tag_entities") tagEntities: RequestBody): Observable<Comment>
-
-    @Multipart
-    @POST("photo/{id}/comment/photo")
-    fun post(@Path("id") id: Long?, @Part("file\"; filename=\"image\"") photo: RequestBody): Observable<Comment>
 
 }

@@ -1,7 +1,8 @@
 package io.mysocialapp.client.models
 
 import io.mysocialapp.client.extensions.imageMediaType
-import okhttp3.MediaType
+import io.mysocialapp.client.extensions.toJSONString
+import io.mysocialapp.client.extensions.toRequestBody
 import okhttp3.RequestBody
 import java.io.File
 
@@ -15,6 +16,7 @@ data class FeedPost(val textWallMessage: TextWallMessage? = null,
         private var mMessage: String? = null
         private var mImage: File? = null
         private var mVisibility: AccessControl = AccessControl.FRIEND
+        private var mPayload: Map<String, Any?>? = null
 
         fun setMessage(message: String): Builder {
             this.mMessage = message
@@ -31,18 +33,27 @@ data class FeedPost(val textWallMessage: TextWallMessage? = null,
             return this
         }
 
+        fun setPayload(payload: Map<String, Any?>): Builder {
+            this.mPayload = payload
+            return this
+        }
+
         fun build(): FeedPost {
             if (mMessage == null && mImage == null) {
                 throw IllegalArgumentException("Message or image is mandatory")
             } else if (mImage == null) {
-                return FeedPost(textWallMessage = TextWallMessage(mMessage).apply { accessControl = mVisibility })
+                return FeedPost(textWallMessage = TextWallMessage(mMessage).apply {
+                    accessControl = mVisibility
+                    payload = mPayload
+                })
             }
 
             val photoRequestBody = RequestBody.create(mImage?.name?.imageMediaType(), mImage!!)
-            val messageRequestBody = if (mMessage.isNullOrBlank()) null else RequestBody.create(MediaType.parse("multipart/form-data"), mMessage!!)
-            val accessControlRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), mVisibility.name)
 
-            return FeedPost(multipartPhoto = MultipartPhoto(photoRequestBody, messageRequestBody, accessControl = accessControlRequestBody))
+            return FeedPost(multipartPhoto = MultipartPhoto(photoRequestBody,
+                    mMessage.toRequestBody(),
+                    accessControl = mVisibility.name.toRequestBody(),
+                    payload = mPayload?.toJSONString().toRequestBody()))
         }
     }
 

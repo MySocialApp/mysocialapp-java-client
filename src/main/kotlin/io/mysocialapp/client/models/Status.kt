@@ -47,18 +47,9 @@ class Status(var message: String? = null) : BaseWall() {
                     ?: Observable.empty()
         }
 
-
-        return if (commentPost.multipartPhoto?.message != null && commentPost.multipartPhoto.tagEntities != null) {
-            session?.clientService?.statusComment?.post(idStr?.toLong(), commentPost.multipartPhoto.photo,
-                    commentPost.multipartPhoto.message, commentPost.multipartPhoto.tagEntities) ?: Observable.empty()
-        } else if (commentPost.multipartPhoto?.message != null) {
-            session?.clientService?.statusComment?.post(idStr?.toLong(),
-                    commentPost.multipartPhoto.photo, commentPost.multipartPhoto.message) ?: Observable.empty()
-        } else if (commentPost.multipartPhoto?.photo != null) {
-            session?.clientService?.statusComment?.post(idStr?.toLong(), commentPost.multipartPhoto.photo)
-        } else {
-            null
-        }?.map { it.session = session; it } ?: Observable.empty()
+        return session?.clientService?.statusComment?.post(idStr?.toLong(), commentPost.multipartPhoto!!.photo,
+                commentPost.multipartPhoto.payload, commentPost.multipartPhoto.message, commentPost.multipartPhoto.tagEntities)
+                ?.map { it.session = session; it } ?: Observable.empty()
     }
 
 }

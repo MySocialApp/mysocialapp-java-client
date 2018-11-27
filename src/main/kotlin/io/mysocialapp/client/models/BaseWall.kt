@@ -7,6 +7,7 @@ import rx.Observable
  */
 open class BaseWall : Base(), Likable, Commentable {
 
+    var payload: Map<String, Any?>? = null
     private var likes: LikeBlob? = null
     private var comments: CommentBlob? = null
 
@@ -75,14 +76,9 @@ open class BaseWall : Base(), Likable, Commentable {
                     ?: Observable.empty()
         }
 
-        return if (commentPost.multipartPhoto?.message != null) {
-            session?.clientService?.photoComment?.post(idStr?.toLong(), commentPost.multipartPhoto.photo, commentPost.multipartPhoto.message)
-                    ?: Observable.empty()
-        } else if (commentPost.multipartPhoto?.photo != null) {
-            session?.clientService?.photoComment?.post(idStr?.toLong(), commentPost.multipartPhoto.photo)
-        } else {
-            null
-        }?.map { it.session = session; it } ?: Observable.empty()
+        return session?.clientService?.photoComment?.post(idStr?.toLong(), commentPost.multipartPhoto!!.photo,
+                commentPost.multipartPhoto.payload, commentPost.multipartPhoto.message, commentPost.multipartPhoto.tagEntities)
+                ?.map { it.session = session; it } ?: Observable.empty()
     }
 
     fun ignore(): Observable<Void> {

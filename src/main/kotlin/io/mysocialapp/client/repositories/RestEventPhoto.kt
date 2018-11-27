@@ -18,25 +18,9 @@ interface RestEventPhoto {
     @POST("event/{id}/photo")
     fun post(@Path("id") id: Long?,
              @Part("file\"; filename=\"image\"") photo: RequestBody,
-             @Part("access_control") accessControl: RequestBody): Observable<Feed>
-
-    @Multipart
-    @POST("event/{id}/photo")
-    fun post(@Path("id") id: Long?,
-             @Part("file\"; filename=\"image\"") photo: RequestBody,
-             @Part("message") message: RequestBody,
-             @Part("access_control") accessControl: RequestBody): Observable<Feed>
-
-    @Multipart
-    @POST("event/{id}/photo")
-    fun post(@Path("id") id: Long?,
-             @Part("file\"; filename=\"image\"") photo: RequestBody,
+             @Part("payload") payload: RequestBody,
              @Part("message") message: RequestBody,
              @Part("access_control") accessControl: RequestBody,
              @Part("tag_entities") tagEntities: RequestBody): Observable<Feed>
-
-    @Multipart
-    @POST("event/{id}/photo")
-    fun post(@Path("id") id: Long?, @Part("file\"; filename=\"image\"") photo: RequestBody): Observable<Feed>
 
 }

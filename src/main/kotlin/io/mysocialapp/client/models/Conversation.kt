@@ -29,15 +29,8 @@ data class Conversation(var name: String? = null) : Base() {
             }?.map { it.session = session; it } ?: Observable.empty()
         }
 
-        val obs = when {
-            message.multipartPhoto.message == null -> session?.clientService?.conversationMessagePhoto?.post(id, message.multipartPhoto.photo)
-            message.multipartPhoto.tagEntities == null -> session?.clientService?.conversationMessagePhoto?.post(id, message.multipartPhoto.photo,
-                    message.multipartPhoto.message)
-            else -> session?.clientService?.conversationMessagePhoto?.post(id, message.multipartPhoto.photo,
-                    message.multipartPhoto.message, message.multipartPhoto.tagEntities)
-        }
-
-        return obs?.map { it.session = session; it } ?: Observable.empty()
+        return session?.clientService?.conversationMessagePhoto?.post(id, message.multipartPhoto.photo, message.multipartPhoto.payload,
+                message.multipartPhoto.message, message.multipartPhoto.tagEntities)?.map { it.session = session; it } ?: Observable.empty()
     }
 
     fun blockingKickMember(user: User) = kickMember(user).toBlocking()?.first()

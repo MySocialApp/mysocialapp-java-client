@@ -120,16 +120,9 @@ open class User(open val updatedDate: Date? = null,
             } ?: Observable.empty()
         }
 
-        val obs = when {
-            feedPost.multipartPhoto.message == null -> session?.clientService?.photo?.post(feedPost.multipartPhoto.photo,
-                    feedPost.multipartPhoto.accessControl!!)
-            feedPost.multipartPhoto.tagEntities == null -> session?.clientService?.photo?.post(feedPost.multipartPhoto.photo,
-                    feedPost.multipartPhoto.accessControl!!, feedPost.multipartPhoto.message)
-            else -> session?.clientService?.photo?.post(feedPost.multipartPhoto.photo,
-                    feedPost.multipartPhoto.accessControl!!, feedPost.multipartPhoto.message, feedPost.multipartPhoto.tagEntities)
-        }
-
-        return obs?.map { it.session = session; it } ?: Observable.empty()
+        return session?.clientService?.photo?.post(feedPost.multipartPhoto.photo, feedPost.multipartPhoto.accessControl,
+                feedPost.multipartPhoto.payload, feedPost.multipartPhoto.message, feedPost.multipartPhoto.tagEntities)
+                ?.map { it.session = session; it } ?: Observable.empty()
     }
 
     fun blockingSendPrivateMessage(conversationMessagePost: ConversationMessagePost): ConversationMessage? {

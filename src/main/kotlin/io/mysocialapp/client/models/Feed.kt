@@ -54,6 +54,9 @@ open class Feed(val action: ActivityType? = null,
     override val location: BaseLocation?
         get() = (`object` as? Localizable)?.getLocality()
 
+    override val payload: Map<String, Any?>?
+        get() = `object`?.payload
+
     override fun listLikes(): Observable<Like> {
         return `object`?.getLikes()?.map { it.session = session; it } ?: Observable.empty()
     }

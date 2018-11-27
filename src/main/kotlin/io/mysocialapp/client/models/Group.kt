@@ -86,16 +86,9 @@ data class Group(var name: String? = null,
             } ?: Observable.empty()
         }
 
-        val obs = when {
-            feedPost.multipartPhoto.message == null -> session?.clientService?.groupPhoto?.post(idStr?.toLong(), feedPost.multipartPhoto.photo,
-                    feedPost.multipartPhoto.accessControl!!)
-            feedPost.multipartPhoto.tagEntities == null -> session?.clientService?.groupPhoto?.post(idStr?.toLong(), feedPost.multipartPhoto.photo,
-                    feedPost.multipartPhoto.message, feedPost.multipartPhoto.accessControl!!)
-            else -> session?.clientService?.groupPhoto?.post(idStr?.toLong(), feedPost.multipartPhoto.photo,
-                    feedPost.multipartPhoto.message, feedPost.multipartPhoto.accessControl!!, feedPost.multipartPhoto.tagEntities)
-        }
-
-        return obs?.map { it.session = session; it } ?: Observable.empty()
+        return session?.clientService?.groupPhoto?.post(idStr?.toLong(), feedPost.multipartPhoto.photo, feedPost.multipartPhoto.payload,
+                feedPost.multipartPhoto.message, feedPost.multipartPhoto.accessControl, feedPost.multipartPhoto.tagEntities)
+                ?.map { it.session = session; it } ?: Observable.empty()
     }
 
     override fun save(): Observable<Group> {
@@ -122,6 +115,7 @@ data class Group(var name: String? = null,
         private var mImage: File? = null
         private var mCoverImage: File? = null
         private var mCustomFields: List<CustomField>? = null
+        private var mPayload: Map<String, Any?>? = null
 
         fun setName(name: String): Builder {
             this.mName = name
@@ -158,6 +152,11 @@ data class Group(var name: String? = null,
             return this
         }
 
+        fun setPayload(payload: Map<String, Any?>): Builder {
+            this.mPayload = payload
+            return this
+        }
+
         fun build(): Group {
             if (mName.isNullOrBlank()) {
                 IllegalArgumentException("Name cannot be null or empty")
@@ -179,6 +178,7 @@ data class Group(var name: String? = null,
                 profileImageFile = mImage
                 profileCoverImageFile = mCoverImage
                 customFields = mCustomFields
+                payload = mPayload
             }
         }
     }

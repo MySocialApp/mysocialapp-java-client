@@ -15,16 +15,9 @@ interface RestConversationMessagePhoto {
 
     @Multipart
     @POST("conversation/{id}/message/photo")
-    fun post(@Path("id") id: Long?, @Part("file\"; filename=\"image\"") photo: RequestBody): Observable<ConversationMessage>
-
-    @Multipart
-    @POST("conversation/{id}/message/photo")
-    fun post(@Path("id") id: Long?, @Part("file\"; filename=\"image\"") photo: RequestBody, @Part("message") message: RequestBody): Observable<ConversationMessage>
-
-    @Multipart
-    @POST("conversation/{id}/message/photo")
     fun post(@Path("id") id: Long?,
              @Part("file\"; filename=\"image\"") photo: RequestBody,
+             @Part("payload") payload: RequestBody,
              @Part("message") message: RequestBody,
              @Part("tag_entities") tagEntities: RequestBody): Observable<ConversationMessage>
 
