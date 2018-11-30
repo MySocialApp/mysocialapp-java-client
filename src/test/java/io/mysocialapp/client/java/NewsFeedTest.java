@@ -10,6 +10,8 @@ import rx.observers.TestSubscriber;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
@@ -154,7 +156,7 @@ class NewsFeedTest {
                 .setVisibility(AccessControl.PUBLIC)
                 .build();
 
-        session.getNewsFeed().blockingCreate(feedPost);
+        session.getNewsFeed().blockingCreate(feedPost).getObject();
     }
 
     @Test
@@ -213,8 +215,14 @@ class NewsFeedTest {
     void listLikes() {
         Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
 
-        for (Like like : feed.blockingListLikes()) {
+        Iterable<Like> likes = feed.blockingListLikes();
+
+        for (Like like : likes) {
             System.out.println(like.getOwner().getDisplayedName() + " has liked " + feed.getObject().getDisplayedName());
+        }
+
+        if (StreamSupport.stream(likes.spliterator(), false).collect(Collectors.toList()).size() > 0) {
+            assertTrue(feed.getObject().getLikersTotal() > 0);
         }
     }
 
@@ -240,10 +248,16 @@ class NewsFeedTest {
     void listComments() {
         Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
 
-        for (Comment comment : feed.blockingListComments()) {
+        Iterable<Comment> comments = feed.blockingListComments();
+
+        for (Comment comment : comments) {
             System.out.println(comment.getOwner().getDisplayedName() +
                     " has commented '" + comment.getMessage() +
                     "' from " + feed.getObject().getDisplayedName());
+        }
+
+        if (StreamSupport.stream(comments.spliterator(), false).collect(Collectors.toList()).size() > 0) {
+            assertTrue(feed.getObject().getCommentsTotal() > 0);
         }
     }
 
