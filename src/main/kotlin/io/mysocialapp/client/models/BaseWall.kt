@@ -1,5 +1,6 @@
 package io.mysocialapp.client.models
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import rx.Observable
 
 /**
@@ -8,7 +9,9 @@ import rx.Observable
 open class BaseWall : Base(), Likable, Commentable {
 
     var payload: Map<String, Any?>? = null
+    @JsonProperty("likes")
     private var likes: LikeBlob? = null
+    @JsonProperty("comments")
     private var comments: CommentBlob? = null
 
     override var commentsTotal: Int
