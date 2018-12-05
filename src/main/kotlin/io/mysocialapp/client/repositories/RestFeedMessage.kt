@@ -4,6 +4,7 @@ import io.mysocialapp.client.models.Feed
 import io.mysocialapp.client.models.TextWallMessage
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import rx.Observable
 
@@ -15,7 +16,7 @@ interface RestFeedMessage {
     @POST("feed/message")
     fun post(@Body message: TextWallMessage): Observable<Feed>
 
-    @POST("feed/message/{id}")
+    @PUT("feed/message/{id}")
     fun put(@Path("id") id: Long?, @Body message: TextWallMessage): Observable<Feed>
 
 }
