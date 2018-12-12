@@ -1,6 +1,5 @@
 package io.mysocialapp.client.java;
 
-import io.mysocialapp.client.ClientConfiguration;
 import io.mysocialapp.client.FluentNewsFeed;
 import io.mysocialapp.client.MySocialApp;
 import io.mysocialapp.client.Session;
@@ -35,7 +34,6 @@ class NewsFeedTest {
 
     private final static Session session = new MySocialApp.Builder()
             .setAppId(APP_ID)
-            .setClientConfiguration(new ClientConfiguration.Builder().setDebug(true).build())
             .build()
             .blockingConnect(EMAIL, PASSWORD);
 

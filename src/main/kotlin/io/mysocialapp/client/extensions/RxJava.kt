@@ -25,6 +25,6 @@ fun <T> Observable<T>.subscribeAsyncBackground(doOnError: (throwable: Throwable)
         this.prepareAsyncBackground().subscribe(cls, doOnError)
 
 fun <T> Observable<T>.retryWithDelay(count: Int = -1, delayInSeconds: Long): Observable<T> =
-        this.retryWhen { it.zipWith(Observable.range(1, if (count < 1) 1000000 else count), { n, i -> i }) }
+        this.retryWhen { it.zipWith(Observable.range(1, if (count < 1) 1000000 else count)) { _, i -> i } }
                 .flatMap { i -> Observable.timer(delayInSeconds, TimeUnit.SECONDS) }
                 .flatMap { this }

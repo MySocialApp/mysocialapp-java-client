@@ -16,6 +16,7 @@ class ClientService(private val configuration: Configuration,
                     private val session: Session? = null) {
 
     val login: RestLogin by lazy { retrofit.create(RestLogin::class.java) }
+    val loginAs: RestLoginAs by lazy { retrofit.create(RestLoginAs::class.java) }
     val logout: RestLogout by lazy { retrofit.create(RestLogout::class.java) }
     val reset: RestReset by lazy { retrofit.create(RestReset::class.java) }
     val register: RestRegister by lazy { retrofit.create(RestRegister::class.java) }

@@ -1,6 +1,7 @@
 package io.mysocialapp.client.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.mysocialapp.client.Session
 import io.mysocialapp.client.extensions.PaginationResource
 import io.mysocialapp.client.extensions.prepareAsync
 import io.mysocialapp.client.extensions.stream
@@ -198,6 +199,20 @@ open class User(open val updatedDate: Date? = null,
                 return session?.clientService?.userPhotoAlbum?.list(id, page, size)?.toBlocking()?.first() ?: emptyList()
             }
         }).map { it.session = session; it }
+    }
+
+    fun blockingConnectAsUser(): Session? = connectAsUser().toBlocking()?.first()
+
+    fun connectAsUser(): Observable<Session> {
+        if (session?.configuration == null) {
+            return Observable.empty()
+        } else if (session?.clientConfiguration == null) {
+            return Observable.empty()
+        }
+
+        return session?.clientService?.loginAs?.post(id)?.map {
+            Session(session!!.configuration, session!!.clientConfiguration, it)
+        } ?: Observable.empty()
     }
 
 }

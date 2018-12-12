@@ -6,8 +6,8 @@ import rx.Observable
 /**
  * Created by evoxmusic on 27/04/2018.
  */
-class Session(private val configuration: Configuration,
-              private val clientConfiguration: ClientConfiguration,
+class Session(val configuration: Configuration,
+              val clientConfiguration: ClientConfiguration,
               val authenticationToken: AuthenticationToken) {
 
     val clientService by lazy { ClientService(configuration, clientConfiguration, this) }

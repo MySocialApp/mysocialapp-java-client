@@ -242,4 +242,12 @@ class AccountTest {
         session.getAccount().blockingRequestForDeleteAccount(PASSWORD);
     }
 
+    @Test
+    void switchAccount() {
+        final Session session = getSession();
+        User user = session.getUser().blockingList(2).iterator().next().getUsers().get(0);
+        assertNotEquals(user.getId(), session.getAccount().blockingGet().getId());
+        assertEquals(user.blockingConnectAsUser().getAccount().blockingGet().getId(), user.getId());
+    }
+
 }
