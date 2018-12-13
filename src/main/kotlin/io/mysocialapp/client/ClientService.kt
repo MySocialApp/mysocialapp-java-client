@@ -45,6 +45,8 @@ class ClientService(private val configuration: Configuration,
     val userGroup: RestUserGroup by lazy { retrofit.create(RestUserGroup::class.java) }
     val userEvent: RestUserEvent by lazy { retrofit.create(RestUserEvent::class.java) }
     val userFriend: RestUserFriend by lazy { retrofit.create(RestUserFriend::class.java) }
+    val userFollowing: RestUserFollowing by lazy { retrofit.create(RestUserFollowing::class.java) }
+    val userFollower: RestUserFollower by lazy { retrofit.create(RestUserFollower::class.java) }
     val userFeed: RestUserFeed by lazy { retrofit.create(RestUserFeed::class.java) }
     val userFeedMessage: RestUserFeedMessage by lazy { retrofit.create(RestUserFeedMessage::class.java) }
     val userPhotoAlbum: RestUserPhotoAlbum by lazy { retrofit.create(RestUserPhotoAlbum::class.java) }

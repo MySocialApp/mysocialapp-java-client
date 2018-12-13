@@ -34,11 +34,13 @@ data class Account(override val updatedDate: Date? = null,
                    override val userStat: UserStat? = null,
                    @get:JsonProperty("is_friend") override val isFriend: Boolean? = null,
                    @get:JsonProperty("is_requested_as_friend") override val isRequestedAsFriend: Boolean? = null,
+                   @get:JsonProperty("following") override val isFollowing: Boolean? = null,
+                   @get:JsonProperty("follower") override val isFollower: Boolean? = null,
                    override var externalId: String? = null,
                    override var customFields: List<CustomField>? = null) : User(updatedDate, profilePhoto, profileCoverPhoto,
         livingLocation, currentStatus, username, firstName, lastName, fullName, password, email, validatedEmail, gender, dateOfBirth,
         presentation, authorities, accountEnabled, accountExpired, facebookId, facebookAccessToken, flag, userSettings, userStat, isFriend,
-        isRequestedAsFriend, externalId, customFields) {
+        isRequestedAsFriend, isFollowing, isFollower, externalId, customFields) {
 
     override fun blockingSave(): Account? = save().toBlocking()?.first()
 

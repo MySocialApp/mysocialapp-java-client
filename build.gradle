@@ -1,10 +1,10 @@
 buildscript {
     // Kotlin
-    ext.kotlin_version = '1.3.10'
+    ext.kotlin_version = '1.3.11'
     // Retrofit
     ext.retrofit_version = '2.4.0'
     // Jackson
-    ext.jackson_version = '2.9.6'
+    ext.jackson_version = '2.9.7'
     // JUnit 5
     ext.junitPlatformVersion = "1.1.1"
     ext.junitVintageVersion = "5.1.1"

@@ -121,10 +121,9 @@ class AccountTest {
         assertNull(profile1.getExternalId());
         assertNull(profile1.getPresentation());
         assertNull(profile1.getGender());
-        assertNull(profile1.getLivingLocation());
 
         // set profile
-        SimpleLocation tokyo = new SimpleLocation(35.6894875, 139.69170639999993);
+        SimpleLocation tokyo = new SimpleLocation(45.988894875, 140.09111170639999993);
 
         profile.setFirstName("Alice");
         profile.setLastName("Jeith" + new Date().getTime());

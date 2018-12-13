@@ -37,6 +37,8 @@ open class User(open val updatedDate: Date? = null,
                 open val userStat: UserStat? = null,
                 @get:JsonProperty("is_friend") open val isFriend: Boolean? = null,
                 @get:JsonProperty("is_requested_as_friend") open val isRequestedAsFriend: Boolean? = null,
+                @get:JsonProperty("is_following") open val isFollowing: Boolean? = null,
+                @get:JsonProperty("is_follower") open val isFollower: Boolean? = null,
                 open val externalId: String? = null,
                 open val customFields: List<CustomField>? = null) : Base() {
 
@@ -76,6 +78,20 @@ open class User(open val updatedDate: Date? = null,
         return session?.clientService?.userFriend?.delete(idStr?.toLong()) ?: Observable.empty()
     }
 
+    fun blockingFollow(): User? = follow().toBlocking()?.first()
+
+    fun follow(): Observable<User> {
+        return session?.clientService?.userFollowing?.post(idStr?.toLong())?.map { it.session = session; it } ?: Observable.empty()
+    }
+
+    fun blockingUnfollow() {
+        unfollow().toBlocking()?.first()
+    }
+
+    fun unfollow(): Observable<Void> {
+        return session?.clientService?.userFollowing?.delete(idStr?.toLong()) ?: Observable.empty()
+    }
+
     @JvmOverloads
     fun blockingListFriend(page: Int = 0, size: Int = 10): Iterable<User> =
             listFriend(page, size).toBlocking()?.toIterable() ?: emptyList()
@@ -87,6 +103,36 @@ open class User(open val updatedDate: Date? = null,
 
             override fun onNext(page: Int, size: Int): List<User> {
                 return session?.clientService?.userFriend?.list(idStr?.toLong(), page, size)?.toBlocking()?.first() ?: emptyList()
+            }
+        }).map { it.session = session; it }
+    }
+
+    @JvmOverloads
+    fun blockingListFollowing(page: Int = 0, size: Int = 10): Iterable<User> =
+            listFollowing(page, size).toBlocking()?.toIterable() ?: emptyList()
+
+    @JvmOverloads
+    fun listFollowing(page: Int = 0, size: Int = 10): Observable<User> {
+        return stream(page, size, object : PaginationResource<User> {
+            override fun getRealResultObject(response: List<User>): List<Any>? = response
+
+            override fun onNext(page: Int, size: Int): List<User> {
+                return session?.clientService?.userFollowing?.list(idStr?.toLong(), page, size)?.toBlocking()?.first() ?: emptyList()
+            }
+        }).map { it.session = session; it }
+    }
+
+    @JvmOverloads
+    fun blockingListFollower(page: Int = 0, size: Int = 10): Iterable<User> =
+            listFollower(page, size).toBlocking()?.toIterable() ?: emptyList()
+
+    @JvmOverloads
+    fun listFollower(page: Int = 0, size: Int = 10): Observable<User> {
+        return stream(page, size, object : PaginationResource<User> {
+            override fun getRealResultObject(response: List<User>): List<Any>? = response
+
+            override fun onNext(page: Int, size: Int): List<User> {
+                return session?.clientService?.userFollower?.list(idStr?.toLong(), page, size)?.toBlocking()?.first() ?: emptyList()
             }
         }).map { it.session = session; it }
     }

@@ -17,6 +17,7 @@ class Session(val configuration: Configuration,
     val newsFeed by lazy { FluentNewsFeed(this) }
     val user by lazy { FluentUser(this) }
     val friend by lazy { FluentFriend(this) }
+    val follow by lazy { FluentFollow(this) }
     val notification by lazy { FluentNotification(this) }
     val conversation by lazy { FluentConversation(this) }
     val group by lazy { FluentGroup(this) }
