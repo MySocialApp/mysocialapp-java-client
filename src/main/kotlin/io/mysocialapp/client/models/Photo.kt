@@ -63,7 +63,7 @@ class Photo(var message: String? = null,
         }
 
         return session?.clientService?.photoComment?.post(idStr?.toLong(), commentPost.multipartPhoto!!.photo,
-                commentPost.multipartPhoto.payload, commentPost.multipartPhoto.message,
+                commentPost.multipartPhoto.payload, commentPost.multipartPhoto.externalId, commentPost.multipartPhoto.message,
                 commentPost.multipartPhoto.tagEntities)?.map { it.session = session; it } ?: Observable.empty()
     }
 
@@ -80,6 +80,7 @@ class Photo(var message: String? = null,
         private var mImageFile: File? = null
         private var mVisibility: AccessControl = AccessControl.FRIEND
         private var mPayload: Map<String, Any?>? = null
+        private var mExternalId: String? = null
 
         fun setName(name: String): Builder {
             this.mMessage = name
@@ -101,6 +102,11 @@ class Photo(var message: String? = null,
             return this
         }
 
+        fun setExternalId(externalId: String): Builder {
+            this.mExternalId = externalId
+            return this
+        }
+
         fun build(): Photo {
             if (mImageFile == null) {
                 throw IllegalArgumentException("Image is mandatory")
@@ -113,7 +119,8 @@ class Photo(var message: String? = null,
                 multipartPhoto = MultipartPhoto(photoRequestBody,
                         mMessage.toRequestBody(),
                         accessControl = mVisibility.name.toRequestBody(),
-                        payload = mPayload?.toJSONString().toRequestBody())
+                        payload = mPayload?.toJSONString().toRequestBody(),
+                        externalId = mExternalId.toRequestBody())
             }
         }
 

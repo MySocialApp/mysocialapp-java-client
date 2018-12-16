@@ -168,8 +168,8 @@ open class User(open val updatedDate: Date? = null,
         }
 
         return session?.clientService?.photo?.post(feedPost.multipartPhoto.photo, feedPost.multipartPhoto.accessControl,
-                feedPost.multipartPhoto.payload, feedPost.multipartPhoto.message, feedPost.multipartPhoto.tagEntities)
-                ?.map { it.session = session; it } ?: Observable.empty()
+                feedPost.multipartPhoto.payload, feedPost.multipartPhoto.externalId, feedPost.multipartPhoto.message,
+                feedPost.multipartPhoto.tagEntities)?.map { it.session = session; it } ?: Observable.empty()
     }
 
     fun blockingSendPrivateMessage(conversationMessagePost: ConversationMessagePost): ConversationMessage? {

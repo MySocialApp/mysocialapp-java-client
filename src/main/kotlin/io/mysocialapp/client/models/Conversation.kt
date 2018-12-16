@@ -30,7 +30,8 @@ data class Conversation(var name: String? = null) : Base() {
         }
 
         return session?.clientService?.conversationMessagePhoto?.post(id, message.multipartPhoto.photo, message.multipartPhoto.payload,
-                message.multipartPhoto.message, message.multipartPhoto.tagEntities)?.map { it.session = session; it } ?: Observable.empty()
+                message.multipartPhoto.externalId, message.multipartPhoto.message,
+                message.multipartPhoto.tagEntities)?.map { it.session = session; it } ?: Observable.empty()
     }
 
     fun blockingKickMember(user: User) = kickMember(user).toBlocking()?.first()

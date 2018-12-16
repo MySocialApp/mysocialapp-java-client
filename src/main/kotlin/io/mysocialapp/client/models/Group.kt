@@ -87,8 +87,8 @@ data class Group(var name: String? = null,
         }
 
         return session?.clientService?.groupPhoto?.post(idStr?.toLong(), feedPost.multipartPhoto.photo, feedPost.multipartPhoto.payload,
-                feedPost.multipartPhoto.message, feedPost.multipartPhoto.accessControl, feedPost.multipartPhoto.tagEntities)
-                ?.map { it.session = session; it } ?: Observable.empty()
+                feedPost.multipartPhoto.externalId, feedPost.multipartPhoto.message, feedPost.multipartPhoto.accessControl,
+                feedPost.multipartPhoto.tagEntities)?.map { it.session = session; it } ?: Observable.empty()
     }
 
     override fun save(): Observable<Group> {

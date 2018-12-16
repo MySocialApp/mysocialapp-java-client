@@ -34,8 +34,8 @@ class FluentPhoto(private val session: Session) {
         }
 
         return session.clientService.photo.post(photo.multipartPhoto!!.photo, photo.multipartPhoto!!.accessControl,
-                photo.multipartPhoto!!.payload, photo.multipartPhoto!!.message, photo.multipartPhoto!!.tagEntities)
-                .map { it.session = session; it.`object` as Photo } ?: Observable.empty()
+                photo.multipartPhoto!!.payload, photo.multipartPhoto!!.externalId, photo.multipartPhoto!!.message,
+                photo.multipartPhoto!!.tagEntities).map { it.session = session; it.`object` as Photo } ?: Observable.empty()
     }
 
     fun blockingDelete(id: Long) {

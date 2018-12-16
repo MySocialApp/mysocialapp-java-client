@@ -34,6 +34,10 @@ class FluentNewsFeed(private val session: Session) {
 
     fun get(id: Long): Observable<Feed> = session.clientService.feed.get(id).map { it.session = session; it }
 
+    fun blockingGetByExternalId(id: String): Feed? = getByExternalId(id).toBlocking()?.first()
+
+    fun getByExternalId(id: String): Observable<Feed> = session.clientService.feedExternal.get(id).map { it.session = session; it }
+
     fun blockingCreate(feedPost: FeedPost): Feed? = create(feedPost).toBlocking().first()
 
     fun create(feedPost: FeedPost): Observable<Feed> {

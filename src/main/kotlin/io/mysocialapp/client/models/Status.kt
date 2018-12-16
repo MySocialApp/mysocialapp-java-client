@@ -48,8 +48,8 @@ class Status(var message: String? = null) : BaseWall() {
         }
 
         return session?.clientService?.statusComment?.post(idStr?.toLong(), commentPost.multipartPhoto!!.photo,
-                commentPost.multipartPhoto.payload, commentPost.multipartPhoto.message, commentPost.multipartPhoto.tagEntities)
-                ?.map { it.session = session; it } ?: Observable.empty()
+                commentPost.multipartPhoto.payload, commentPost.multipartPhoto.externalId, commentPost.multipartPhoto.message,
+                commentPost.multipartPhoto.tagEntities)?.map { it.session = session; it } ?: Observable.empty()
     }
 
 }

@@ -18,6 +18,7 @@ interface RestConversationMessagePhoto {
     fun post(@Path("id") id: Long?,
              @Part("file\"; filename=\"image\"") photo: RequestBody,
              @Part("payload") payload: RequestBody,
+             @Part("external_id") externalId: RequestBody,
              @Part("message") message: RequestBody,
              @Part("tag_entities") tagEntities: RequestBody): Observable<ConversationMessage>
 

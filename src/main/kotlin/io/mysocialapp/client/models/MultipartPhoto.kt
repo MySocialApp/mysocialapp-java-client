@@ -9,4 +9,5 @@ data class MultipartPhoto(val photo: RequestBody,
                           val message: RequestBody = RequestBody.create(null, ""),
                           val tagEntities: RequestBody = RequestBody.create(null, ""),
                           val accessControl: RequestBody = RequestBody.create(null, ""),
-                          val payload: RequestBody = RequestBody.create(null, ""))
+                          val payload: RequestBody = RequestBody.create(null, ""),
+                          val externalId: RequestBody = RequestBody.create(null, ""))

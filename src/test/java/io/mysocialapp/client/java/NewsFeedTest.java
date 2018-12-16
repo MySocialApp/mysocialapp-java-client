@@ -13,8 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.*;
 
 /**
  * Created by evoxmusic on 17/07/2018.
@@ -191,6 +190,41 @@ class NewsFeedTest {
                 .build();
 
         session2.getNewsFeed().blockingCreate(feedPost);
+    }
+
+    @Test
+    void createNewsFeed_with_External_id() throws InterruptedException {
+        String message = "This is a post with external ID";
+
+        String externalId = UUID.randomUUID().toString();
+
+        final FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
+                .setExternalId(externalId)
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        assertEquals(externalId, session.getNewsFeed().blockingCreate(feedPost).getExternalId());
+        Thread.sleep(1000);
+        assertEquals(externalId, session.getNewsFeed().blockingGetByExternalId(externalId).getExternalId());
+    }
+
+    @Test
+    void createNewsFeed_withImage_and_External_id() throws InterruptedException {
+        String message = "This is a post with image and external ID";
+
+        String externalId = UUID.randomUUID().toString();
+
+        final FeedPost feedPost = new FeedPost.Builder()
+                .setMessage(message)
+                .setImage(getFile("/hello.jpg"))
+                .setExternalId(externalId)
+                .setVisibility(AccessControl.PUBLIC)
+                .build();
+
+        assertEquals(externalId, session.getNewsFeed().blockingCreate(feedPost).getExternalId());
+        Thread.sleep(1000);
+        assertEquals(externalId, session.getNewsFeed().blockingGetByExternalId(externalId).getExternalId());
     }
 
     @Test
@@ -404,5 +438,6 @@ class NewsFeedTest {
         Feed feed = session.getNewsFeed().blockingStream(1).iterator().next();
         feed.blockingDelete();
     }
+
 
 }

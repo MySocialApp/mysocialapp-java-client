@@ -33,6 +33,9 @@ open class Feed(val action: ActivityType? = null,
     override val owner: User?
         get() = actor
 
+    override val externalId: String?
+        get() = `object`?.externalId
+
     override var bodyMessage: String?
         get() = `object`?.bodyMessage
         set(message) {

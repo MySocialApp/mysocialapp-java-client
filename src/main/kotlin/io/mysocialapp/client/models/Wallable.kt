@@ -23,6 +23,8 @@ interface Wallable : Serializable {
 
     val `object`: BaseWall?
 
+    val externalId: String?
+
     var bodyMessage: String?
 
     val bodyMessageTagEntities: TagEntities?

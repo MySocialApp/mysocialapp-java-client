@@ -17,6 +17,7 @@ data class FeedPost(val textWallMessage: TextWallMessage? = null,
         private var mImage: File? = null
         private var mVisibility: AccessControl = AccessControl.FRIEND
         private var mPayload: Map<String, Any?>? = null
+        private var mExternalId: String? = null
 
         fun setMessage(message: String): Builder {
             this.mMessage = message
@@ -38,6 +39,11 @@ data class FeedPost(val textWallMessage: TextWallMessage? = null,
             return this
         }
 
+        fun setExternalId(externalId: String): Builder {
+            this.mExternalId = externalId
+            return this
+        }
+
         fun build(): FeedPost {
             if (mMessage == null && mImage == null) {
                 throw IllegalArgumentException("Message or image is mandatory")
@@ -45,15 +51,15 @@ data class FeedPost(val textWallMessage: TextWallMessage? = null,
                 return FeedPost(textWallMessage = TextWallMessage(mMessage).apply {
                     accessControl = mVisibility
                     payload = mPayload
+                    externalId = mExternalId
                 })
             }
 
             val photoRequestBody = RequestBody.create(mImage?.name?.imageMediaType(), mImage!!)
 
-            return FeedPost(multipartPhoto = MultipartPhoto(photoRequestBody,
-                    mMessage.toRequestBody(),
-                    accessControl = mVisibility.name.toRequestBody(),
-                    payload = mPayload?.toJSONString().toRequestBody()))
+            return FeedPost(multipartPhoto = MultipartPhoto(photoRequestBody, mMessage.toRequestBody(),
+                    accessControl = mVisibility.name.toRequestBody(), payload = mPayload?.toJSONString().toRequestBody(),
+                    externalId = mExternalId.toRequestBody()))
         }
     }
 

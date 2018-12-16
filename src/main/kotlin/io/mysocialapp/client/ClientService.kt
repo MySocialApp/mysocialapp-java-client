@@ -27,6 +27,7 @@ class ClientService(private val configuration: Configuration,
     val accountProfilePhoto: RestAccountProfilePhoto by lazy { retrofit.create(RestAccountProfilePhoto::class.java) }
     val accountProfileCoverPhoto: RestAccountProfileCoverPhoto by lazy { retrofit.create(RestAccountProfileCoverPhoto::class.java) }
     val feed: RestFeed by lazy { retrofit.create(RestFeed::class.java) }
+    val feedExternal: RestFeedExternal by lazy { retrofit.create(RestFeedExternal::class.java) }
     val feedMessage: RestFeedMessage by lazy { retrofit.create(RestFeedMessage::class.java) }
     val feedIgnore: RestFeedIgnore by lazy { retrofit.create(RestFeedIgnore::class.java) }
     val feedAbuse: RestFeedAbuse by lazy { retrofit.create(RestFeedAbuse::class.java) }

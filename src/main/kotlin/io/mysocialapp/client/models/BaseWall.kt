@@ -9,6 +9,7 @@ import rx.Observable
 open class BaseWall : Base(), Likable, Commentable {
 
     var payload: Map<String, Any?>? = null
+    var externalId: String? = null
     @JsonProperty("likes")
     private var likes: LikeBlob? = null
     @JsonProperty("comments")
@@ -80,8 +81,8 @@ open class BaseWall : Base(), Likable, Commentable {
         }
 
         return session?.clientService?.photoComment?.post(idStr?.toLong(), commentPost.multipartPhoto!!.photo,
-                commentPost.multipartPhoto.payload, commentPost.multipartPhoto.message, commentPost.multipartPhoto.tagEntities)
-                ?.map { it.session = session; it } ?: Observable.empty()
+                commentPost.multipartPhoto.payload, commentPost.multipartPhoto.externalId, commentPost.multipartPhoto.message,
+                commentPost.multipartPhoto.tagEntities)?.map { it.session = session; it } ?: Observable.empty()
     }
 
     fun ignore(): Observable<Void> {
