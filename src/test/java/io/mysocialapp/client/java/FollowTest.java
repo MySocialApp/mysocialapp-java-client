@@ -24,7 +24,7 @@ class FollowTest {
 
     @Test
     void listFollowing() {
-        Iterable<User> usersIterable = session.getFollow().blockingListFollowing(0, 10);
+        Iterable<User> usersIterable = session.getFollow().blockingListFollowing(0, 50);
 
         usersIterable.forEach(user -> {
             System.out.println("ID: " + user.getId() + " Name: " + user.getDisplayedName());
@@ -53,6 +53,16 @@ class FollowTest {
             assertTrue(session.getUser().blockingGet(user.getId()).isFollowing());
             user.blockingUnfollow();
             assertTrue(session.getUser().blockingGet(user.getId()).isFollowing() == false);
+        });
+    }
+
+    @Test
+    void do_follow() {
+        Iterable<User> usersIterable = session.getUser().blockingList(0, 20).iterator().next().getUsers();
+
+        usersIterable.forEach(user -> {
+            user.blockingFollow();
+            assertTrue(session.getUser().blockingGet(user.getId()).isFollowing());
         });
     }
 
