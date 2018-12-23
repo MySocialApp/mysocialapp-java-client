@@ -261,4 +261,10 @@ open class User(open val updatedDate: Date? = null,
         } ?: Observable.empty()
     }
 
+    fun blockingUserStat(): UserStat? = userStat().toBlocking()?.first()
+
+    fun userStat(): Observable<UserStat> {
+        return session?.clientService?.userStat?.get(id) ?: Observable.empty()
+    }
+
 }

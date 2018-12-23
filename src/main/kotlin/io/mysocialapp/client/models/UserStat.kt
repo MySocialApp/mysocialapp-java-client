@@ -8,7 +8,6 @@ import java.util.*
  */
 data class UserStat(var status: Status? = null,
                     var ride: Ride? = null,
-                    var bike: Bike? = null,
                     var friend: Friend? = null,
                     var follow: Follow? = null) : Serializable {
 
@@ -22,8 +21,6 @@ data class UserStat(var status: Status? = null,
     }
 
     data class Ride(val totalCreated: Int) : Serializable
-
-    data class Bike(val totalOwned: Int) : Serializable
 
     data class Friend(val total: Int) : Serializable
 

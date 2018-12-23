@@ -221,6 +221,17 @@ class AccountTest {
     }
 
     @Test
+    void userStat() {
+        UserStat userStat = getSession().getAccount().blockingGet().blockingUserStat();
+        assertNotNull(userStat);
+        assertNotNull(userStat.getFriend());
+        assertNotNull(userStat.getFriend().getTotal());
+        assertNotNull(userStat.getFollow());
+        assertNotNull(userStat.getFollow().getTotalFollowers());
+        assertNotNull(userStat.getFollow().getTotalFollowing());
+    }
+
+    @Test
     void resetPassword() {
         new MySocialApp.Builder()
                 .setAppId(APP_ID)

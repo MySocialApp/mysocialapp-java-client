@@ -41,6 +41,7 @@ class ClientService(private val configuration: Configuration,
     val statusLike: RestStatusLike by lazy { retrofit.create(RestStatusLike::class.java) }
     val statusComment: RestStatusComment by lazy { retrofit.create(RestStatusComment::class.java) }
     val user: RestUser by lazy { retrofit.create(RestUser::class.java) }
+    val userStat: RestUserStat by lazy { retrofit.create(RestUserStat::class.java) }
     val userExternal: RestUserExternal by lazy { retrofit.create(RestUserExternal::class.java) }
     val userActive: RestUserActive by lazy { retrofit.create(RestUserActive::class.java) }
     val userGroup: RestUserGroup by lazy { retrofit.create(RestUserGroup::class.java) }
