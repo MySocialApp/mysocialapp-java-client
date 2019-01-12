@@ -11,20 +11,26 @@ import rx.Observable
 class FluentNewsFeed(private val session: Session) {
 
     @JvmOverloads
-    fun blockingStream(limit: Int = Int.MAX_VALUE): Iterable<Feed> = stream(limit).toBlocking().toIterable()
+    fun blockingStream(limit: Int = Int.MAX_VALUE, algorithm: FeedAlgorithm? = null): Iterable<Feed> =
+            stream(limit, algorithm).toBlocking().toIterable()
 
     @JvmOverloads
-    fun stream(limit: Int = Int.MAX_VALUE): Observable<Feed> = list(0, limit)
+    fun stream(limit: Int = Int.MAX_VALUE, algorithm: FeedAlgorithm? = null): Observable<Feed> = list(0, limit, algorithm)
 
     @JvmOverloads
-    fun blockingList(page: Int = 0, size: Int = 10): Iterable<Feed> = list(page, size).toBlocking().toIterable()
+    fun blockingList(page: Int = 0, size: Int = 10, algorithm: FeedAlgorithm? = null): Iterable<Feed> =
+            list(page, size, algorithm).toBlocking().toIterable()
 
     @JvmOverloads
-    fun list(page: Int = 0, size: Int = 10): Observable<Feed> {
+    fun list(page: Int = 0, size: Int = 10, algorithm: FeedAlgorithm? = null): Observable<Feed> {
         return stream(page, size, object : PaginationResource<Feed> {
             override fun getRealResultObject(response: List<Feed>): List<Any>? = response
 
             override fun onNext(page: Int, size: Int): List<Feed> {
+                if (algorithm != null) {
+                    return session.clientService.feed.list(page, size, algorithm).toBlocking().first() ?: emptyList()
+                }
+
                 return session.clientService.feed.list(page, size).toBlocking().first() ?: emptyList()
             }
         }).map { it.session = session; it }
