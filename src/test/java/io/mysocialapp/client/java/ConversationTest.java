@@ -8,6 +8,7 @@ import io.mysocialapp.client.models.ConversationMessage;
 import io.mysocialapp.client.models.ConversationMessagePost;
 import io.mysocialapp.client.models.User;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -48,7 +49,7 @@ public class ConversationTest {
     @Test
     void listConversations() {
         Iterable<Conversation> conversations = session.getConversation().blockingList(0, 10);
-        assertNotNull(conversations);
+        conversations.forEach(Assertions::assertNotNull);
     }
 
     @Test
@@ -134,6 +135,31 @@ public class ConversationTest {
                 .build();
 
         getFirstConversation().blockingSendMessage(conversationMessagePost);
+    }
+
+    @Test
+    void postMessage_with_mention() {
+        Conversation conv = getFirstConversation();
+
+        ConversationMessagePost conversationMessagePost = new ConversationMessagePost.Builder()
+                .setMessage("[[user:" + conv.getOwner().getIdStr() + "]]")
+                .build();
+
+        ConversationMessage conversationMessage = conv.blockingSendMessage(conversationMessagePost);
+        assertEquals(conversationMessage.getOwner().getDisplayedName(), conv.getOwner().getDisplayedName());
+    }
+
+    @Test
+    void postMessage_with_image_and_mention() {
+        Conversation conv = getFirstConversation();
+
+        ConversationMessagePost conversationMessagePost = new ConversationMessagePost.Builder()
+                .setMessage("[[user:" + conv.getOwner().getIdStr() + "]]")
+                .setImage(getFile("/hello.jpg"))
+                .build();
+
+        ConversationMessage conversationMessage = conv.blockingSendMessage(conversationMessagePost);
+        assertEquals(conversationMessage.getOwner().getDisplayedName(), conv.getOwner().getDisplayedName());
     }
 
     @Test
