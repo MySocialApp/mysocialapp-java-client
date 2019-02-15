@@ -32,6 +32,8 @@ class URLTag : TagEntityAbstract() {
         get() = intArrayOf(startIndex, endIndex)
         set(indices) {
             if (indices == null) {
+                this.startIndex = 0
+                this.endIndex = 0
                 return
             }
 

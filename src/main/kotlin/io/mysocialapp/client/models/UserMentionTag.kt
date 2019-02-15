@@ -4,9 +4,10 @@ package io.mysocialapp.client.models
 /**
  * Created by evoxmusic on 15/09/15.
  */
-class UserMentionTag(val mentionedUser: User? = null,
-                     val mIndices: IntArray? = null) : TagEntityAbstract() {
+class UserMentionTag : TagEntityAbstract() {
 
+    val mentionedUser: User? = null
+    val mIndices: IntArray? = null
     val target: Feed? = null
     private var startIndex: Int = 0
     private var endIndex: Int = 0
@@ -36,6 +37,8 @@ class UserMentionTag(val mentionedUser: User? = null,
         get() = intArrayOf(startIndex, endIndex)
         set(indices) {
             if (indices == null) {
+                this.startIndex = 0
+                this.endIndex = 0
                 return
             }
 
