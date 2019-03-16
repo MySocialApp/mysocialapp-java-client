@@ -11,20 +11,27 @@ import rx.Observable
 class FluentUser(private val session: Session) {
 
     @JvmOverloads
-    fun blockingStream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Iterable<Users> = stream(limit, options).toBlocking().toIterable()
+    fun blockingStream(limit: Int = Int.MAX_VALUE, options: Options = Options(), requestAsAdmin: Boolean = false): Iterable<Users> =
+            stream(limit, options, requestAsAdmin).toBlocking().toIterable()
 
     @JvmOverloads
-    fun stream(limit: Int = Int.MAX_VALUE, options: Options = Options()): Observable<Users> = list(0, limit, options)
+    fun stream(limit: Int = Int.MAX_VALUE, options: Options = Options(), requestAsAdmin: Boolean = false): Observable<Users> =
+            list(0, limit, options, requestAsAdmin)
 
     @JvmOverloads
-    fun blockingList(page: Int = 0, size: Int = 10, options: Options = Options()): Iterable<Users> = list(page, size, options).toBlocking().toIterable()
+    fun blockingList(page: Int = 0, size: Int = 10, options: Options = Options(), requestAsAdmin: Boolean = false): Iterable<Users> =
+            list(page, size, options, requestAsAdmin).toBlocking().toIterable()
 
     @JvmOverloads
-    fun list(page: Int = 0, size: Int = 10, options: Options = Options()): Observable<Users> {
+    fun list(page: Int = 0, size: Int = 10, options: Options = Options(), requestAsAdmin: Boolean = false): Observable<Users> {
         return stream(page, size, object : PaginationResource<Users> {
             override fun getRealResultObject(response: List<Users>): List<Any>? = response.firstOrNull()?.users
 
             override fun onNext(page: Int, size: Int): List<Users> {
+                if (requestAsAdmin) {
+                    return listOf(session.clientService.adminUser.list(page, size, options.queryParams).toBlocking().first())
+                }
+
                 return listOf(session.clientService.user.list(page, size, options.queryParams).toBlocking().first())
             }
         }).map { it.users?.forEach { u -> u.session = session }; it }
