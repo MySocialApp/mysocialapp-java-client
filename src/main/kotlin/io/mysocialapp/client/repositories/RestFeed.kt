@@ -1,7 +1,6 @@
 package io.mysocialapp.client.repositories
 
 import io.mysocialapp.client.models.Feed
-import io.mysocialapp.client.models.FeedAlgorithm
 import retrofit2.http.*
 import rx.Observable
 
@@ -14,7 +13,7 @@ interface RestFeed {
     fun list(@Query("page") page: Int, @Query("size") size: Int): Observable<List<Feed>>
 
     @POST("feed")
-    fun list(@Query("page") page: Int, @Query("size") size: Int, @Body algorithm: FeedAlgorithm): Observable<List<Feed>>
+    fun list(@Query("page") page: Int, @Query("size") size: Int, @Body algorithm: HashMap<String, Any?>): Observable<List<Feed>>
 
     @GET("feed/{id}")
     fun get(@Path("id") id: Long?): Observable<Feed>

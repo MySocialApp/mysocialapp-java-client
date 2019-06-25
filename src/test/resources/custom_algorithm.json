@@ -1,0 +1,237 @@
+{
+  "criterion": {
+    "criteria": [
+      {
+        "criteria": [
+          {
+            "field": "name_length",
+            "operator": "GREATER_THAN",
+            "value": 150
+          },
+          {
+            "field": "payload.comment_length",
+            "operator": "GREATER_THAN",
+            "value": 150
+          },
+          {
+            "field": "payload.pronostics.match0.comment_length",
+            "operator": "GREATER_THAN",
+            "value": 150
+          },
+          {
+            "field": "payload.pronostics.match1.comment_length",
+            "operator": "GREATER_THAN",
+            "value": 150
+          },
+          {
+            "field": "payload.pronostics.match2.comment_length",
+            "operator": "GREATER_THAN",
+            "value": 150
+          },
+          {
+            "field": "payload.pronostics.match3.comment_length",
+            "operator": "GREATER_THAN",
+            "value": 150
+          },
+          {
+            "field": "payload.pronostics.match4.comment_length",
+            "operator": "GREATER_THAN",
+            "value": 150
+          },
+          {
+            "field": "payload.pronostics.match5.comment_length",
+            "operator": "GREATER_THAN",
+            "value": 150
+          }
+        ],
+        "name": "comment_150",
+        "operator": "OR"
+      },
+      {
+        "field": "owner.id",
+        "name": "admin_user_post",
+        "operator": "EQUALS",
+        "value": 4951814979290417000
+      },
+      {
+        "field": "owner.id",
+        "name": "forced_users_posts",
+        "operator": "EQUALS",
+        "values": [
+          2860
+        ]
+      },
+      {
+        "criteria": [
+          {
+            "criteria": [
+              {
+                "field": "payload.tipResult",
+                "operator": "EXIST"
+              },
+              {
+                "field": "payload.totalResult",
+                "operator": "EXIST"
+              }
+            ],
+            "operator": "NOT"
+          },
+          {
+            "field": "owner.id",
+            "operator": "EQUALS",
+            "values": [
+              "{userId}",
+              "{friendUsers}",
+              "{followedUsers}"
+            ]
+          }
+        ],
+        "name": "comment_without_bet",
+        "operator": "AND"
+      },
+      {
+        "criteria": [
+          {
+            "field": "commenters",
+            "operator": "EXIST"
+          },
+          {
+            "field": "commenters.id",
+            "operator": "EQUALS",
+            "values": [
+              "{userId}",
+              "{friendUsers}",
+              "{followedUsers}"
+            ]
+          }
+        ],
+        "name": "at_least_1_comment_from_friends",
+        "operator": "AND"
+      },
+      {
+        "criteria": [
+          {
+            "operator": "SCRIPT",
+            "value": "_source.likers?.size() >= 3"
+          },
+          {
+            "field": "likers.id",
+            "operator": "EQUALS",
+            "values": [
+              "{userId}",
+              "{friendUsers}",
+              "{followedUsers}"
+            ]
+          }
+        ],
+        "name": "at_least_3_likes_from_friends",
+        "operator": "AND"
+      },
+      {
+        "criteria": [
+          {
+            "criteria": [
+              {
+                "criteria": [
+                  {
+                    "field": "payload.tipResult",
+                    "operator": "WILDCARD",
+                    "value": "Gagn*"
+                  },
+                  {
+                    "field": "payload.tipBet",
+                    "operator": "GREATER_THAN",
+                    "value": 2.99
+                  }
+                ],
+                "operator": "AND"
+              },
+              {
+                "criteria": [
+                  {
+                    "field": "payload.totalResult",
+                    "operator": "WILDCARD",
+                    "value": "Gagn*"
+                  },
+                  {
+                    "field": "payload.totalBet",
+                    "operator": "GREATER_THAN",
+                    "value": 2.99
+                  }
+                ],
+                "operator": "AND"
+              }
+            ],
+            "operator": "OR"
+          },
+          {
+            "criteria": [
+              {
+                "field": "payload.comment_length",
+                "operator": "GREATER_THAN",
+                "value": 150
+              },
+              {
+                "field": "payload.pronostics.match0.comment_length",
+                "operator": "GREATER_THAN",
+                "value": 150
+              },
+              {
+                "field": "payload.pronostics.match1.comment_length",
+                "operator": "GREATER_THAN",
+                "value": 150
+              },
+              {
+                "field": "payload.pronostics.match2.comment_length",
+                "operator": "GREATER_THAN",
+                "value": 150
+              },
+              {
+                "field": "payload.pronostics.match3.comment_length",
+                "operator": "GREATER_THAN",
+                "value": 150
+              },
+              {
+                "field": "payload.pronostics.match4.comment_length",
+                "operator": "GREATER_THAN",
+                "value": 150
+              },
+              {
+                "field": "payload.pronostics.match5.comment_length",
+                "operator": "GREATER_THAN",
+                "value": 150
+              }
+            ],
+            "operator": "OR"
+          }
+        ],
+        "name": "won_with_comment_150",
+        "operator": "AND"
+      }
+    ],
+    "operator": "OR"
+  },
+  "raw_results": true,
+  "sort": [
+    {
+      "aggregation": "MIN",
+      "fields": [
+        "created_date",
+        "payload.startdate",
+        "commenters.created_date",
+        "likers.created_date"
+      ]
+    },
+    {
+      "aggregation": "MIN",
+      "fields": [
+        "created_date",
+        "commenters.created_date",
+        "likers.created_date"
+      ]
+    }
+  ],
+  "sort_aggregation": "AVERAGE",
+  "sort_order": "ASC",
+  "type": "FEED"
+}

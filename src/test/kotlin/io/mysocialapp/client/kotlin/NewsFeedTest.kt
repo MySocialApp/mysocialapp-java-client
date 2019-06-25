@@ -4,7 +4,9 @@ import io.mysocialapp.client.FluentNewsFeed
 import io.mysocialapp.client.MySocialApp
 import io.mysocialapp.client.Session
 import io.mysocialapp.client.models.CommentPost
+import io.mysocialapp.client.models.FeedAlgorithm
 import org.junit.Test
+import java.io.File
 
 /**
  * Created by evoxmusic on 05/05/2018.
@@ -17,10 +19,25 @@ class NewsFeedTest {
 
     private fun getSession(): Session? = MySocialApp.Builder().setAppId(APP_ID).build().blockingConnect("alice.jeith@mysocialapp.io", "myverysecretpassw0rd")
 
+    private fun getFile(filePath: String): File {
+        return File(System::class.java.getResource(filePath).file)
+    }
+
     @Test
     fun `get some news from feed`() {
         val s = getSession()
         s?.newsFeed?.blockingList()?.forEach { feed -> println(feed.bodyMessage) }
+    }
+
+    @Test
+    fun `list custom feeds`() {
+        val s = getSession()
+
+        val customAlgorithm = FeedAlgorithm.Builder()
+                .setCustomFeedRequest(getFile("/custom_algorithm.json").readText())
+                .build()
+
+        s?.newsFeed?.blockingList(algorithm = customAlgorithm)?.forEach { feed -> println(feed) }
     }
 
     @Test

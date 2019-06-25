@@ -27,8 +27,8 @@ class FluentNewsFeed(private val session: Session) {
             override fun getRealResultObject(response: List<Feed>): List<Any>? = response
 
             override fun onNext(page: Int, size: Int): List<Feed> {
-                if (algorithm != null) {
-                    return session.clientService.feed.list(page, size, algorithm).toBlocking().first() ?: emptyList()
+                if (algorithm?.customFeedRequest != null) {
+                    return session.clientService.feed.list(page, size, algorithm.customFeedRequest).toBlocking().first() ?: emptyList()
                 }
 
                 return session.clientService.feed.list(page, size).toBlocking().first() ?: emptyList()
