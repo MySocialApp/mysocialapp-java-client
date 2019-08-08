@@ -20,6 +20,8 @@ data class Conversation(var name: String? = null) : Base() {
             return field
         }
 
+    var silent: Boolean? = false
+
     fun blockingSendMessage(message: ConversationMessagePost): ConversationMessage? = sendMessage(message).toBlocking()?.first()
 
     fun sendMessage(message: ConversationMessagePost): Observable<ConversationMessage> {
@@ -65,6 +67,17 @@ data class Conversation(var name: String? = null) : Base() {
     fun blockingQuit() = blockingDelete()
 
     fun quit() = delete()
+
+    fun makeSilent(silent: Boolean): Observable<Conversation> {
+        if (silent) {
+            return session?.clientService?.conversation?.doSilent(id) ?: Observable.empty()
+        } else {
+            return session?.clientService?.conversation?.undoSilent(id)?.map {
+                this.silent = false
+                this
+            } ?: Observable.empty()
+        }
+    }
 
     class Builder {
         private var mName: String? = null

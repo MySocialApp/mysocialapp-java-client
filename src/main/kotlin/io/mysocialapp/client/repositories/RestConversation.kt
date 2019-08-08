@@ -24,4 +24,9 @@ interface RestConversation {
     @DELETE("conversation/{id}")
     fun delete(@Path("id") id: Long?): Observable<Void>
 
+    @POST("conversation/{id}/silent")
+    fun doSilent(@Path("id") id: Long?): Observable<Conversation>
+
+    @DELETE("conversation/{id}/silent")
+    fun undoSilent(@Path("id") id: Long?): Observable<Void>
 }
